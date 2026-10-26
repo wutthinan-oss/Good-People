@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="send.css">
+<link rel="stylesheet" href="style.css?v=20261027b"><link rel="stylesheet" href="send.css?v=20261027b">
 </head>
 <body>
 
@@ -218,7 +218,8 @@
       <p class="lead">เลือกภารกิจ → ส่งผลทางมือถือ → ผู้กำกับตรวจ → ขึ้นหน้าเว็บ</p>
     </div>
 
-    <div class="cm cm4 cm-light reveal" aria-label="วิธีใช้เว็บ 4 ขั้น">
+    <div class="cm-panel reveal">
+    <div class="cm cm4" aria-label="วิธีใช้เว็บ 4 ขั้น">
       <div class="cm-end"><span>📱</span><b>นักเรียน</b><small>ใช้มือถือ<br>ไม่ต้องล็อกอิน</small></div>
       <div class="cm-arrow" aria-hidden="true">➜</div>
       <div class="cm-steps">
@@ -230,12 +231,9 @@
       <div class="cm-arrow" aria-hidden="true">➜</div>
       <div class="cm-end cm-out"><span>🌐</span><b>หน้าเว็บ</b><small>เห็นผลจริง<br>ตรวจสอบได้</small></div>
     </div>
-    <div class="cm-loop light reveal">ภาพขึ้นหน้าเว็บเมื่อผู้กำกับกดอนุมัติเท่านั้น · ตัวเลขสรุปคำนวณจากรายงานจริง ไม่ได้พิมพ์ไว้เอง</div>
+    <div class="cm-loop">ภาพขึ้นหน้าเว็บเมื่อผู้กำกับกดอนุมัติเท่านั้น · ตัวเลขสรุปคำนวณจากรายงานจริง ไม่ได้พิมพ์ไว้เอง</div>
+    </div>
 
-    <div class="demo reveal" id="send" style="text-align:center">
-      <h3>ทำภารกิจที่ได้รับ</h3>
-      <p class="mut" style="color:var(--mut)">นักศึกษาเข้าไปบันทึกผลภารกิจได้เลย ไม่ต้องล็อกอิน กรอกชื่อ ชั้นปี นศท. และลำดับเลขที่ แล้วเลือกภารกิจ แนบภาพหลักฐานจากมือถือ ข้อมูลเข้าฐานข้อมูลของผู้กำกับโดยตรง</p>
-      <p style="margin:16px 0 0"><a class="btn btn-primary" href="mission.html">เปิดหน้าทำภารกิจที่ได้รับ →</a> <a class="btn btn-ghost" href="gallery.html">ดูภาพกิจกรรมจากนักศึกษา</a></p>
     </div>
   </div>
 </section>
@@ -278,7 +276,7 @@
       <div class="res" id="rMs"><div class="bars"><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i></div><b>รายงานภารกิจที่ส่งเข้าระบบ</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
       <div class="res" id="rBen"><div class="bars"><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i></div><b>ผู้ได้รับประโยชน์ที่นักศึกษารายงาน</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
     </div>
-    <p class="live-note" id="liveNote">ตัวเลขชุดนี้ดึงจากฐานข้อมูลของระบบโดยอัตโนมัติ ไม่ได้พิมพ์ไว้ในหน้าเว็บ จะเปลี่ยนเมื่อนักศึกษาส่งรายงานและผู้กำกับบันทึกคะแนน · <a href="#send">นักศึกษาส่งภารกิจได้ที่นี่</a> · <a href="mission.html">เปิดหน้าทำภารกิจ</a></p>
+    <p class="live-note" id="liveNote">ตัวเลขชุดนี้ดึงจากฐานข้อมูลของระบบโดยอัตโนมัติ ไม่ได้พิมพ์ไว้ในหน้าเว็บ จะเปลี่ยนเมื่อนักศึกษาส่งรายงานและผู้กำกับบันทึกคะแนน · <a href="mission.html">นักศึกษาส่งภารกิจได้ที่นี่</a> · <a href="mission.html">เปิดหน้าทำภารกิจ</a></p>
   </div>
   </div>
 </section>
@@ -315,9 +313,9 @@
 </footer>
 
 <button class="toTop" id="toTop" aria-label="กลับขึ้นบน" onclick="scrollTo({top:0})">↑</button>
-<script src="assets/data/photos.js"></script>
-<script src="config.js"></script><script src="api.js"></script>
-<script src="app.js"></script>
-<script src="live.js"></script>
+<script src="assets/data/photos.js?v=20261027b"></script>
+<script src="config.js?v=20261027b"></script><script src="api.js?v=20261027b"></script>
+<script src="app.js?v=20261027b"></script>
+<script src="live.js?v=20261027b"></script>
 </body>
 </html>
