@@ -28,7 +28,7 @@ async function loadStats(){const r=await call('stats');if(!r.ok){$('#sBox').text
 
 async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำลังโหลด...</div>';const r=await call('reports',{missionId:$('#fM').value,reviewStatus:$('#fR').value});
   if(!r.ok){$('#rList').innerHTML=`<div class="pcard">${esc(r.error)}</div>`;return}REPS=r.reports;
-  $('#rList').innerHTML=REPS.map((x,i)=>`<div class="rep"><div class="h"><b>${esc(x.name)}</b><span class="small">${esc(x.sid)}</span><span class="stg">${esc(nm(x.missionId))} · ขั้น ${esc(x.stage)}</span>
+  $('#rList').innerHTML=REPS.map((x,i)=>`<div class="rep"><div class="h"><b>${esc(x.name)}</b><span class="small">${esc(x.sid)}</span>${x.source==='name'?'<span class="badge2" title="ส่งด้วยการพิมพ์ชื่อ ยังไม่ยืนยันตัวตนด้วย PIN">ส่งด้วยชื่อ</span>':''}<span class="stg">${esc(nm(x.missionId))} · ขั้น ${esc(x.stage)}</span>
    <span class="badge2 ${x.status==='ทำครบตามแผน'?'g':x.status==='ยังไม่ได้ทำ'?'r':''}">${esc(x.status)}</span><span class="badge2 ${x.reviewStatus==='ผ่าน'?'g':x.reviewStatus==='ขอแก้ไข'?'r':''}">${esc(x.reviewStatus)}</span><span class="small">${esc(fmtD(x.ts))}</span></div>
    ${x.role?`<p><b>บทบาท:</b> ${esc(x.role)}</p>`:''}${x.reason?`<p><b>เหตุผล:</b> ${esc(x.reason)}</p>`:''}${x.q1?`<p><b>1)</b> ${esc(x.q1)}</p><p><b>2)</b> ${esc(x.q2)}</p><p><b>3)</b> ${esc(x.q3)}</p>`:''}${x.evidence?`<p><b>หลักฐาน:</b> ${esc(x.evidence)}</p>`:''}
    ${x.photos?`<div class="thumbs">${String(x.photos).split(',').map(id=>`<button type="button" class="thumb" data-id="${esc(id)}">📷 ดูภาพ</button>`).join('')}</div>`:''}

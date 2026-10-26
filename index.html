@@ -218,19 +218,11 @@
 
     <div class="demo reveal" id="send">
       <h3>ส่งภารกิจรายบุคคล <span class="tagd" id="sdDemoTag" hidden>DEMO · ไม่บันทึกข้อมูลจริง</span></h3>
-      <p class="mut" style="color:var(--mut)">รายงานตามจริงได้เลย แม้งานยังไม่สำเร็จ แนบภาพหลักฐานจากมือถือได้ ข้อมูลเข้าฐานข้อมูลของผู้กำกับโดยตรง</p>
+      <p class="mut" style="color:var(--mut)">พิมพ์ชื่อแล้วส่งได้เลย ไม่ต้องใช้รหัส รายงานตามจริงแม้งานยังไม่สำเร็จ แนบภาพหลักฐานจากมือถือได้ ข้อมูลเข้าฐานข้อมูลของผู้กำกับโดยตรง</p>
 
-      <form id="sdLogin" autocomplete="off">
-        <div class="sd-row">
-          <div><label class="sd-l" for="sdSid">เลขประจำตัว</label><input class="sd-in" id="sdSid" inputmode="numeric" required></div>
-          <div><label class="sd-l" for="sdPin">PIN ที่ผู้กำกับแจกให้</label><input class="sd-in" id="sdPin" type="password" inputmode="numeric" maxlength="10" required></div>
-        </div>
-        <div class="sd-err" id="sdELogin"></div>
-        <p style="margin:14px 0 0"><button class="btn btn-primary" type="submit" id="sdBLogin">เข้าสู่ระบบเพื่อส่งภารกิจ</button></p>
-      </form>
-
-      <form id="sdForm" hidden>
-        <p class="sd-who"><b id="sdWho"></b> <button type="button" class="sd-link" id="sdOut">ออกจากระบบ</button></p>
+      <form id="sdForm" autocomplete="off">
+        <label class="sd-l" for="sdName">ชื่อ-สกุลของฉัน</label><input class="sd-in" id="sdName" maxlength="80" placeholder="พิมพ์ชื่อและนามสกุล (ไม่ต้องพิมพ์คำนำหน้า)" required autocomplete="name">
+        <input type="text" id="sdWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="sd-row">
           <div><label class="sd-l" for="sdMs">ภารกิจ</label><select class="sd-in" id="sdMs" required></select></div>
           <div><label class="sd-l" for="sdStage">ขั้นที่รายงาน</label>
@@ -256,7 +248,7 @@
         <div class="q">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน) <span class="sd-hint">(ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</span></div><input class="sd-in" id="sdBen" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
         <div class="q">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย)</div><input class="sd-in" id="sdEvi" maxlength="400">
         <div class="sd-err" id="sdESub"></div><div class="out" id="sdOk"></div>
-        <p style="margin:14px 0 0"><button class="btn btn-primary" type="submit" id="sdBSub">ส่งรายงาน</button> <a class="sd-link" href="portal.html">เปิดพอร์ทัลเต็ม (ดูประวัติ ข้อเสนอแนะ ดาว)</a></p>
+        <p style="margin:14px 0 0"><button class="btn btn-primary" type="submit" id="sdBSub">ส่งรายงาน</button> <a class="sd-link" href="portal.html">ดูประวัติ ข้อเสนอแนะ และดาวของฉัน (ใช้ PIN)</a></p>
       </form>
     </div>
   </div>
