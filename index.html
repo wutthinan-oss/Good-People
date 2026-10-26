@@ -37,6 +37,9 @@ textarea{min-height:90px}
 .mut{color:var(--mut);font-size:14px}
 .seg{display:flex;gap:6px;margin-bottom:10px}.seg button{flex:1}
 .sc{display:flex;gap:4px}.sc button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}.sc button.on{background:var(--gold);border-color:var(--gold);color:#222;font-weight:700}
+.bar{height:8px;background:var(--line);border-radius:9px;margin:2px 0 10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold)}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:99px;font-size:15px;z-index:30;opacity:0;transition:.25s;pointer-events:none;max-width:90%}#toast.on{opacity:1}
+.btn,.chip,nav button{min-height:44px}.chip{display:inline-flex;align-items:center}
 .demo{background:#fff3cd;color:#664d03;padding:8px 14px;font-size:14px;text-align:center;border-bottom:1px solid #e6cf7a}
 table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:5px 7px;text-align:center}th{background:var(--bg)}
 td.l{text-align:left}.ph{display:flex;gap:6px;flex-wrap:wrap}.ph img{width:80px;height:80px;object-fit:cover;border-radius:8px}
@@ -51,14 +54,14 @@ td.l{text-align:left}.ph{display:flex;gap:6px;flex-wrap:wrap}.ph img{width:80px;
 </style>
 </head>
 <body>
-<div id="demoBar" class="demo" style="display:none">โหมดข้อมูลตัวอย่าง: ข้อมูลทั้งหมดเป็นของสมมติ ใช้ทดลองระบบเท่านั้น ห้ามนำไปส่งเป็นผลงานจริง</div>
+<div id="demoBar" class="demo" style="display:none">เว็บจำลอง: ข้อมูลทั้งหมดเป็นของสมมติ ใช้สาธิตระบบเท่านั้น ห้ามนำไปส่งเป็นผลงานจริง · <a href="./">ไปหน้าใช้งานจริง</a></div>
 <header><b id="hTitle">สร้างสรรค์คนดี</b><small id="hSub"></small></header>
 <main id="app"></main>
 <nav id="nav"></nav>
-<div id="rpt"></div>
+<div id="rpt"></div><div id="toast"></div>
 <script>
 const TR=['ความพอเพียง','ความกตัญญู','ความซื่อสัตย์สุจริต','ความรับผิดชอบ','อุดมการณ์คุณธรรม'];
-const KEY='gp_v1';
+const DEMO_MODE=/[?&]demo/.test(location.search),KEY=DEMO_MODE?'gp_demo':'gp_v1';
 const D0=()=>({meta:{title:'นวัตกรรมสร้างสรรค์คนดี',owner:'นายวุฒินันท์ สีดีจริง',pos:'ครูชำนาญการ',school:'โรงเรียนมัธยมวัดหนองแขม',area:'สำนักงานเขตพื้นที่การศึกษามัธยมศึกษากรุงเทพมหานคร เขต 1',tel:'0899836693',email:'',type:'ด้านการเรียนการสอน',cls:'ม.6/12',traits:[...TR]},students:[],acts:[],good:[],scores:{pre:{},post:{}},text:{},pubs:[],awards:[],demo:false});
 let S=load(),tab='home',sub={act:'acts',asm:'pre'},asmTrait=0,openAct=null;
 function load(){try{const j=JSON.parse(localStorage.getItem(KEY));if(j){const d=D0();return{...d,...j,meta:{...d.meta,...j.meta},scores:{pre:{},post:{},...j.scores}}}}catch(e){}return D0()}
@@ -69,6 +72,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 const thDate=d=>{if(!d)return'';const m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],x=new Date(d);return`${x.getDate()} ${m[x.getMonth()]} ${x.getFullYear()+543}`};
 const nm=id=>(S.students.find(s=>s.id===id)||{}).name||'-';
 const $=s=>document.querySelector(s);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
 
 /* ---------- สถิติ ---------- */
 const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
@@ -93,10 +97,13 @@ function render(){nav();$('#hTitle').textContent=S.meta.title;$('#hSub').textCon
   $('#app').innerHTML={home:vHome,stu:vStu,act:vAct,asm:vAsm,rep:vRep}[tab]()}
 
 /* ---------- หน้าหลัก ---------- */
-function vHome(){const st=stats().filter(x=>x.n>1);
-  return`<div class="grid"><div class="card stat"><b>${S.students.length}</b><small>นักเรียน</small></div><div class="card stat"><b>${S.acts.length}</b><small>กิจกรรม</small></div>
+function steps(){const n=S.students.length,full=ph=>n>0&&S.students.every(s=>Object.keys(S.scores[ph][s.id]||{}).length>=5);
+  return[['นำเข้ารายชื่อนักเรียน',n>0,'stu'],['ประเมินคุณลักษณะก่อนโครงการ',full('pre'),'asm','pre'],['บันทึกกิจกรรมพร้อมรูปจริง',S.acts.length>0,'act','acts'],['บันทึกความดีของนักเรียน',S.good.length>0,'act','good'],['ประเมินคุณลักษณะหลังโครงการ',full('post'),'asm','post'],['กรอกการเผยแพร่/รางวัล (ถ้ามีจริง)',S.pubs.length+S.awards.length>0,'rep'],['ตรวจเล่มและพิมพ์ PDF / Word',false,'rep']]}
+function goStep(t,s){if(s){if(t==='asm')sub.asm=s;else sub.act=s}go(t)}
+function vHome(){const st=stats().filter(x=>x.n>1),sp=steps(),done=sp.filter(x=>x[1]).length,nx=sp.find(x=>!x[1]);
+  return`<div class="card"><h2>ขั้นตอนการใช้งาน (${done}/${sp.length})</h2><div class="bar"><i style="width:${done/sp.length*100}%"></i></div>${sp.map((x,i)=>`<div class="item" style="align-items:center"><span>${x[1]?'✅':'⬜'} ${x[0]}</span>${x[1]?'':`<button class="btn sm ${x===nx?'':'alt'}" onclick="goStep('${x[2]}','${x[3]||''}')">ทำเลย</button>`}</div>`).join('')}</div>
+  <div class="grid"><div class="card stat"><b>${S.students.length}</b><small>นักเรียน</small></div><div class="card stat"><b>${S.acts.length}</b><small>กิจกรรม</small></div>
   <div class="card stat"><b>${S.good.length}</b><small>บันทึกความดี</small></div><div class="card stat"><b>${Object.keys(S.scores.post).length}/${S.students.length}</b><small>ประเมินหลังแล้ว</small></div></div>
-  <div class="card"><h2>เริ่มต้นใช้งาน</h2><ol class="mut" style="padding-left:20px;margin:0"><li>แท็บ <b>นักเรียน</b>: วางรายชื่อห้อง</li><li>แท็บ <b>ประเมิน</b>: ประเมินก่อนเริ่มโครงการ</li><li>แท็บ <b>กิจกรรม</b>: บันทึกกิจกรรม/ความดีตามจริง แนบรูป</li><li>แท็บ <b>ประเมิน</b>: ประเมินหลังโครงการ</li><li>แท็บ <b>เล่ม</b>: สร้างเล่มนวัตกรรม พิมพ์เป็น PDF หรือดาวน์โหลด Word</li></ol></div>
   ${st.length?`<div class="card"><h2>สรุปผลก่อน-หลังโดยย่อ</h2>${st.map(x=>`<div class="item"><span>${x.tn}</span><span>${f2(x.m1)} → <b>${f2(x.m2)}</b></span></div>`).join('')}</div>`:''}
   <div class="card"><h2>ข้อมูลและการสำรอง</h2><p class="mut">ข้อมูลเก็บในเครื่องนี้เท่านั้น ไม่ถูกส่งไปที่ใด ควรสำรองสม่ำเสมอ</p>
   <button class="btn" onclick="backup()">สำรองข้อมูล</button><label class="btn alt" style="margin:4px">นำเข้าข้อมูลสำรอง<input type="file" accept=".json" hidden onchange="restore(this)"></label>
@@ -117,7 +124,7 @@ function importStu(txt){if(S.demo&&!confirm('ลบข้อมูลตัว�
     if(p.length<2){const m=l.match(/^(\d{3,})\s+(.+?)\s+(\d+)\s+(\d+)$/);p=m?[m[1],m[2],m[3],m[4]]:[]}
     if(p.length<2||!/^\d+$/.test(p[0]))return;out.push({id:uid(),sid:p[0],name:p[1].replace(/\s+/g,' '),no:+p[3]||out.length+1})});
   if(!out.length)return alert('อ่านรายชื่อไม่ได้ ตรวจรูปแบบอีกครั้ง');
-  if(S.demo)S={...D0(),meta:S.meta};S.students=out.sort((a,b)=>a.no-b.no);save();alert(`นำเข้า ${out.length} คน`);render()}
+  if(S.demo)S={...D0(),meta:S.meta};S.students=out.sort((a,b)=>a.no-b.no);save();render();toast(`นำเข้า ${out.length} คนแล้ว`)}
 function addStu(){const a=$('#n1').value.trim(),b=$('#n2').value.trim();if(!b)return;S.students.push({id:uid(),sid:a,name:b,no:S.students.length+1});save();render()}
 function delStu(id){if(confirm('ลบนักเรียนคนนี้ (รวมคะแนนและบันทึกของเขา)?')){S.students=S.students.filter(s=>s.id!==id);delete S.scores.pre[id];delete S.scores.post[id];S.good=S.good.filter(g=>g.sid!==id);save();render()}}
 
@@ -135,22 +142,25 @@ function shrink(f){return new Promise(r=>{const i=new Image(),u=URL.createObject
 async function addAct(){const t=$('#a2').value.trim();if(!t)return alert('กรอกชื่อกิจกรรม');
   const ph=(await Promise.all([...$('#a6').files].map(shrink))).filter(Boolean);
   if(S.demo&&!confirm('ตอนนี้เป็นข้อมูลตัวอย่าง ควรลบข้อมูลตัวอย่างก่อนบันทึกข้อมูลจริง ดำเนินการต่อหรือไม่?'))return;
-  S.acts.push({id:uid(),date:$('#a1').value,title:t,tr:[...$('#a3').querySelectorAll('.on')].map(e=>+e.dataset.i),detail:$('#a4').value,att:[...$('#a5').querySelectorAll('.on')].map(e=>e.dataset.id),photos:ph});save();render()}
+  S.acts.push({id:uid(),date:$('#a1').value,title:t,tr:[...$('#a3').querySelectorAll('.on')].map(e=>+e.dataset.i),detail:$('#a4').value,att:[...$('#a5').querySelectorAll('.on')].map(e=>e.dataset.id),photos:ph});save();render();toast('บันทึกกิจกรรมแล้ว')}
 function delAct(id){if(confirm('ลบกิจกรรมนี้?')){S.acts=S.acts.filter(a=>a.id!==id);save();render()}}
 function vGood(){const G=[...S.good].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,40);
   return`<div class="card"><h2>บันทึกความดี</h2><label>นักเรียน</label><select id="g1">${S.students.map(s=>`<option value="${s.id}">${s.no}. ${esc(s.name)}</option>`).join('')}</select>
   <label>คุณลักษณะ</label><select id="g2">${TR.map((t,i)=>`<option value="${i}">${t}</option>`).join('')}</select><label>สิ่งที่ทำ</label><input id="g3" placeholder="เช่น เก็บกระเป๋าเงินได้และนำส่งครู"><label>วันที่</label><input type="date" id="g4" value="${today()}">
   <button class="btn" style="margin-top:10px" onclick="addGood()">บันทึก</button></div>
   <div class="card"><h2>ล่าสุด (${S.good.length} รายการ)</h2>${G.map(g=>`<div class="item"><div><b>${esc(nm(g.sid))}</b> · ${TR[g.t]}<div class="mut">${thDate(g.date)} ${esc(g.note)}</div></div><button class="btn sm red" onclick="delGood('${g.id}')">ลบ</button></div>`).join('')||'<p class="mut">ยังไม่มีรายการ</p>'}</div>`}
-function addGood(){if(!S.students.length)return alert('เพิ่มนักเรียนก่อน');if(S.demo&&!confirm('ตอนนี้เป็นข้อมูลตัวอย่าง ดำเนินการต่อหรือไม่?'))return;S.good.push({id:uid(),sid:$('#g1').value,t:+$('#g2').value,note:$('#g3').value,date:$('#g4').value});save();render()}
+function addGood(){if(!S.students.length)return alert('เพิ่มนักเรียนก่อน');if(S.demo&&!confirm('ตอนนี้เป็นข้อมูลตัวอย่าง ดำเนินการต่อหรือไม่?'))return;S.good.push({id:uid(),sid:$('#g1').value,t:+$('#g2').value,note:$('#g3').value,date:$('#g4').value});save();render();toast('บันทึกความดีแล้ว')}
 function delGood(id){S.good=S.good.filter(g=>g.id!==id);save();render()}
 
 /* ---------- ประเมิน ---------- */
 function vAsm(){const ph=sub.asm,done=S.students.filter(s=>(S.scores[ph][s.id]||{})[asmTrait]).length;
   return`<div class="seg"><button class="btn ${ph==='pre'?'':'alt'}" onclick="sub.asm='pre';render()">ก่อนโครงการ</button><button class="btn ${ph==='post'?'':'alt'}" onclick="sub.asm='post';render()">หลังโครงการ</button></div>
-  <div class="card"><h2>ให้คะแนน 1-5 ตามที่สังเกตจริง</h2><p class="mut">1=น้อยที่สุด … 5=มากที่สุด ประเมินครั้งละ 1 คุณลักษณะ</p>${TR.map((t,i)=>`<span class="chip ${asmTrait===i?'on':''}" onclick="asmTrait=${i};render()">${t}</span>`).join('')}
-  <p class="mut">ประเมินแล้ว ${done}/${S.students.length}</p>${S.students.map(s=>{const v=(S.scores[ph][s.id]||{})[asmTrait];return`<div class="item" style="align-items:center"><span>${s.no}. ${esc(s.name)}</span><div class="sc">${[1,2,3,4,5].map(n=>`<button class="${v===n?'on':''}" onclick="setSc('${s.id}',${n})">${n}</button>`).join('')}</div></div>`}).join('')||'<p class="mut">เพิ่มนักเรียนก่อน</p>'}</div>
+  <div class="card"><h2>ให้คะแนน 1-5 ตามที่สังเกตจริง</h2><p class="mut">1=น้อยที่สุด … 5=มากที่สุด ประเมินครั้งละ 1 คุณลักษณะ</p>${TR.map((t,i)=>{const c=S.students.filter(s=>(S.scores[ph][s.id]||{})[i]).length;return`<span class="chip ${asmTrait===i?'on':''}" onclick="asmTrait=${i};render()">${t} ${c}/${S.students.length}</span>`}).join('')}
+  <div class="bar"><i style="width:${S.students.length?done/S.students.length*100:0}%"></i></div><p class="mut">ประเมินแล้ว ${done}/${S.students.length}</p>
+  <div class="row"><button class="btn sm alt" onclick="fillRest(3)">เติม 3 ให้คนที่ยังไม่ประเมิน</button><button class="btn sm alt" onclick="fillRest(4)">เติม 4</button></div><p class="mut">ค่าที่เติมเป็นค่าเริ่มต้นเพื่อความเร็ว ต้องแก้รายคนให้ตรงกับที่สังเกตจริง</p>${S.students.map(s=>{const v=(S.scores[ph][s.id]||{})[asmTrait];return`<div class="item" style="align-items:center"><span>${s.no}. ${esc(s.name)}</span><div class="sc">${[1,2,3,4,5].map(n=>`<button class="${v===n?'on':''}" onclick="setSc('${s.id}',${n})">${n}</button>`).join('')}</div></div>`}).join('')||'<p class="mut">เพิ่มนักเรียนก่อน</p>'}</div>
+  ${asmTrait<4?`<button class="btn" style="width:100%" onclick="asmTrait++;render();scrollTo(0,0)">ถัดไป: ${TR[asmTrait+1]} →</button>`:''}
   <div class="card"><h2>ผลวิเคราะห์ (คำนวณจากคะแนนที่กรอก)</h2>${statTable()}</div>`}
+function fillRest(v){let c=0;S.students.forEach(s=>{const o=S.scores[sub.asm][s.id]=S.scores[sub.asm][s.id]||{};if(!o[asmTrait]){o[asmTrait]=v;c++}});save();render();toast(`เติมค่า ${v} ให้ ${c} คน`)}
 function setSc(id,n){(S.scores[sub.asm][id]=S.scores[sub.asm][id]||{})[asmTrait]=n;save();const y=scrollY;render();scrollTo(0,y)}
 function statTable(){const st=stats();if(!st.some(x=>x.n>1))return'<p class="mut">ต้องมีคะแนนทั้งก่อนและหลังอย่างน้อย 2 คน จึงจะวิเคราะห์ได้</p>';
   return`<div style="overflow:auto"><table><tr><th>คุณลักษณะ</th><th>n</th><th>ก่อน x̄(SD)</th><th>หลัง x̄(SD)</th><th>ระดับหลัง</th><th>t</th><th>p</th></tr>${st.map(x=>x.n>1?`<tr><td class="l">${x.tn}</td><td>${x.n}</td><td>${f2(x.m1)} (${f2(x.s1)})</td><td>${f2(x.m2)} (${f2(x.s2)})</td><td>${lvl(x.m2)}</td><td>${f2(x.t)}</td><td>${x.p<.001?'<.001':f2(x.p)}</td></tr>`:`<tr><td class="l">${x.t}</td><td colspan="6" class="mut">ข้อมูลไม่พอ</td></tr>`).join('')}</table></div>`}
@@ -210,16 +220,17 @@ function dlWord(){const h=`<html xmlns:o="urn:schemas-microsoft-com:office:offic
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿',h],{type:'application/msword'}));a.download=`${S.meta.title}.doc`;a.click()}
 
 /* ---------- ข้อมูลตัวอย่าง (สมมติ) ---------- */
-function loadDemo(){if(!confirm('แทนที่ข้อมูลปัจจุบันด้วยข้อมูลตัวอย่างสมมติ? (ควรสำรองข้อมูลจริงก่อน)'))return;
+function loadDemo(auto){if(auto!==true&&!confirm('แทนที่ข้อมูลปัจจุบันด้วยข้อมูลตัวอย่างสมมติ? (ควรสำรองข้อมูลจริงก่อน)'))return;
   let x=7;const r=()=>(x=(x*16807)%2147483647)/2147483647;const d=D0();d.demo=true;
-  for(let i=1;i<=12;i++)d.students.push({id:'d'+i,sid:'D'+String(i).padStart(4,'0'),name:'นักเรียนตัวอย่าง '+String(i).padStart(2,'0'),no:i});
-  const T=['กิจกรรมจิตอาสาพัฒนาห้องเรียน','ธนาคารความดี','เล่าเรื่องความกตัญญู','ตลาดนัดพอเพียง','ค่ายคุณธรรม','ส่งต่อน้ำใจสู่ชุมชน'];
-  T.forEach((t,i)=>d.acts.push({id:'da'+i,date:`2026-0${i+5}-1${i+1}`.slice(0,10),title:'(ตัวอย่าง) '+t,tr:[i%5,(i+2)%5],detail:'',att:d.students.map(s=>s.id).slice(0,10+i%3),photos:[]}));
-  for(let i=0;i<15;i++)d.good.push({id:'dg'+i,sid:'d'+(1+i%12),t:i%5,note:'(ตัวอย่าง) พฤติกรรมความดีสมมติ',date:`2026-0${6+i%3}-0${1+i%9}`});
+  for(let i=1;i<=37;i++)d.students.push({id:'d'+i,sid:'D'+String(i).padStart(4,'0'),name:'นักเรียนตัวอย่าง '+String(i).padStart(2,'0'),no:i});
+  const T=['กิจกรรมจิตอาสาพัฒนาห้องเรียน','ธนาคารความดี','เล่าเรื่องความกตัญญู','ตลาดนัดพอเพียง','ค่ายคุณธรรม','ส่งต่อน้ำใจสู่ชุมชน','มุมร้านค้าซื่อสัตย์','ปฏิทินส่งงานรับผิดชอบ'];
+  T.forEach((t,i)=>d.acts.push({id:'da'+i,date:`2026-0${5+Math.floor(i/3)}-${String(5+(i%3)*8).padStart(2,'0')}`,title:'(ตัวอย่าง) '+t,tr:[i%5,(i+2)%5],detail:'กิจกรรมสมมติเพื่อสาธิตระบบ',att:d.students.map(s=>s.id).slice(0,30+(i*3)%8),photos:[]}));
+  for(let i=0;i<60;i++)d.good.push({id:'dg'+i,sid:'d'+(1+i%37),t:i%5,note:'(ตัวอย่าง) พฤติกรรมความดีสมมติ',date:`2026-0${6+i%4}-${String(1+i%27).padStart(2,'0')}`});
   d.students.forEach(s=>{d.scores.pre[s.id]={};d.scores.post[s.id]={};for(let i=0;i<5;i++){const a=Math.max(1,Math.min(5,Math.round(2.5+r()*1.5)));d.scores.pre[s.id][i]=a;d.scores.post[s.id][i]=Math.max(1,Math.min(5,a+Math.round(r()*2)))}});
   d.pubs.push({id:'dp1',title:'(ตัวอย่าง) เผยแพร่ผลงาน',ch:'ช่องทางสมมติ',date:'2026-09-01'});
   S=d;SEC.forEach(([k])=>S.text[k]=draft(k));save();go('home')}
 
+if(DEMO_MODE&&!S.demo)loadDemo(true);
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 render();
 </script>
