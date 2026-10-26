@@ -11,7 +11,7 @@
   function mock(a,d){
     if(a==='ping')return{ok:true};
     if(a==='gallery'){const items=[];db.reports.filter(r=>r.publicOk==1&&r.photos).forEach(r=>String(r.photos).split(',').filter(Boolean).forEach((k,i)=>{const m=MS.find(x=>x.id===r.missionId);items.push({id:r.id+'_'+(i+1),mission:m?m.title:'',missionId:r.missionId,stage:r.stage,date:String(r.ts).slice(0,10),year:r.year||'',caption:r.caption||'',src:db.photos[k],full:db.photos[k]})}));return{ok:true,count:items.length,items}}
-    if(a==='approvePhotos'){const r=db.reports.find(x=>x.id===d.id);if(!r||!r.photos)return{ok:false,error:'รายงานนี้ไม่มีภาพ'};r.publicOk=d.approve?1:'';r.caption=d.approve?(d.caption||''):'';return{ok:true}}
+    if(a==='approvePhotos'){const r=db.reports.find(x=>x.id===d.id);if(!r||!r.photos)return{ok:false,error:'รายงานนี้ไม่มีภาพ'};r.publicOk=d.approve?1:(d.reject?'no':'');r.caption=d.approve?(d.caption||''):'';return{ok:true}}
     if(a==='publicMissions')return{ok:true,missions:MS};
     if(a==='submitByName'){if(String(d.name||'').trim().length<3)return{ok:false,error:'พิมพ์ชื่อ-สกุลให้ครบ'};if(!(d.year>=1&&d.year<=5))return{ok:false,error:'เลือกชั้นปี นศท. (1–5)'};if(!(d.no>=1))return{ok:false,error:'กรอกลำดับเลขที่ นศท. เป็นตัวเลข'};if(d.status!=='ทำครบตามแผน'&&!d.reason)return{ok:false,error:'โปรดระบุเหตุผลเมื่อทำไม่ครบ'};
       const id='R'+(db.seq++);db.reports.push({id,ts:new Date().toISOString(),sid:'Y'+d.year+'-'+d.no,name:d.name,year:d.year,no:d.no,source:'name',missionId:d.missionId,stage:d.stage,role:d.role||'',status:d.status,reason:d.reason||'',q1:d.q1||'',q2:d.q2||'',q3:d.q3||'',evidence:d.evidence||'',reviewStatus:'รอตรวจ',feedback:'',b1:'',b2:'',b3:'',reviewTs:'',beneficiaries:d.beneficiaries===''||d.beneficiaries==null?'':+d.beneficiaries,photos:(d.photos||[]).map((p,i)=>{const k='ph'+db.seq+'_'+i;db.photos[k]=p;return k}).join(','),star:'',starNote:''});return{ok:true,id,photos:(d.photos||[]).length}}
@@ -23,12 +23,12 @@
       if(d.status!=='ทำครบตามแผน'&&!d.reason)return{ok:false,error:'โปรดระบุเหตุผลเมื่อทำไม่ครบ'};return{ok:true,id}}
     if(a==='myReports')return{ok:true,reports:db.reports.slice().reverse(),stars:db.reports.filter(r=>r.star==1).length};
     if(a==='photo')return db.photos[d.fileId]?{ok:true,data:db.photos[d.fileId]}:{ok:false,error:'ไม่พบภาพ'};
-    if(a==='reports'){let l=db.reports.slice().reverse();if(d.photoStatus==='pending')l=l.filter(r=>r.photos&&r.publicOk!=1);if(d.photoStatus==='approved')l=l.filter(r=>r.publicOk==1);return{ok:true,reports:l}}
+    if(a==='reports'){let l=db.reports.slice().reverse();if(d.photoStatus==='pending')l=l.filter(r=>r.photos&&r.publicOk!=1&&r.publicOk!=='no');if(d.photoStatus==='rejected')l=l.filter(r=>r.publicOk==='no');if(d.photoStatus==='approved')l=l.filter(r=>r.publicOk==1);return{ok:true,reports:l}}
     if(a==='review'){const r=db.reports.find(x=>x.id===d.id);if(!r)return{ok:false,error:'ไม่พบรายงาน'};Object.assign(r,{reviewStatus:d.reviewStatus,feedback:d.feedback,b1:d.b1,b2:d.b2,b3:d.b3,reviewTs:new Date().toISOString(),star:d.star?1:'',starNote:d.star?(d.starNote||''):''});return{ok:true}}
     if(a==='saveScore'){db.scores.push({ts:new Date().toISOString(),sid:d.sid,phase:d.phase,b1:+d.b1,b2:+d.b2,b3:+d.b3});return{ok:true}}
     if(a==='stats'){const by={},rv={'รอตรวจ':0,'ผ่าน':0,'ขอแก้ไข':0},ph={};db.reports.forEach(r=>{by[r.status]=(by[r.status]||0)+1;rv[r.reviewStatus]++});
       db.scores.forEach(s=>{const p=ph[s.phase]=ph[s.phase]||{n:0,b1:0,b2:0,b3:0};p.n++;p.b1+=s.b1;p.b2+=s.b2;p.b3+=s.b3});Object.values(ph).forEach(p=>['b1','b2','b3'].forEach(b=>p[b]=Math.round(p[b]/p.n*100)/100));
-      return{ok:true,stats:{students:1,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,byMission:{},review:rv,reviewAvg:{},scoresByPhase:ph,stars:db.reports.filter(r=>r.star==1).length,topStars:db.reports.filter(r=>r.star==1).length?[{sid:'demo',name:'นักศึกษาตัวอย่าง',stars:db.reports.filter(r=>r.star==1).length}]:[]}}}
+      return{ok:true,stats:{students:1,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,byMission:{},review:rv,reviewAvg:{},scoresByPhase:ph,photoPending:db.reports.filter(r=>r.photos&&r.publicOk!=1&&r.publicOk!=='no').length,photoApproved:db.reports.filter(r=>r.publicOk==1).length,photoRejected:db.reports.filter(r=>r.publicOk==='no').length,stars:db.reports.filter(r=>r.star==1).length,topStars:db.reports.filter(r=>r.star==1).length?[{sid:'demo',name:'นักศึกษาตัวอย่าง',stars:db.reports.filter(r=>r.star==1).length}]:[]}}}
     return{ok:false,error:'ไม่รองรับ'};
   }
   window.api=async function(action,data){

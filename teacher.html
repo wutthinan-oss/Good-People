@@ -32,11 +32,26 @@
     <div class="ptop"><b>คอนโซลผู้กำกับ</b><span class="sp"></span><button class="btn btn-ghost" style="padding:8px 18px" onclick="logout()">ออกจากระบบ</button></div>
     <div class="tabs" id="tabs">
       <button class="tab on" data-t="stats">สรุป</button>
+      <button class="tab" data-t="photos">อนุมัติภาพ <span class="pbadge" id="pBadge" hidden></span></button>
       <button class="tab" data-t="reports">ตรวจรายงาน</button>
       <button class="tab" data-t="scores">คะแนนพฤติกรรม</button>
     </div>
 
     <section id="tStats"><div class="pcard"><h2>ภาพรวมการทดลอง</h2><div id="sBox">กำลังโหลด...</div></div></section>
+
+    <section id="tPhotos" hidden>
+      <div class="pcard">
+        <h2>อนุมัติภาพขึ้นหน้าเว็บ</h2>
+        <p class="small">ภาพที่นักศึกษาส่งเป็นส่วนตัว จะขึ้นหน้า "ภาพกิจกรรม" ก็ต่อเมื่อกดอนุมัติที่นี่ ตรวจก่อนทุกครั้งว่าไม่มีข้อมูลส่วนตัวและผู้ปรากฏในภาพได้รับความยินยอม</p>
+        <div class="tabs" id="phTabs" style="margin:10px 0 0">
+          <button class="tab on" data-s="pending">รออนุมัติ</button>
+          <button class="tab" data-s="approved">อนุมัติแล้ว</button>
+          <button class="tab" data-s="rejected">ไม่อนุมัติ</button>
+        </div>
+      </div>
+      <div class="phbar" id="phBar"><label><input type="checkbox" id="phAll"> เลือกทั้งหมด</label> <button class="btn btn-primary" id="phBulk" type="button" style="padding:8px 20px">อนุมัติที่เลือก</button> <span class="small" id="phMsg"></span></div>
+      <div class="phgrid" id="phGrid"></div>
+    </section>
 
     <section id="tReports" hidden>
       <div class="pcard">

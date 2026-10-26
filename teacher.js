@@ -11,9 +11,9 @@ $('#fLogin').addEventListener('submit',async e=>{e.preventDefault();hide('#eLogi
   const r=await api('tlogin',{key:$('#key').value});b.disabled=false;b.textContent='เข้าสู่ระบบ';
   if(!r.ok)return show('#eLogin',r.error||'เข้าสู่ระบบไม่สำเร็จ');TOKEN=r.token;try{sessionStorage.setItem('cadet_ttok',TOKEN)}catch(x){}$('#key').value='';enter()});
 document.querySelectorAll('#tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
-  ['stats','reports','scores'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
-  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports()});
-async function init(){const r=await call('missions');if(r.ok){MS=r.missions;$('#fM').innerHTML='<option value="">ทั้งหมด</option>'+MS.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join('')}loadStats()}
+  ['stats','photos','reports','scores'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
+  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos()});
+async function init(){const r=await call('missions');if(r.ok){MS=r.missions;$('#fM').innerHTML='<option value="">ทั้งหมด</option>'+MS.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join('')}loadStats();badge()}
 const nm=id=>(MS.find(m=>m.id===id)||{}).title||id;
 
 async function loadStats(){const r=await call('stats');if(!r.ok){$('#sBox').textContent=r.error;return}const s=r.stats;
@@ -61,3 +61,29 @@ if(TOKEN)enter();
 document.addEventListener('click',async e=>{const b=e.target.closest('.thumb');if(!b||b.dataset.done)return;b.textContent='กำลังโหลด...';
   const r=await call('photo',{fileId:b.dataset.id});if(!r.ok){b.textContent=r.error||'โหลดไม่ได้';return}
   b.dataset.done=1;b.outerHTML=`<img class="pimg" src="${r.data}" alt="ภาพหลักฐาน">`});
+
+/* ===== อนุมัติภาพ ===== */
+let PHS='pending',PL=[];
+async function badge(){const r=await call('stats');if(r.ok){const n=r.stats.photoPending||0;const b=$('#pBadge');b.hidden=!n;b.textContent=n}}
+document.querySelectorAll('#phTabs .tab').forEach(b=>b.onclick=()=>{PHS=b.dataset.s;document.querySelectorAll('#phTabs .tab').forEach(x=>x.classList.toggle('on',x===b));loadPhotos()});
+async function loadPhotos(){const g=$('#phGrid');g.innerHTML='<div class="pcard">กำลังโหลด...</div>';$('#phMsg').textContent='';
+  const r=await call('reports',{photoStatus:PHS});if(!r.ok){g.innerHTML=`<div class="pcard">${esc(r.error)}</div>`;return}
+  PL=r.reports.filter(x=>x.photos);$('#phBar').style.display=PHS==='pending'&&PL.length?'flex':'none';$('#phAll').checked=false;
+  if(!PL.length){g.innerHTML=`<div class="pcard small">${PHS==='pending'?'ไม่มีภาพรออนุมัติ':PHS==='approved'?'ยังไม่มีภาพที่อนุมัติ':'ไม่มีภาพที่ไม่อนุมัติ'}</div>`;badge();return}
+  g.innerHTML=PL.map((x,i)=>`<div class="phcard"><div class="phimgs" id="phi${i}">${String(x.photos).split(',').filter(Boolean).map(id=>`<span class="phload" data-id="${esc(id)}">กำลังโหลดภาพ...</span>`).join('')}</div>
+    <div class="phmeta"><b>${esc(nm(x.missionId))}</b> · ขั้น ${esc(x.stage)} · ${esc(fmtD(x.ts))}<br><span class="small">${esc(x.name)} · ${x.year?'นศท. ปี '+esc(x.year)+' เลขที่ '+esc(x.no):esc(x.sid)}${x.source==='open'?' · ไม่อยู่ในรายชื่อ':''}</span></div>
+    ${PHS==='pending'?`<label class="phsel"><input type="checkbox" class="phck" data-i="${i}"> เลือกอนุมัติ</label>`:''}
+    <input class="in" id="pc${i}" maxlength="160" placeholder="คำบรรยายภาพ (ไม่ต้องใส่ชื่อนักเรียน)" value="${esc(x.caption||nm(x.missionId))}">
+    <div class="phbtn">${PHS==='approved'?`<button class="btn btn-ghost" onclick="phAct(${i},'off')" type="button">ถอดภาพออก</button>`
+      :`<button class="btn btn-primary" onclick="phAct(${i},'ok')" type="button">✅ อนุมัติ</button>${PHS==='pending'?`<button class="btn btn-ghost" onclick="phAct(${i},'no')" type="button">ไม่อนุมัติ</button>`:''}`}<span class="small" id="pm${i}"></span></div></div>`).join('');
+  document.querySelectorAll('.phload').forEach(async el=>{const p=await call('photo',{fileId:el.dataset.id});
+    el.outerHTML=p.ok?`<img class="phimg" src="${p.data}" alt="ภาพหลักฐาน">`:`<span class="small">โหลดภาพไม่ได้</span>`})}
+async function phAct(i,act){const x=PL[i];const o={id:x.id,caption:$('#pc'+i).value};
+  if(act==='ok')o.approve=true;else if(act==='no')o.reject=true;
+  const r=await call('approvePhotos',o);if(!r.ok){$('#pm'+i).textContent=r.error||'ไม่สำเร็จ';return}await loadPhotos();badge()}
+$('#phAll').onchange=e=>document.querySelectorAll('.phck').forEach(c=>c.checked=e.target.checked);
+$('#phBulk').onclick=async()=>{const sel=[...document.querySelectorAll('.phck:checked')].map(c=>+c.dataset.i);
+  if(!sel.length){$('#phMsg').textContent='ยังไม่ได้เลือกภาพ';return}
+  if(!confirm('อนุมัติ '+sel.length+' รายการให้แสดงบนหน้าเว็บ? ตรวจแล้วว่าไม่มีข้อมูลส่วนตัวและได้รับความยินยอม'))return;
+  let ok=0;for(const i of sel){const r=await call('approvePhotos',{id:PL[i].id,approve:true,caption:$('#pc'+i).value});if(r.ok)ok++}
+  $('#phMsg').textContent='อนุมัติแล้ว '+ok+' รายการ';await loadPhotos();badge()};
