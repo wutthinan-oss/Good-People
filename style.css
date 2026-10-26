@@ -304,3 +304,14 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
   .cm-s:not(:last-child)::after{content:"▼";right:auto;left:26px;top:auto;bottom:-24px;font-size:16px}
   .cm-out3{grid-template-columns:1fr}
 }
+
+/* ป้ายชื่อผลงาน (วิบวับ) */
+.cm-badge{display:inline-block;max-width:100%;text-align:center;font:700 clamp(18px,3.4vw,28px)/1.35 var(--display);letter-spacing:.02em;color:#F3E7B8;padding:10px 26px 12px;margin-bottom:14px;border-radius:999px;border:2px solid rgba(231,201,90,.7);background:linear-gradient(120deg,rgba(201,162,39,.18),rgba(255,255,255,.06),rgba(201,162,39,.18));box-shadow:0 0 22px rgba(231,201,90,.28);position:relative;overflow:hidden}
+.cm-badge strong{display:block;font-size:1.25em;background:linear-gradient(100deg,#C9A227 0%,#FFF3B0 30%,#E7C95A 50%,#FFF3B0 70%,#C9A227 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:cmShine 3.2s linear infinite}
+.cm-badge::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:cmSweep 4.2s ease-in-out infinite}
+.cm-badge .sp{display:inline-block;color:#FFD84D;text-shadow:0 0 10px rgba(255,216,77,.9);animation:cmTwinkle 1.6s ease-in-out infinite}
+.cm-badge .s2{animation-delay:.8s}
+@keyframes cmShine{to{background-position:-220% 0}}
+@keyframes cmSweep{0%,55%{left:-60%}100%{left:130%}}
+@keyframes cmTwinkle{0%,100%{transform:scale(1) rotate(0);opacity:1}50%{transform:scale(1.35) rotate(18deg);opacity:.65}}
+@media(prefers-reduced-motion:reduce){.cm-badge strong,.cm-badge::after,.cm-badge .sp{animation:none}.cm-badge strong{background-position:0 0}}
