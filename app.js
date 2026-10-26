@@ -17,10 +17,6 @@ showStep(0);let cur=0;
 document.addEventListener('keydown',e=>{if(!st.contains(document.activeElement))return;if(e.key==='ArrowRight'){cur=(cur+1)%5;showStep(cur);st.children[cur].focus()}if(e.key==='ArrowLeft'){cur=(cur+4)%5;showStep(cur);st.children[cur].focus()}});
 [...st.children].forEach((b,i)=>b.addEventListener('click',()=>cur=i));
 
-/* demo form (ไม่บันทึกข้อมูล) */
-function demoSend(){const v=document.querySelector('input[name=st]:checked'),o=document.getElementById('demoOut');
-  o.style.display='block';o.textContent=v?`ตัวอย่าง: ระบบรับสถานะ “${v.value}” แล้ว ในเว็บจริงผู้กำกับจะเห็นรายงานนี้พร้อมหลักฐานและให้ข้อเสนอแนะ (หน้านี้เป็นตัวอย่าง ไม่ได้บันทึกข้อมูลใดๆ)`:'กรุณาเลือกสถานะภารกิจก่อน'}
-
 /* photos: ถ้ามีไฟล์ใน assets/photos/ จะแสดงเอง */
 document.querySelectorAll('[data-photo]').forEach(el=>{const f='assets/photos/'+el.dataset.photo,i=new Image();
   i.onload=()=>{el.style.backgroundImage=`url("${f}")`;el.classList.add('has');el.setAttribute('role','img');el.setAttribute('aria-label','ภาพกิจกรรม CADET รด.หัวใจอาสา')};i.src=f});
