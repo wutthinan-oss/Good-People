@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#123222">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>พอร์ทัลนักศึกษา — CADET ภารกิจทำดี</title>
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -33,7 +37,7 @@
 
   <!-- หลังเข้าสู่ระบบ -->
   <div id="vApp" hidden>
-    <div class="ptop"><b id="who"></b><span class="sp"></span><button class="btn btn-ghost" style="padding:8px 18px" onclick="logout()">ออกจากระบบ</button></div>
+    <div class="ptop"><b id="who"></b><span class="starbox" id="stars" hidden>⭐ <b id="starN">0</b> ดาว</span><span class="sp"></span><button class="btn btn-ghost" id="bInstall" type="button" style="padding:8px 18px" hidden>ติดตั้งแอป</button><button class="btn btn-ghost" style="padding:8px 18px" onclick="logout()">ออกจากระบบ</button></div>
     <div class="tabs" id="tabs">
       <button class="tab on" data-t="missions">ภารกิจ</button>
       <button class="tab" data-t="submit">ส่งรายงาน</button>
@@ -69,7 +73,14 @@
             <label class="f" for="q2">2) ใครได้รับประโยชน์ และฉันรู้ได้อย่างไร</label><textarea class="in" id="q2" maxlength="800"></textarea>
             <label class="f" for="q3">3) ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง</label><textarea class="in" id="q3" maxlength="800"></textarea>
           </div>
-          <label class="f" for="evidence">หลักฐาน (ลิงก์หรือคำอธิบาย เช่น ภาพเก็บไว้ที่ผู้กำกับ)</label><input class="in" id="evidence" maxlength="400">
+          <label class="f">ภาพหลักฐาน (ถ่ายหรือเลือกจากเครื่อง ได้ไม่เกิน 3 ภาพ)</label>
+          <div class="shots" id="shots"></div>
+          <div class="shotbtns">
+            <label class="btn btn-ghost shotbtn">📷 ถ่ายภาพ<input type="file" accept="image/*" capture="environment" id="fCam" hidden></label>
+            <label class="btn btn-ghost shotbtn">🖼️ เลือกภาพ<input type="file" accept="image/*" id="fPick" multiple hidden></label>
+          </div>
+          <p class="small">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับและเจ้าของรายงาน ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
+          <label class="f" for="evidence">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย เช่น ภาพเก็บไว้ที่ผู้กำกับ)</label><input class="in" id="evidence" maxlength="400">
           <div class="err" id="eSub"></div><div class="ok" id="oSub"></div>
           <p style="margin:18px 0 0"><button class="btn btn-primary" id="bSub">ส่งรายงาน</button></p>
         </form>
@@ -79,6 +90,6 @@
     <section id="tHistory" hidden><div id="hList"></div></section>
   </div>
 </main>
-<script src="config.js"></script><script src="api.js"></script><script src="portal.js"></script>
+<script src="config.js"></script><script src="api.js"></script><script src="pwa.js"></script><script src="portal.js"></script>
 </body>
 </html>
