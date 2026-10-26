@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>พอร์ทัลนักศึกษา — CADET ภารกิจทำดี</title>
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>พอร์ทัลนักศึกษา</small></span></a>
+  <nav class="main" style="display:flex"><a href="./">หน้าแรก</a></nav>
+</div></header>
+<div class="demo-banner" id="demoBar" hidden>โหมดสาธิต: ข้อมูลอยู่ในหน้านี้เท่านั้น ไม่ถูกส่งไปที่ใด · ล็อกอินด้วย demo / 1234</div>
+
+<main class="pwrap">
+  <!-- เข้าสู่ระบบ -->
+  <section class="pcard login" id="vLogin" style="padding:26px">
+    <img src="assets/logo.png" alt="โลโก้ CADET รด.หัวใจอาสา">
+    <h2 style="text-align:center">เข้าสู่ระบบนักศึกษา</h2>
+    <p class="small" style="text-align:center">ใช้เลขประจำตัวและ PIN 4 หลักที่ผู้กำกับแจกให้</p>
+    <form id="fLogin" autocomplete="off">
+      <label class="f" for="sid">เลขประจำตัว</label><input class="in" id="sid" inputmode="numeric" required>
+      <label class="f" for="pin">PIN</label><input class="in" id="pin" type="password" inputmode="numeric" maxlength="10" required>
+      <div class="err" id="eLogin"></div>
+      <p style="margin:18px 0 0"><button class="btn btn-primary" style="width:100%;justify-content:center" id="bLogin">เข้าสู่ระบบ</button></p>
+    </form>
+  </section>
+
+  <!-- หลังเข้าสู่ระบบ -->
+  <div id="vApp" hidden>
+    <div class="ptop"><b id="who"></b><span class="sp"></span><button class="btn btn-ghost" style="padding:8px 18px" onclick="logout()">ออกจากระบบ</button></div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-t="missions">ภารกิจ</button>
+      <button class="tab" data-t="submit">ส่งรายงาน</button>
+      <button class="tab" data-t="history">ประวัติและข้อเสนอแนะ</button>
+    </div>
+
+    <section id="tMissions">
+      <div id="mList"></div>
+    </section>
+
+    <section id="tSubmit" hidden>
+      <div class="pcard">
+        <h2>ส่งรายงานภารกิจ</h2>
+        <p class="small">รายงานตามความเป็นจริง แม้งานยังไม่สำเร็จ ผู้กำกับไม่ตัดสินความเป็นคนดีจากคำตอบเดียว</p>
+        <form id="fSub">
+          <label class="f" for="mission">ภารกิจ</label><select class="in" id="mission" required></select>
+          <div class="row2">
+            <div><label class="f" for="stage">ขั้นที่รายงาน</label>
+              <select class="in" id="stage" required>
+                <option value="C">C ใส่ใจปัญหา</option><option value="A">A รับภารกิจ</option><option value="D">D ลงมือทำ</option><option value="E">E ตรวจสอบและสะท้อนคิด</option><option value="T">T สานต่อ</option>
+              </select></div>
+            <div style="grid-column:span 2"><label class="f" for="role">บทบาทของฉันในภารกิจนี้</label><input class="in" id="role" maxlength="200" placeholder="เช่น หัวหน้าหมู่ ผู้บันทึกผลตรวจ"></div>
+          </div>
+          <label class="f">สถานะการทำภารกิจ</label>
+          <div class="opts2">
+            <label><input type="radio" name="st" value="ทำครบตามแผน" required> ✅ ทำครบตามแผน</label>
+            <label><input type="radio" name="st" value="ทำได้บางส่วน"> 🟡 ทำได้บางส่วน</label>
+            <label><input type="radio" name="st" value="ยังไม่ได้ทำ"> ⭕ ยังไม่ได้ทำ</label>
+          </div>
+          <div id="reasonBox" hidden><label class="f" for="reason">เหตุผล (จำเป็นเมื่อทำไม่ครบ)</label><textarea class="in" id="reason" maxlength="600"></textarea></div>
+          <div id="qBox">
+            <label class="f" for="q1">1) วันนี้ฉันรับผิดชอบอะไร และทำได้ตามข้อตกลงหรือไม่ <span class="small">(บังคับในขั้น E และ T)</span></label><textarea class="in" id="q1" maxlength="800"></textarea>
+            <label class="f" for="q2">2) ใครได้รับประโยชน์ และฉันรู้ได้อย่างไร</label><textarea class="in" id="q2" maxlength="800"></textarea>
+            <label class="f" for="q3">3) ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง</label><textarea class="in" id="q3" maxlength="800"></textarea>
+          </div>
+          <label class="f" for="evidence">หลักฐาน (ลิงก์หรือคำอธิบาย เช่น ภาพเก็บไว้ที่ผู้กำกับ)</label><input class="in" id="evidence" maxlength="400">
+          <div class="err" id="eSub"></div><div class="ok" id="oSub"></div>
+          <p style="margin:18px 0 0"><button class="btn btn-primary" id="bSub">ส่งรายงาน</button></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="tHistory" hidden><div id="hList"></div></section>
+  </div>
+</main>
+<script src="config.js"></script><script src="api.js"></script><script src="portal.js"></script>
+</body>
+</html>

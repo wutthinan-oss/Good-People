@@ -1,0 +1,39 @@
+/* ตัวเชื่อม API (Google Apps Script) + โหมดสาธิต ?demo=1 (ข้อมูลสมมติในหน้าเว็บ ไม่ส่งไปที่ใด) */
+(function(){
+  const DEMO=/[?&]demo=1/.test(location.search);
+  window.CADET_DEMO=DEMO;
+  const URL_=window.CADET_API||'';
+  const MS=[
+    {id:'m1',level:'ระดับ 1–2',title:'หนึ่งหมู่ หนึ่งพื้นที่รับผิดชอบ',stages:'C+A|D|E+T',weeks:'สัปดาห์ 5–7',goal:'สำรวจปัญหาในพื้นที่ที่ได้รับอนุญาต จัดทำแผนดูแล ลงมือทำ และกลับมาตรวจผล',evidence:'แบบสำรวจ แผนงาน ภาพตามช่วงเวลา ผลตรวจพื้นที่ สะท้อนคิดรายบุคคล',active:true},
+    {id:'m2',level:'ระดับ 2',title:'รด.ช่วยชุมชน',stages:'C+A|D|E+T',weeks:'สัปดาห์ 8–10',goal:'รับฟังความต้องการของชุมชนก่อนจัดกิจกรรมช่วยเหลือ',evidence:'ความต้องการที่สำรวจได้ รายการงาน ผลตรวจรับ ความเห็นผู้รับประโยชน์',active:true},
+    {id:'m3',level:'ระดับ 3',title:'รด.รักษาทรัพย์สินส่วนรวม',stages:'C+A+D|E+T',weeks:'สัปดาห์ 11–12',goal:'ระบุปัญหาการใช้ทรัพยากรส่วนรวม วางแนวทางดูแล และติดตามผลการใช้งาน',evidence:'ข้อมูลก่อนดำเนินงาน ข้อตกลงการดูแล ผลติดตาม การแก้ไขปัญหา',active:true}];
+  const db={reports:[],scores:[],seq:1};
+  function mock(a,d){
+    if(a==='ping')return{ok:true};
+    if(a==='login')return d.sid==='demo'&&d.pin==='1234'?{ok:true,token:'demo-s',name:'นักศึกษาตัวอย่าง (โหมดสาธิต)',room:'-'}:{ok:false,error:'โหมดสาธิต: ใช้เลขประจำตัว demo และ PIN 1234'};
+    if(a==='tlogin')return d.key==='demo'?{ok:true,token:'demo-t'}:{ok:false,error:'โหมดสาธิต: ใช้รหัส demo'};
+    if(a==='missions')return{ok:true,missions:MS};
+    if(a==='submit'){const id='R'+(db.seq++);db.reports.push({id,ts:new Date().toISOString(),sid:'demo',name:'นักศึกษาตัวอย่าง',missionId:d.missionId,stage:d.stage,role:d.role||'',status:d.status,reason:d.reason||'',q1:d.q1||'',q2:d.q2||'',q3:d.q3||'',evidence:d.evidence||'',reviewStatus:'รอตรวจ',feedback:'',b1:'',b2:'',b3:'',reviewTs:''});
+      if(d.status!=='ทำครบตามแผน'&&!d.reason)return{ok:false,error:'โปรดระบุเหตุผลเมื่อทำไม่ครบ'};return{ok:true,id}}
+    if(a==='myReports')return{ok:true,reports:db.reports.slice().reverse()};
+    if(a==='reports')return{ok:true,reports:db.reports.slice().reverse()};
+    if(a==='review'){const r=db.reports.find(x=>x.id===d.id);if(!r)return{ok:false,error:'ไม่พบรายงาน'};Object.assign(r,{reviewStatus:d.reviewStatus,feedback:d.feedback,b1:d.b1,b2:d.b2,b3:d.b3,reviewTs:new Date().toISOString()});return{ok:true}}
+    if(a==='saveScore'){db.scores.push({ts:new Date().toISOString(),sid:d.sid,phase:d.phase,b1:+d.b1,b2:+d.b2,b3:+d.b3});return{ok:true}}
+    if(a==='stats'){const by={},rv={'รอตรวจ':0,'ผ่าน':0,'ขอแก้ไข':0},ph={};db.reports.forEach(r=>{by[r.status]=(by[r.status]||0)+1;rv[r.reviewStatus]++});
+      db.scores.forEach(s=>{const p=ph[s.phase]=ph[s.phase]||{n:0,b1:0,b2:0,b3:0};p.n++;p.b1+=s.b1;p.b2+=s.b2;p.b3+=s.b3});Object.values(ph).forEach(p=>['b1','b2','b3'].forEach(b=>p[b]=Math.round(p[b]/p.n*100)/100));
+      return{ok:true,stats:{students:1,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,byMission:{},review:rv,reviewAvg:{},scoresByPhase:ph}}}
+    return{ok:false,error:'ไม่รองรับ'};
+  }
+  window.api=async function(action,data){
+    const body=Object.assign({action},data||{});
+    if(DEMO){await new Promise(r=>setTimeout(r,250));return mock(action,body)}
+    if(!URL_)return{ok:false,error:'ยังไม่ได้ตั้งค่า API ในไฟล์ config.js'};
+    try{
+      const res=await fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),redirect:'follow'});
+      const txt=await res.text();
+      try{return JSON.parse(txt)}catch(e){return{ok:false,error:'เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ (ตรวจว่า deploy เป็น Web app และมีฟังก์ชัน doPost)'}}
+    }catch(e){return{ok:false,error:'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่'}}
+  };
+  window.esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  window.fmtD=s=>{if(!s)return'';const d=new Date(s);return isNaN(d)?'':d.toLocaleString('th-TH',{day:'numeric',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'})};
+})();

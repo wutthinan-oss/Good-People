@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>คอนโซลผู้กำกับ — CADET ภารกิจทำดี</title>
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>คอนโซลผู้กำกับ</small></span></a>
+  <nav class="main" style="display:flex"><a href="./">หน้าแรก</a></nav>
+</div></header>
+<div class="demo-banner" id="demoBar" hidden>โหมดสาธิต: ข้อมูลอยู่ในหน้านี้เท่านั้น · รหัสผู้กำกับ demo</div>
+
+<main class="pwrap">
+  <section class="pcard login" id="vLogin" style="padding:26px">
+    <img src="assets/logo.png" alt="โลโก้">
+    <h2 style="text-align:center">เข้าสู่ระบบผู้กำกับ</h2>
+    <form id="fLogin" autocomplete="off">
+      <label class="f" for="key">รหัสผู้กำกับ</label><input class="in" id="key" type="password" required>
+      <div class="err" id="eLogin"></div>
+      <p style="margin:18px 0 0"><button class="btn btn-primary" style="width:100%;justify-content:center" id="bLogin">เข้าสู่ระบบ</button></p>
+    </form>
+  </section>
+
+  <div id="vApp" hidden>
+    <div class="ptop"><b>คอนโซลผู้กำกับ</b><span class="sp"></span><button class="btn btn-ghost" style="padding:8px 18px" onclick="logout()">ออกจากระบบ</button></div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-t="stats">สรุป</button>
+      <button class="tab" data-t="reports">ตรวจรายงาน</button>
+      <button class="tab" data-t="scores">คะแนนพฤติกรรม</button>
+    </div>
+
+    <section id="tStats"><div class="pcard"><h2>ภาพรวมการทดลอง</h2><div id="sBox">กำลังโหลด...</div></div></section>
+
+    <section id="tReports" hidden>
+      <div class="pcard">
+        <div class="row2">
+          <div><label class="f" for="fM">ภารกิจ</label><select class="in" id="fM"><option value="">ทั้งหมด</option></select></div>
+          <div><label class="f" for="fR">สถานะการตรวจ</label><select class="in" id="fR"><option value="">ทั้งหมด</option><option>รอตรวจ</option><option>ผ่าน</option><option>ขอแก้ไข</option></select></div>
+          <div style="align-self:end"><button class="btn btn-ghost" onclick="loadReports()">โหลดใหม่</button> <button class="btn btn-ghost" onclick="exportCsv()">ส่งออก CSV</button></div>
+        </div>
+      </div>
+      <div id="rList"></div>
+    </section>
+
+    <section id="tScores" hidden>
+      <div class="pcard">
+        <h2>บันทึกคะแนนพฤติกรรม</h2>
+        <p class="small">ระดับ 4 = ดีเยี่ยม, 3 = ดี, 2 = ผ่าน, 1 = ไม่ผ่าน</p>
+        <form id="fScore">
+          <div class="row2">
+            <div><label class="f" for="scSid">เลขประจำตัว</label><input class="in" id="scSid" inputmode="numeric" required></div>
+            <div><label class="f" for="scPh">ช่วงการประเมิน</label><select class="in" id="scPh"><option>ก่อน</option><option>ระหว่าง</option><option>หลัง</option></select></div>
+            <div><label class="f" for="scAs">ผู้ประเมิน</label><input class="in" id="scAs" value="ผู้กำกับ" maxlength="60"></div>
+          </div>
+          <div class="row2">
+            <div><label class="f" for="b1">ความรับผิดชอบ</label><select class="in" id="b1"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+            <div><label class="f" for="b2">ความซื่อสัตย์ในการรายงาน</label><select class="in" id="b2"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+            <div><label class="f" for="b3">จิตสาธารณะ</label><select class="in" id="b3"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+          </div>
+          <div class="err" id="eSc"></div><div class="ok" id="oSc"></div>
+          <p style="margin:16px 0 0"><button class="btn btn-primary">บันทึกคะแนน</button></p>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+<script src="config.js"></script><script src="api.js"></script><script src="teacher.js"></script>
+</body>
+</html>
