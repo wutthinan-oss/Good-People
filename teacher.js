@@ -26,12 +26,16 @@ async function loadStats(){const r=await call('stats');if(!r.ok){$('#sBox').text
    ${['ก่อน','ระหว่าง','หลัง'].map(k=>ph[k]?`<tr><td>${k}</td><td>${ph[k].n}</td><td>${ph[k].b1}</td><td>${ph[k].b2}</td><td>${ph[k].b3}</td></tr>`:`<tr><td>${k}</td><td colspan="4" class="small">ยังไม่มีข้อมูล</td></tr>`).join('')}</table>
    <p class="small">ตัวเลขคำนวณจากข้อมูลที่บันทึกจริงในระบบเท่านั้น</p>`}
 
-async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำลังโหลด...</div>';const r=await call('reports',{missionId:$('#fM').value,reviewStatus:$('#fR').value});
+async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำลังโหลด...</div>';const r=await call('reports',{missionId:$('#fM').value,reviewStatus:$('#fR').value,photoStatus:$('#fP').value});
   if(!r.ok){$('#rList').innerHTML=`<div class="pcard">${esc(r.error)}</div>`;return}REPS=r.reports;
   $('#rList').innerHTML=REPS.map((x,i)=>`<div class="rep"><div class="h"><b>${esc(x.name)}</b><span class="small">${x.year?'นศท. ปี '+esc(x.year)+' เลขที่ '+esc(x.no):esc(x.sid)}</span>${x.source==='name'?'<span class="badge2" title="ส่งด้วยการพิมพ์ชื่อ ยังไม่ยืนยันตัวตนด้วย PIN">ส่งด้วยชื่อ</span>':''}<span class="stg">${esc(nm(x.missionId))} · ขั้น ${esc(x.stage)}</span>
    <span class="badge2 ${x.status==='ทำครบตามแผน'?'g':x.status==='ยังไม่ได้ทำ'?'r':''}">${esc(x.status)}</span><span class="badge2 ${x.reviewStatus==='ผ่าน'?'g':x.reviewStatus==='ขอแก้ไข'?'r':''}">${esc(x.reviewStatus)}</span><span class="small">${esc(fmtD(x.ts))}</span></div>
    ${x.role?`<p><b>บทบาท:</b> ${esc(x.role)}</p>`:''}${x.reason?`<p><b>เหตุผล:</b> ${esc(x.reason)}</p>`:''}${x.q1?`<p><b>1)</b> ${esc(x.q1)}</p><p><b>2)</b> ${esc(x.q2)}</p><p><b>3)</b> ${esc(x.q3)}</p>`:''}${x.evidence?`<p><b>หลักฐาน:</b> ${esc(x.evidence)}</p>`:''}
    ${x.photos?`<div class="thumbs">${String(x.photos).split(',').map(id=>`<button type="button" class="thumb" data-id="${esc(id)}">📷 ดูภาพ</button>`).join('')}</div>`:''}
+   ${x.photos?`<div class="apv ${x.publicOk?'on':''}"><b>${x.publicOk?'✅ ภาพนี้แสดงบนหน้าเว็บแล้ว':'⏳ ภาพรออนุมัติ (ยังไม่แสดงบนหน้าเว็บ)'}</b>
+     <input class="in" id="cap${i}" maxlength="160" placeholder="คำบรรยายภาพ เช่น เก็บขยะบริเวณสนาม (ไม่ต้องใส่ชื่อนักเรียน)" value="${esc(x.caption||'')}">
+     <button type="button" class="btn ${x.publicOk?'btn-ghost':'btn-primary'}" style="padding:7px 18px" onclick="approve(${i},${x.publicOk?0:1})">${x.publicOk?'ถอดภาพออกจากหน้าเว็บ':'อนุมัติให้แสดงภาพ'}</button> <span class="small" id="apm${i}"></span>
+     <p class="small" style="margin:6px 0 0">ตรวจก่อนอนุมัติ: ไม่มีข้อมูลส่วนตัว และผู้ปรากฏในภาพได้รับความยินยอมแล้ว</p></div>`:''}
    ${x.star?`<div class="starnote">⭐ มอบดาวแล้ว${x.starNote?': '+esc(x.starNote):''}</div>`:''}
    <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:600">ตรวจ / ให้ข้อเสนอแนะ</summary>
     <div class="row2"><div><label class="f">ผลการตรวจ</label><select class="in" id="rs${i}"><option ${x.reviewStatus==='ผ่าน'?'selected':''}>ผ่าน</option><option ${x.reviewStatus==='ขอแก้ไข'?'selected':''}>ขอแก้ไข</option></select></div>
@@ -42,6 +46,8 @@ async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำล
     <input class="in" id="rsn${i}" maxlength="200" placeholder="เหตุผลที่มอบดาว เช่น ช่วยเพื่อนจนงานเสร็จ" value="${esc(x.starNote||'')}">
     <label class="f">ข้อเสนอแนะ</label><textarea class="in" id="rf${i}" maxlength="800">${esc(x.feedback)}</textarea>
     <p style="margin:10px 0 0"><button class="btn btn-primary" style="padding:8px 20px" onclick="saveReview(${i})">บันทึกผลตรวจ</button> <span class="small" id="rm${i}"></span></p></details></div>`).join('')||'<div class="pcard">ยังไม่มีรายงาน</div>'}
+async function approve(i,on){const x=REPS[i];const r=await call('approvePhotos',{id:x.id,approve:!!on,caption:$('#cap'+i).value});
+  if(!r.ok){$('#apm'+i).textContent=r.error||'ไม่สำเร็จ';return}await loadReports()}
 async function saveReview(i){const x=REPS[i],g=id=>$('#'+id+i).value;const r=await call('review',{id:x.id,reviewStatus:g('rs'),feedback:g('rf'),b1:g('rb1'),b2:g('rb2'),b3:g('rb3'),star:$('#rst'+i).checked?1:0,starNote:$('#rsn'+i).value});
   $('#rm'+i).textContent=r.ok?'บันทึกแล้ว':(r.error||'บันทึกไม่สำเร็จ')}
 function exportCsv(){const h=['id','ts','sid','name','missionId','stage','role','status','reason','q1','q2','q3','evidence','reviewStatus','feedback','b1','b2','b3','star','starNote'];

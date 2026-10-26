@@ -1,6 +1,6 @@
 /* Service worker: เก็บหน้าหลักของแอปไว้เปิดเร็ว/เปิดได้แม้สัญญาณอ่อน ส่วนข้อมูลจากฐานข้อมูลไม่เก็บแคช */
-const V = 'cadet-v2';
-const SHELL = ['mission.html', 'mission.js', 'portal.html', 'portal.css', 'portal.js', 'api.js', 'config.js', 'pwa.js', 'style.css',
+const V = 'cadet-v3';
+const SHELL = ['mission.html', 'mission.js', 'gallery.html', 'gallery.js', 'gallery.css', 'portal.html', 'portal.css', 'portal.js', 'api.js', 'config.js', 'pwa.js', 'style.css',
                'assets/logo.png', 'assets/icon-192.png', 'manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
