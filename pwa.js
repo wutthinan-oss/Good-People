@@ -11,7 +11,7 @@
   if (ios) btn.hidden = false;
   btn.addEventListener('click', function () {
     if (deferred) { deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; btn.hidden = true; }); }
-    else alert(ios ? 'บน iPhone/iPad: กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศร) ใน Safari แล้วเลือก "เพิ่มลงในหน้าจอโหลด"' : 'เปิดเมนูของเบราว์เซอร์ แล้วเลือก "ติดตั้งแอป" หรือ "เพิ่มลงในหน้าจอหลัก"');
+    else alert(ios ? 'บน iPhone/iPad: กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศร) ใน Safari แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"' : 'เปิดเมนูของเบราว์เซอร์ แล้วเลือก "ติดตั้งแอป" หรือ "เพิ่มลงในหน้าจอหลัก"');
   });
   addEventListener('appinstalled', function () { btn.hidden = true; });
 })();
