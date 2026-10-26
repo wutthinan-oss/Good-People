@@ -336,3 +336,15 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 
 #why .sec-head .eyebrow{justify-content:center}
 #why .sec-head .lead{margin-inline:auto}
+
+/* หัวข้อส่วนแบบทางการ: ป้ายเลขส่วน + แถบแบ่งพื้นที่ชัดเจน */
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font:700 clamp(18px,2.6vw,24px)/1.2 var(--display);letter-spacing:0;text-transform:none;color:#fff;background:var(--green);padding:7px 24px 7px 7px;border-radius:999px;box-shadow:0 4px 14px rgba(18,50,34,.25);margin-bottom:18px}
+.eyebrow::before{content:none}
+.eyebrow .no{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--green-d);font:800 20px var(--display)}
+section.dark .eyebrow{background:var(--gold);color:var(--green-d)}
+section.dark .eyebrow .no{background:var(--green-d);color:var(--gold)}
+.sec-head{text-align:center}
+.sec-head .lead{margin-inline:auto}
+section[id]{border-top:6px solid var(--gold)}
+section.dark{border-top-color:#E7C95A}
+section[id] .sec-head h2{font-size:clamp(26px,4.4vw,40px)}
