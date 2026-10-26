@@ -16,7 +16,7 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:'Sarabun',system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:76px;font-size:16px}
 header{background:var(--g);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:5;border-bottom:3px solid var(--gold)}
-header b{font-size:18px;display:block}header small{opacity:.85}
+header{display:flex;align-items:center;gap:12px}header img{width:52px;height:52px;border-radius:50%;background:#fff;object-fit:cover}header b{font-size:18px;display:block}header small{opacity:.85}
 main{padding:14px 16px;max-width:760px;margin:0 auto}
 nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;z-index:6;padding-bottom:env(safe-area-inset-bottom)}
 nav button{flex:1;border:0;background:none;padding:9px 2px;color:var(--mut);font:inherit;font-size:12px;cursor:pointer}
@@ -55,7 +55,7 @@ td.l{text-align:left}.ph{display:flex;gap:6px;flex-wrap:wrap}.ph img{width:80px;
 </head>
 <body>
 <div id="demoBar" class="demo" style="display:none">เว็บจำลอง: ข้อมูลทั้งหมดเป็นของสมมติ ใช้สาธิตระบบเท่านั้น ห้ามนำไปส่งเป็นผลงานจริง · <a href="./">ไปหน้าใช้งานจริง</a></div>
-<header><b id="hTitle">สร้างสรรค์คนดี</b><small id="hSub"></small></header>
+<header><img src="logo.png" alt="โลโก้สร้างสรรค์คนดี"><div><b id="hTitle">สร้างสรรค์คนดี</b><small id="hSub"></small></div></header>
 <main id="app"></main>
 <nav id="nav"></nav>
 <div id="rpt"></div><div id="toast"></div>
@@ -101,7 +101,7 @@ function steps(){const n=S.students.length,full=ph=>n>0&&S.students.every(s=>Obj
   return[['นำเข้ารายชื่อนักเรียน',n>0,'stu'],['ประเมินคุณลักษณะก่อนโครงการ',full('pre'),'asm','pre'],['บันทึกกิจกรรมพร้อมรูปจริง',S.acts.length>0,'act','acts'],['บันทึกความดีของนักเรียน',S.good.length>0,'act','good'],['ประเมินคุณลักษณะหลังโครงการ',full('post'),'asm','post'],['กรอกการเผยแพร่/รางวัล (ถ้ามีจริง)',S.pubs.length+S.awards.length>0,'rep'],['ตรวจเล่มและพิมพ์ PDF / Word',false,'rep']]}
 function goStep(t,s){if(s){if(t==='asm')sub.asm=s;else sub.act=s}go(t)}
 function vHome(){const st=stats().filter(x=>x.n>1),sp=steps(),done=sp.filter(x=>x[1]).length,nx=sp.find(x=>!x[1]);
-  return`<div class="card"><h2>ขั้นตอนการใช้งาน (${done}/${sp.length})</h2><div class="bar"><i style="width:${done/sp.length*100}%"></i></div>${sp.map((x,i)=>`<div class="item" style="align-items:center"><span>${x[1]?'✅':'⬜'} ${x[0]}</span>${x[1]?'':`<button class="btn sm ${x===nx?'':'alt'}" onclick="goStep('${x[2]}','${x[3]||''}')">ทำเลย</button>`}</div>`).join('')}</div>
+  return`<div style="text-align:center"><img src="logo.png" alt="" style="width:170px;max-width:60%"></div><div class="card"><h2>ขั้นตอนการใช้งาน (${done}/${sp.length})</h2><div class="bar"><i style="width:${done/sp.length*100}%"></i></div>${sp.map((x,i)=>`<div class="item" style="align-items:center"><span>${x[1]?'✅':'⬜'} ${x[0]}</span>${x[1]?'':`<button class="btn sm ${x===nx?'':'alt'}" onclick="goStep('${x[2]}','${x[3]||''}')">ทำเลย</button>`}</div>`).join('')}</div>
   <div class="grid"><div class="card stat"><b>${S.students.length}</b><small>นักเรียน</small></div><div class="card stat"><b>${S.acts.length}</b><small>กิจกรรม</small></div>
   <div class="card stat"><b>${S.good.length}</b><small>บันทึกความดี</small></div><div class="card stat"><b>${Object.keys(S.scores.post).length}/${S.students.length}</b><small>ประเมินหลังแล้ว</small></div></div>
   ${st.length?`<div class="card"><h2>สรุปผลก่อน-หลังโดยย่อ</h2>${st.map(x=>`<div class="item"><span>${x.tn}</span><span>${f2(x.m1)} → <b>${f2(x.m2)}</b></span></div>`).join('')}</div>`:''}
@@ -231,6 +231,7 @@ function loadDemo(auto){if(auto!==true&&!confirm('แทนที่ข้อม
   S=d;SEC.forEach(([k])=>S.text[k]=draft(k));save();go('home')}
 
 if(DEMO_MODE&&!S.demo)loadDemo(true);
+{const q=new URLSearchParams(location.search),t=q.get('tab');if(t&&TABS.some(x=>x[0]===t))tab=t;if(q.get('asm'))sub.asm=q.get('asm')}
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 render();
 </script>
