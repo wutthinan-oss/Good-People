@@ -261,3 +261,10 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 @media(max-width:700px){.lb{grid-template-columns:1fr;padding:10px}.lb-n{position:absolute;bottom:14px;width:52px;height:52px}.lb-prev{left:14px}.lb-next{right:14px}.lb img{max-height:calc(100vh - 170px)}.lb figcaption{margin-bottom:56px}}
 .about.nophoto{grid-template-columns:1fr;max-width:760px}
 .wstats .fact b{font-size:clamp(22px,3.4vw,30px);white-space:nowrap}
+
+/* ตัวเลขผลลัพธ์จากระบบ */
+.res .big{display:block;font:700 34px var(--display);color:var(--green);line-height:1.2;margin:4px 0}
+.res .sub{display:block;font-size:14.5px}
+.res.live{border-style:solid;border-color:var(--green)}
+.res.live .bars{display:none}
+.live-note{font-size:14px;color:var(--mut);margin-top:14px}

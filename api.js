@@ -10,10 +10,11 @@
   const db={reports:[],scores:[],seq:1,photos:{}};
   function mock(a,d){
     if(a==='ping')return{ok:true};
+    if(a==='public'){const by={};let bn=0,nb=0;db.reports.forEach(r=>{by[r.status]=(by[r.status]||0)+1;if(r.beneficiaries!==''){bn+=r.beneficiaries;nb++}});return{ok:true,students:195,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,scorePairs:0,before:null,after:null,beneficiaries:nb?bn:null,beneficiaryReports:nb}}
     if(a==='login')return d.sid==='demo'&&d.pin==='1234'?{ok:true,token:'demo-s',name:'นักศึกษาตัวอย่าง (โหมดสาธิต)',room:'-'}:{ok:false,error:'โหมดสาธิต: ใช้เลขประจำตัว demo และ PIN 1234'};
     if(a==='tlogin')return d.key==='demo'?{ok:true,token:'demo-t'}:{ok:false,error:'โหมดสาธิต: ใช้รหัส demo'};
     if(a==='missions')return{ok:true,missions:MS};
-    if(a==='submit'){const id='R'+(db.seq++);db.reports.push({id,ts:new Date().toISOString(),sid:'demo',name:'นักศึกษาตัวอย่าง',missionId:d.missionId,stage:d.stage,role:d.role||'',status:d.status,reason:d.reason||'',q1:d.q1||'',q2:d.q2||'',q3:d.q3||'',evidence:d.evidence||'',reviewStatus:'รอตรวจ',feedback:'',b1:'',b2:'',b3:'',reviewTs:'',photos:(d.photos||[]).map((p,i)=>{const k='ph'+db.seq+'_'+i;db.photos[k]=p;return k}).join(','),star:'',starNote:''});
+    if(a==='submit'){const id='R'+(db.seq++);db.reports.push({id,ts:new Date().toISOString(),sid:'demo',name:'นักศึกษาตัวอย่าง',missionId:d.missionId,stage:d.stage,role:d.role||'',status:d.status,reason:d.reason||'',q1:d.q1||'',q2:d.q2||'',q3:d.q3||'',evidence:d.evidence||'',reviewStatus:'รอตรวจ',feedback:'',b1:'',b2:'',b3:'',reviewTs:'',beneficiaries:d.beneficiaries===''||d.beneficiaries==null?'':+d.beneficiaries,photos:(d.photos||[]).map((p,i)=>{const k='ph'+db.seq+'_'+i;db.photos[k]=p;return k}).join(','),star:'',starNote:''});
       if(d.status!=='ทำครบตามแผน'&&!d.reason)return{ok:false,error:'โปรดระบุเหตุผลเมื่อทำไม่ครบ'};return{ok:true,id}}
     if(a==='myReports')return{ok:true,reports:db.reports.slice().reverse(),stars:db.reports.filter(r=>r.star==1).length};
     if(a==='photo')return db.photos[d.fileId]?{ok:true,data:db.photos[d.fileId]}:{ok:false,error:'ไม่พบภาพ'};

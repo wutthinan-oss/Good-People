@@ -253,6 +253,7 @@
           <label class="btn btn-ghost sd-pick">🖼️ เลือกภาพ<input type="file" accept="image/*" id="sdFile" multiple hidden></label>
         </div>
         <p class="sd-hint">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับและเจ้าของรายงาน ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
+        <div class="q">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน) <span class="sd-hint">(ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</span></div><input class="sd-in" id="sdBen" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
         <div class="q">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย)</div><input class="sd-in" id="sdEvi" maxlength="400">
         <div class="sd-err" id="sdESub"></div><div class="out" id="sdOk"></div>
         <p style="margin:14px 0 0"><button class="btn btn-primary" type="submit" id="sdBSub">ส่งรายงาน</button> <a class="sd-link" href="portal.html">เปิดพอร์ทัลเต็ม (ดูประวัติ ข้อเสนอแนะ ดาว)</a></p>
@@ -294,11 +295,13 @@
     <div class="notice">⚠️ <span>เป็นเป้าหมายที่เสนอให้ทดลอง ไม่ใช่ผลที่เกิดขึ้นแล้ว จะไม่กำหนดว่าคะแนนต้องเพิ่ม 20% หรือ 30% โดยไม่มีฐานข้อมูลรองรับ และจะรายงานผลตามจริงแม้บางตัวชี้วัดไม่เป็นไปตามเป้า</span></div>
 
     <h3 style="margin-top:34px">ผลการทดลอง</h3>
-    <div class="results">
-      <div class="res"><div class="bars"><i style="height:30%"></i><i style="height:30%"></i></div><b>คะแนนพฤติกรรม ก่อน – หลัง</b>รอข้อมูลจริงจากการทดลอง</div>
-      <div class="res"><div class="bars"><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i></div><b>ภารกิจที่ดำเนินการ</b>รอข้อมูลจริงจากการทดลอง</div>
-      <div class="res"><div class="bars"><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i></div><b>ประโยชน์ต่อผู้รับบริการ</b>รอข้อมูลจริงจากการทดลอง</div>
+    <div class="results" id="results-live">
+      <div class="res" id="rBeh"><div class="bars"><i style="height:30%"></i><i style="height:30%"></i></div><b>คะแนนพฤติกรรม ก่อน – หลัง</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
+      <div class="res" id="rMs"><div class="bars"><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i></div><b>รายงานภารกิจที่ส่งเข้าระบบ</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
+      <div class="res" id="rBen"><div class="bars"><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i></div><b>ผู้ได้รับประโยชน์ที่นักศึกษารายงาน</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
     </div>
+    <p class="live-note" id="liveNote">ตัวเลขชุดนี้ดึงจากฐานข้อมูลของระบบโดยอัตโนมัติ ไม่ได้พิมพ์ไว้ในหน้าเว็บ จะเปลี่ยนเมื่อนักศึกษาส่งรายงานและผู้กำกับบันทึกคะแนน · <a href="#send">นักศึกษาส่งภารกิจได้ที่นี่</a> · <a href="portal.html">เปิดพอร์ทัลนักศึกษา</a></p>
+  </div>
   </div>
 </section>
 
@@ -337,6 +340,6 @@
 <script src="assets/data/photos.js"></script>
 <script src="config.js"></script><script src="api.js"></script>
 <script src="app.js"></script>
-<script src="send.js"></script>
+<script src="send.js"></script><script src="live.js"></script>
 </body>
 </html>

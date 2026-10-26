@@ -36,7 +36,7 @@
     if(st.value!=='ทำครบตามแผน'&&!$('#sdReason').value.trim())return show('#sdESub','โปรดระบุเหตุผลเมื่อทำไม่ครบ');
     if((stage==='E'||stage==='T')&&q.some(x=>!x))return show('#sdESub','ขั้น E และ T ต้องตอบคำถามสะท้อนคิดทั้ง 3 ข้อ');
     const b=$('#sdBSub');b.disabled=true;b.textContent='กำลังส่ง...';
-    const r=await call('submit',{missionId:$('#sdMs').value,stage,role:$('#sdRole').value,status:st.value,reason:$('#sdReason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#sdEvi').value,photos:PH});
+    const r=await call('submit',{missionId:$('#sdMs').value,stage,role:$('#sdRole').value,status:st.value,reason:$('#sdReason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#sdEvi').value,photos:PH,beneficiaries:$('#sdBen').value});
     b.disabled=false;b.textContent='ส่งรายงาน';
     if(!r.ok)return show('#sdESub',r.error||'ส่งไม่สำเร็จ');
     show('#sdOk','ส่งรายงานแล้ว (รหัส '+r.id+(r.photos?' · แนบ '+r.photos+' ภาพ':'')+') ผู้กำกับจะตรวจและให้ข้อเสนอแนะ');

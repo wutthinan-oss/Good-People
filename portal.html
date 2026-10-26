@@ -80,6 +80,7 @@
             <label class="btn btn-ghost shotbtn">🖼️ เลือกภาพ<input type="file" accept="image/*" id="fPick" multiple hidden></label>
           </div>
           <p class="small">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับและเจ้าของรายงาน ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
+          <label class="f" for="ben">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน, ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</label><input class="in" id="ben" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
           <label class="f" for="evidence">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย เช่น ภาพเก็บไว้ที่ผู้กำกับ)</label><input class="in" id="evidence" maxlength="400">
           <div class="err" id="eSub"></div><div class="ok" id="oSub"></div>
           <p style="margin:18px 0 0"><button class="btn btn-primary" id="bSub">ส่งรายงาน</button></p>
