@@ -34,7 +34,7 @@
       <a href="#works">ผลงานอ้างอิง</a>
       <a href="#system">ระบบเว็บ</a>
       <a href="#results">ตัวชี้วัด</a>
-      <a href="portal.html" class="btn btn-primary" style="padding:6px 16px">เข้าสู่ระบบ</a>
+      <a href="mission.html" class="btn btn-primary" style="padding:6px 16px">ทำภารกิจ</a>
     </nav>
   </div>
 </header>
@@ -215,40 +215,10 @@
         <div class="mock"><div class="row"><span>ประวัติภารกิจ · ข้อเสนอแนะ · เป้าหมายรอบถัดไป</span><span class="pill">รายบุคคล</span></div></div></div>
     </div>
 
-    <div class="demo reveal" id="send">
-      <h3>ส่งภารกิจรายบุคคล <span class="tagd" id="sdDemoTag" hidden>DEMO · ไม่บันทึกข้อมูลจริง</span></h3>
-      <p class="mut" style="color:var(--mut)">พิมพ์ชื่อแล้วส่งได้เลย ไม่ต้องใช้รหัส รายงานตามจริงแม้งานยังไม่สำเร็จ แนบภาพหลักฐานจากมือถือได้ ข้อมูลเข้าฐานข้อมูลของผู้กำกับโดยตรง</p>
-
-      <form id="sdForm" autocomplete="off">
-        <label class="sd-l" for="sdName">ชื่อ-สกุลของฉัน</label><input class="sd-in" id="sdName" maxlength="80" placeholder="พิมพ์ชื่อและนามสกุล (ไม่ต้องพิมพ์คำนำหน้า)" required autocomplete="name">
-        <input type="text" id="sdWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <div class="sd-row">
-          <div><label class="sd-l" for="sdMs">ภารกิจ</label><select class="sd-in" id="sdMs" required></select></div>
-          <div><label class="sd-l" for="sdStage">ขั้นที่รายงาน</label>
-            <select class="sd-in" id="sdStage"><option value="C">C ใส่ใจปัญหา</option><option value="A">A รับภารกิจ</option><option value="D" selected>D ลงมือทำ</option><option value="E">E ตรวจสอบและสะท้อนคิด</option><option value="T">T สานต่อ</option></select></div>
-        </div>
-        <label class="sd-l" for="sdRole">บทบาทของฉันในภารกิจนี้</label><input class="sd-in" id="sdRole" maxlength="200" placeholder="เช่น หัวหน้าหมู่ ผู้บันทึกผลตรวจ">
-        <div class="opts" role="radiogroup" aria-label="สถานะภารกิจ" style="margin-top:14px">
-          <label><input type="radio" name="sdSt" value="ทำครบตามแผน"> ✅ ทำครบตามแผน</label>
-          <label><input type="radio" name="sdSt" value="ทำได้บางส่วน"> 🟡 ทำได้บางส่วน</label>
-          <label><input type="radio" name="sdSt" value="ยังไม่ได้ทำ"> ⭕ ยังไม่ได้ทำ (บอกเหตุผล)</label>
-        </div>
-        <div id="sdReasonBox" hidden><div class="q">เหตุผล (จำเป็นเมื่อทำไม่ครบ)</div><textarea id="sdReason" maxlength="600" aria-label="เหตุผล"></textarea></div>
-        <div class="q">1) วันนี้ฉันรับผิดชอบอะไร และทำได้ตามข้อตกลงหรือไม่ <span class="sd-hint">(ขั้น E และ T ต้องตอบทั้ง 3 ข้อ)</span></div><textarea id="sdQ1" maxlength="800" aria-label="คำถามที่ 1"></textarea>
-        <div class="q">2) ใครได้รับประโยชน์ และฉันรู้ได้อย่างไร</div><textarea id="sdQ2" maxlength="800" aria-label="คำถามที่ 2"></textarea>
-        <div class="q">3) ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง</div><textarea id="sdQ3" maxlength="800" aria-label="คำถามที่ 3"></textarea>
-        <div class="q">ภาพหลักฐาน <span class="sd-hint">(ถ่ายหรือเลือกจากเครื่อง ไม่เกิน 3 ภาพ)</span></div>
-        <div class="sd-shots" id="sdShots"></div>
-        <div class="sd-btns">
-          <label class="btn btn-ghost sd-pick">📷 ถ่ายภาพ<input type="file" accept="image/*" capture="environment" id="sdCam" hidden></label>
-          <label class="btn btn-ghost sd-pick">🖼️ เลือกภาพ<input type="file" accept="image/*" id="sdFile" multiple hidden></label>
-        </div>
-        <p class="sd-hint">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับและเจ้าของรายงาน ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
-        <div class="q">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน) <span class="sd-hint">(ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</span></div><input class="sd-in" id="sdBen" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
-        <div class="q">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย)</div><input class="sd-in" id="sdEvi" maxlength="400">
-        <div class="sd-err" id="sdESub"></div><div class="out" id="sdOk"></div>
-        <p style="margin:14px 0 0"><button class="btn btn-primary" type="submit" id="sdBSub">ส่งรายงาน</button> <a class="sd-link" href="portal.html">ดูประวัติ ข้อเสนอแนะ และดาวของฉัน (ใช้ PIN)</a></p>
-      </form>
+    <div class="demo reveal" id="send" style="text-align:center">
+      <h3>ทำภารกิจที่ได้รับ</h3>
+      <p class="mut" style="color:var(--mut)">นักศึกษาเข้าไปบันทึกผลภารกิจได้เลย ไม่ต้องล็อกอิน กรอกชื่อ ชั้นปี นศท. และลำดับเลขที่ แล้วเลือกภารกิจ แนบภาพหลักฐานจากมือถือ ข้อมูลเข้าฐานข้อมูลของผู้กำกับโดยตรง</p>
+      <p style="margin:16px 0 0"><a class="btn btn-primary" href="mission.html">เปิดหน้าทำภารกิจที่ได้รับ →</a></p>
     </div>
   </div>
 </section>
@@ -291,7 +261,7 @@
       <div class="res" id="rMs"><div class="bars"><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i></div><b>รายงานภารกิจที่ส่งเข้าระบบ</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
       <div class="res" id="rBen"><div class="bars"><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i><i style="height:25%"></i></div><b>ผู้ได้รับประโยชน์ที่นักศึกษารายงาน</b><span class="big" hidden></span><span class="sub">รอข้อมูลจริงจากระบบ</span></div>
     </div>
-    <p class="live-note" id="liveNote">ตัวเลขชุดนี้ดึงจากฐานข้อมูลของระบบโดยอัตโนมัติ ไม่ได้พิมพ์ไว้ในหน้าเว็บ จะเปลี่ยนเมื่อนักศึกษาส่งรายงานและผู้กำกับบันทึกคะแนน · <a href="#send">นักศึกษาส่งภารกิจได้ที่นี่</a> · <a href="portal.html">เปิดพอร์ทัลนักศึกษา</a></p>
+    <p class="live-note" id="liveNote">ตัวเลขชุดนี้ดึงจากฐานข้อมูลของระบบโดยอัตโนมัติ ไม่ได้พิมพ์ไว้ในหน้าเว็บ จะเปลี่ยนเมื่อนักศึกษาส่งรายงานและผู้กำกับบันทึกคะแนน · <a href="#send">นักศึกษาส่งภารกิจได้ที่นี่</a> · <a href="mission.html">เปิดหน้าทำภารกิจ</a></p>
   </div>
   </div>
 </section>
@@ -331,6 +301,6 @@
 <script src="assets/data/photos.js"></script>
 <script src="config.js"></script><script src="api.js"></script>
 <script src="app.js"></script>
-<script src="send.js"></script><script src="live.js"></script>
+<script src="live.js"></script>
 </body>
 </html>

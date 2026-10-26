@@ -3,7 +3,7 @@
   "short_name": "CADET",
   "description": "รับภารกิจจิตอาสา ส่งรายงานและภาพหลักฐาน รด.หัวใจอาสา",
   "lang": "th",
-  "start_url": "portal.html",
+  "start_url": "mission.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

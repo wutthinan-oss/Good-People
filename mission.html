@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>ทำภารกิจที่ได้รับ — CADET ภารกิจทำดี</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>ทำภารกิจที่ได้รับ</small></span></a>
+  <nav class="main" style="display:flex"><a href="./">หน้าแรก</a><button class="btn btn-ghost" id="bInstall" type="button" style="padding:6px 16px" hidden>ติดตั้งแอป</button></nav>
+</div></header>
+<div class="demo-banner" id="demoBar" hidden>โหมดสาธิต: ข้อมูลอยู่ในหน้านี้เท่านั้น ไม่ถูกส่งไปที่ใด</div>
+
+<main class="pwrap">
+  <!-- ข้อมูลของฉัน (ไม่ต้องล็อกอิน) -->
+  <section class="pcard login" id="vId" style="padding:26px">
+    <img src="assets/logo.png" alt="โลโก้ CADET รด.หัวใจอาสา">
+    <h2 style="text-align:center">ทำภารกิจที่ได้รับ</h2>
+    <p class="small" style="text-align:center">กรอกข้อมูลของตนเอง แล้วเลือกภารกิจที่ได้รับเพื่อบันทึกผล ไม่ต้องล็อกอิน</p>
+    <form id="fId" autocomplete="off">
+      <label class="f" for="iName">ชื่อ-สกุล</label>
+      <input class="in" id="iName" maxlength="80" placeholder="พิมพ์ชื่อและนามสกุล ไม่ต้องมีคำนำหน้า" required autocomplete="name">
+      <label class="f" for="iYear">ระดับชั้นปี นศท.</label>
+      <select class="in" id="iYear" required>
+        <option value="">เลือกชั้นปี</option>
+        <option value="1">นักศึกษาวิชาทหาร ชั้นปีที่ 1</option><option value="2">ชั้นปีที่ 2</option><option value="3">ชั้นปีที่ 3</option><option value="4">ชั้นปีที่ 4</option><option value="5">ชั้นปีที่ 5</option>
+      </select>
+      <label class="f" for="iNo">ลำดับเลขที่ นศท.</label>
+      <input class="in" id="iNo" type="number" min="1" max="999" inputmode="numeric" placeholder="เช่น 12" required>
+      <div class="err" id="eId"></div>
+      <p style="margin:18px 0 0"><button class="btn btn-primary" style="width:100%;justify-content:center" type="submit">เริ่มทำภารกิจ</button></p>
+    </form>
+  </section>
+
+  <!-- แดชบอร์ดภารกิจ -->
+  <div id="vApp" hidden>
+    <div class="ptop"><b id="who"></b><span class="sp"></span><button class="btn btn-ghost" id="bEdit" type="button" style="padding:8px 18px">แก้ไขข้อมูลของฉัน</button></div>
+    <div class="ok" id="oDone" style="margin-bottom:12px"></div>
+
+    <h2 style="margin:6px 0 10px">ภารกิจที่ได้รับ</h2>
+    <div id="mList"></div>
+
+    <section class="pcard" id="vForm" hidden>
+      <h2 id="fTitle">บันทึกผลภารกิจ</h2>
+      <p class="small">รายงานตามความเป็นจริง แม้งานยังไม่สำเร็จ ผู้กำกับไม่ตัดสินความเป็นคนดีจากคำตอบเดียว</p>
+      <form id="fSub">
+        <input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="row2">
+          <div><label class="f" for="stage">ขั้นที่รายงาน</label>
+            <select class="in" id="stage" required>
+              <option value="C">C ใส่ใจปัญหา</option><option value="A">A รับภารกิจ</option><option value="D" selected>D ลงมือทำ</option><option value="E">E ตรวจสอบและสะท้อนคิด</option><option value="T">T สานต่อ</option>
+            </select></div>
+          <div style="grid-column:span 2"><label class="f" for="role">บทบาทของฉันในภารกิจนี้</label><input class="in" id="role" maxlength="200" placeholder="เช่น หัวหน้าหมู่ ผู้บันทึกผลตรวจ"></div>
+        </div>
+        <label class="f">สถานะการทำภารกิจ</label>
+        <div class="opts2">
+          <label><input type="radio" name="st" value="ทำครบตามแผน"> ✅ ทำครบตามแผน</label>
+          <label><input type="radio" name="st" value="ทำได้บางส่วน"> 🟡 ทำได้บางส่วน</label>
+          <label><input type="radio" name="st" value="ยังไม่ได้ทำ"> ⭕ ยังไม่ได้ทำ</label>
+        </div>
+        <div id="reasonBox" hidden><label class="f" for="reason">เหตุผล (จำเป็นเมื่อทำไม่ครบ)</label><textarea class="in" id="reason" maxlength="600"></textarea></div>
+        <label class="f" for="q1">1) วันนี้ฉันรับผิดชอบอะไร และทำได้ตามข้อตกลงหรือไม่ <span class="small">(ขั้น E และ T ต้องตอบทั้ง 3 ข้อ)</span></label><textarea class="in" id="q1" maxlength="800"></textarea>
+        <label class="f" for="q2">2) ใครได้รับประโยชน์ และฉันรู้ได้อย่างไร</label><textarea class="in" id="q2" maxlength="800"></textarea>
+        <label class="f" for="q3">3) ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง</label><textarea class="in" id="q3" maxlength="800"></textarea>
+
+        <label class="f">ภาพหลักฐาน (ถ่ายหรือเลือกจากเครื่อง ไม่เกิน 3 ภาพ)</label>
+        <div class="shots" id="shots"></div>
+        <div class="shotbtns">
+          <label class="btn btn-ghost shotbtn">📷 ถ่ายภาพ<input type="file" accept="image/*" capture="environment" id="fCam" hidden></label>
+          <label class="btn btn-ghost shotbtn">🖼️ เลือกภาพ<input type="file" accept="image/*" id="fPick" multiple hidden></label>
+        </div>
+        <p class="small">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับ ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
+
+        <label class="f" for="ben">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน, ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</label><input class="in" id="ben" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
+        <label class="f" for="evidence">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย)</label><input class="in" id="evidence" maxlength="400">
+        <div class="err" id="eSub"></div>
+        <p style="margin:18px 0 0"><button class="btn btn-primary" id="bSub">ส่งรายงานภารกิจ</button> <button class="btn btn-ghost" id="bCancel" type="button">ยกเลิก</button></p>
+      </form>
+    </section>
+  </div>
+</main>
+<script src="config.js"></script><script src="api.js"></script><script src="pwa.js"></script><script src="mission.js"></script>
+</body>
+</html>
