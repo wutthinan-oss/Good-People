@@ -333,3 +333,6 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 .cm-panel .cm{margin-top:0}
 .cm-panel .cm-loop{margin-top:20px}
 @media(max-width:900px){.cm-panel{padding:24px 14px 16px}}
+
+#why .sec-head .eyebrow{justify-content:center}
+#why .sec-head .lead{margin-inline:auto}
