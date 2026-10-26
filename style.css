@@ -315,3 +315,15 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 @keyframes cmSweep{0%,55%{left:-60%}100%{left:130%}}
 @keyframes cmTwinkle{0%,100%{transform:scale(1) rotate(0);opacity:1}50%{transform:scale(1.35) rotate(18deg);opacity:.65}}
 @media(prefers-reduced-motion:reduce){.cm-badge strong,.cm-badge::after,.cm-badge .sp{animation:none}.cm-badge strong{background-position:0 0}}
+
+/* วิธีใช้เว็บ 4 ขั้น (ใช้โครงเดียวกับโมเดล CADET แต่พื้นสว่าง) */
+.cm4 .cm-steps{grid-template-columns:repeat(4,1fr)}
+.cm-light .cm-end{color:var(--ink);border-color:var(--green)}
+.cm-light .cm-end small{color:var(--mut)}
+.cm-light .cm-out{background:linear-gradient(160deg,#C9A227,#E7C95A);border:0;color:#123222}
+.cm-light .cm-out small{color:#3b3410}
+.cm-light .cm-s{border:1px solid var(--line);border-top:7px solid var(--c);box-shadow:var(--shadow)}
+.cm-loop.light{background:var(--green-l);color:var(--green-d)}
+
+#system .sec-head .eyebrow,#model .sec-head .eyebrow{justify-content:center}
+#system .sec-head .lead{margin-inline:auto}
