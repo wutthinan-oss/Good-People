@@ -60,6 +60,7 @@ td.l{text-align:left}.ph{display:flex;gap:6px;flex-wrap:wrap}.ph img{width:80px;
 #splash{position:fixed;inset:0;z-index:60;background:radial-gradient(800px 500px at 80% -10%,#DCF3EA 0%,transparent 60%),#F2FAF7;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;text-align:center;padding:24px}
 #splash img{width:min(62vw,300px);animation:pop .7s ease}#splash h1{font-size:28px;color:var(--g);margin:14px 0 2px}#splash p{color:var(--mut);margin:0}#splash.off{opacity:0;pointer-events:none}
 #splash .go{margin-top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--g)}@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.gt input.g{width:42px;text-align:center;padding:6px 2px}.gt th,.gt td{padding:3px 4px}.gt td.l{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -177,13 +178,29 @@ function addGood(){if(!S.students.length)return alert('เพิ่มนัก�
 function delGood(id){S.good=S.good.filter(g=>g.id!==id);save();render()}
 
 /* ---------- ประเมิน ---------- */
-function vAsm(){const ph=sub.asm,done=S.students.filter(s=>(S.scores[ph][s.id]||{})[asmTrait]).length;
-  return`<div class="seg"><button class="btn ${ph==='pre'?'':'alt'}" onclick="sub.asm='pre';render()">ก่อนโครงการ</button><button class="btn ${ph==='post'?'':'alt'}" onclick="sub.asm='post';render()">หลังโครงการ</button></div>
-  <div class="card"><div class="eyebrow">${ph==='pre'?'Before':'After'}</div><h2>ให้คะแนน 1-5 ตามที่สังเกตจริง</h2><p class="mut">1=น้อยที่สุด … 5=มากที่สุด ประเมินครั้งละ 1 คุณลักษณะ</p>${TR.map((t,i)=>{const c=S.students.filter(s=>(S.scores[ph][s.id]||{})[i]).length;return`<span class="chip ${asmTrait===i?'on':''}" onclick="asmTrait=${i};render()">${t} ${c}/${S.students.length}</span>`}).join('')}
+function vAsmList(ph){const done=S.students.filter(s=>(S.scores[ph][s.id]||{})[asmTrait]).length;
+  return`<div class="card"><div class="eyebrow">${ph==='pre'?'Before':'After'}</div><h2>ให้คะแนน 1-5 ตามที่สังเกตจริง</h2><p class="mut">1=น้อยที่สุด … 5=มากที่สุด ประเมินครั้งละ 1 คุณลักษณะ</p>${TR.map((t,i)=>{const c=S.students.filter(s=>(S.scores[ph][s.id]||{})[i]).length;return`<span class="chip ${asmTrait===i?'on':''}" onclick="asmTrait=${i};render()">${t} ${c}/${S.students.length}</span>`}).join('')}
   <div class="bar"><i style="width:${S.students.length?done/S.students.length*100:0}%"></i></div><p class="mut">ประเมินแล้ว ${done}/${S.students.length}</p>
   <div class="row"><button class="btn sm alt" onclick="fillRest(3)">เติม 3 ให้คนที่ยังไม่ประเมิน</button><button class="btn sm alt" onclick="fillRest(4)">เติม 4</button></div><p class="mut">ค่าที่เติมเป็นค่าเริ่มต้นเพื่อความเร็ว ต้องแก้รายคนให้ตรงกับที่สังเกตจริง</p>${S.students.map(s=>{const v=(S.scores[ph][s.id]||{})[asmTrait];return`<div class="item" style="align-items:center"><span>${s.no}. ${esc(s.name)}</span><div class="sc">${[1,2,3,4,5].map(n=>`<button class="${v===n?'on':''}" onclick="setSc('${s.id}',${n})">${n}</button>`).join('')}</div></div>`}).join('')||'<p class="mut">เพิ่มนักเรียนก่อน</p>'}</div>
-  ${asmTrait<4?`<button class="btn" style="width:100%" onclick="asmTrait++;render();scrollTo(0,0)">ถัดไป: ${TR[asmTrait+1]} →</button>`:''}
+  ${asmTrait<4?`<button class="btn" style="width:100%" onclick="asmTrait++;render();scrollTo(0,0)">ถัดไป: ${TR[asmTrait+1]} →</button>`:''}`}
+var asmGrid=false;
+function vAsm(){const ph=sub.asm;
+  return`<div class="seg"><button class="btn ${ph==='pre'?'':'alt'}" onclick="sub.asm='pre';render()">ก่อนโครงการ</button><button class="btn ${ph==='post'?'':'alt'}" onclick="sub.asm='post';render()">หลังโครงการ</button></div>
+  <div class="seg"><button class="btn sm ${asmGrid?'alt':''}" onclick="asmGrid=false;render()">ทีละคุณลักษณะ</button><button class="btn sm ${asmGrid?'':'alt'}" onclick="asmGrid=true;render()">ตารางกรอกเร็ว (ทั้งห้อง)</button></div>
+  ${asmGrid?vGrid(ph):vAsmList(ph)}
   <div class="card"><h2>ผลวิเคราะห์ (คำนวณจากคะแนนที่กรอก)</h2>${statTable()}</div>`}
+function vGrid(ph){const SH=['พอเพียง','กตัญญู','ซื่อสัตย์','รับผิดชอบ','อุดมการณ์'];
+  if(!S.students.length)return'<div class="card"><p class="mut">เพิ่มนักเรียนก่อน</p></div>';
+  return`<div class="card"><div class="eyebrow">${ph==='pre'?'Before':'After'} · Grid</div><h2>กรอกคะแนนทั้งห้องในตารางเดียว</h2><p class="mut">พิมพ์ตัวเลข 1-5 ในช่อง (ว่าง = ยังไม่ประเมิน) กรอกจากใบบันทึกคะแนนที่พิมพ์ไปใช้จริงในห้อง</p>
+  <div style="overflow:auto"><table class="gt"><tr><th>ที่</th><th>ชื่อ</th>${SH.map(x=>`<th>${x}</th>`).join('')}</tr>${S.students.map(s=>`<tr><td>${s.no}</td><td class="l">${esc(s.name)}</td>${TR.map((t,i)=>{const v=(S.scores[ph][s.id]||{})[i];return`<td><input class="g" type="number" inputmode="numeric" min="1" max="5" value="${v||''}" onchange="setCell('${s.id}',${i},this)"></td>`}).join('')}</tr>`).join('')}</table></div></div>
+  <div class="card"><div class="eyebrow">Paste</div><h2>วางคะแนนจาก Excel หรือพิมพ์เป็นแถว</h2><p class="mut">แต่ละบรรทัด: เลขที่ แล้วคะแนน 5 ค่า (พอเพียง กตัญญู ซื่อสัตย์ รับผิดชอบ อุดมการณ์) เช่น <span class="mono">1 4 5 4 4 5</span></p>
+  <textarea id="pasteSc" placeholder="1 4 5 4 4 5&#10;2 3 4 4 3 4"></textarea><button class="btn" onclick="importScores()">นำเข้าคะแนน</button></div>`}
+function setCell(id,i,el){const v=parseInt(el.value,10),o=S.scores[sub.asm][id]=S.scores[sub.asm][id]||{};
+  if(v>=1&&v<=5){o[i]=v;save()}else if(el.value===''){delete o[i];save()}else{el.value=o[i]||'';toast('ใส่ตัวเลข 1-5 เท่านั้น')}}
+function importScores(){let ok=0,bad=0;($('#pasteSc').value||'').split(/\r?\n/).forEach(l=>{l=l.trim();if(!l)return;const t=l.split(/[\s,\t]+/).map(Number);
+  const st=S.students.find(s=>s.no===t[0]);if(!st||t.length<6||t.slice(1,6).some(v=>!(v>=1&&v<=5&&Number.isInteger(v)))){bad++;return}
+  const o=S.scores[sub.asm][st.id]=S.scores[sub.asm][st.id]||{};t.slice(1,6).forEach((v,i)=>o[i]=v);ok++});save();render();toast(`นำเข้า ${ok} คน`+(bad?` ข้าม ${bad} บรรทัดที่รูปแบบไม่ถูก`:''))}
+
 function fillRest(v){let c=0;S.students.forEach(s=>{const o=S.scores[sub.asm][s.id]=S.scores[sub.asm][s.id]||{};if(!o[asmTrait]){o[asmTrait]=v;c++}});save();render();toast(`เติมค่า ${v} ให้ ${c} คน`)}
 function setSc(id,n){(S.scores[sub.asm][id]=S.scores[sub.asm][id]||{})[asmTrait]=n;save();const y=scrollY;render();scrollTo(0,y)}
 function statTable(){const st=stats();if(!st.some(x=>x.n>1))return'<p class="mut">ต้องมีคะแนนทั้งก่อนและหลังอย่างน้อย 2 คน จึงจะวิเคราะห์ได้</p>';
