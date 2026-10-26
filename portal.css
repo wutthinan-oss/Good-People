@@ -82,3 +82,9 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .phsel{display:block;margin:6px 0;font-weight:600}
 .phbtn{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
 .phbtn .btn{padding:7px 16px}
+
+/* ดาวความพึงพอใจ */
+.stars{display:flex;align-items:center;gap:4px;margin:6px 0}
+.stars button{background:none;border:0;font-size:40px;line-height:1;color:#d8d2bb;cursor:pointer;padding:0 2px}
+.stars button.on{color:#e0a800}
+.stars .stxt{margin-left:10px;color:var(--mut);font-size:15px}

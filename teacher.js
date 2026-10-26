@@ -18,7 +18,7 @@ const nm=id=>(MS.find(m=>m.id===id)||{}).title||id;
 
 async function loadStats(){const r=await call('stats');if(!r.ok){$('#sBox').textContent=r.error;return}const s=r.stats;
   const ph=s.scoresByPhase||{};
-  $('#sBox').innerHTML=`<div class="sgrid"><div><b>${s.students}</b><span>นักศึกษาในระบบ</span></div><div><b>${s.reports}</b><span>รายงานที่ส่ง</span></div><div><b>${s.submitters}</b><span>ผู้ส่งรายงาน</span></div><div><b>${(s.review||{})['รอตรวจ']||0}</b><span>รอตรวจ</span></div><div><b>⭐ ${s.stars||0}</b><span>ดาวที่มอบแล้ว</span></div></div>
+  $('#sBox').innerHTML=`<div class="sgrid"><div><b>${s.students}</b><span>นักศึกษาในระบบ</span></div><div><b>${s.reports}</b><span>รายงานที่ส่ง</span></div><div><b>${s.submitters}</b><span>ผู้ส่งรายงาน</span></div><div><b>${(s.review||{})['รอตรวจ']||0}</b><span>รอตรวจ</span></div><div><b>⭐ ${s.stars||0}</b><span>ดาวที่มอบแล้ว</span></div><div><b>${s.ratingAvg===null||s.ratingAvg===undefined?'-':s.ratingAvg}</b><span>ดาวพึงพอใจเฉลี่ย (เต็ม 5)</span></div></div>
    ${(s.topStars||[]).length?`<h3>ดาวเด่น (สูงสุด 10 คน)</h3><table class="tt"><tr><th>ชื่อ</th><th>เลขประจำตัว</th><th>ดาว</th></tr>${s.topStars.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.sid)}</td><td>⭐ ${x.stars}</td></tr>`).join('')}</table>`:''}
    <h3>สถานะที่รายงาน</h3><p>${Object.entries(s.byStatus||{}).map(([k,v])=>`<span class="badge2">${esc(k)} ${v}</span>`).join(' ')||'ยังไม่มีข้อมูล'}</p>
    <h3>คะแนนพฤติกรรมเฉลี่ยตามช่วง (ระดับ 1–4)</h3>
@@ -31,6 +31,7 @@ async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำล
   $('#rList').innerHTML=REPS.map((x,i)=>`<div class="rep"><div class="h"><b>${esc(x.name)}</b><span class="small">${x.year?'นศท. ปี '+esc(x.year)+' เลขที่ '+esc(x.no):esc(x.sid)}</span>${x.source==='name'?'<span class="badge2" title="ชื่อตรงกับรายชื่อ แต่ยังไม่ยืนยันตัวตนด้วย PIN">ส่งด้วยชื่อ (ตรงรายชื่อ)</span>':x.source==='open'?'<span class="badge2" title="ชื่อนี้ไม่อยู่ในรายชื่อในชีต Students">ส่งด้วยชื่อ (ไม่อยู่ในรายชื่อ)</span>':''}<span class="stg">${esc(nm(x.missionId))} · ขั้น ${esc(x.stage)}</span>
    <span class="badge2 ${x.status==='ทำครบตามแผน'?'g':x.status==='ยังไม่ได้ทำ'?'r':''}">${esc(x.status)}</span><span class="badge2 ${x.reviewStatus==='ผ่าน'?'g':x.reviewStatus==='ขอแก้ไข'?'r':''}">${esc(x.reviewStatus)}</span><span class="small">${esc(fmtD(x.ts))}</span></div>
    ${x.role?`<p><b>บทบาท:</b> ${esc(x.role)}</p>`:''}${x.reason?`<p><b>เหตุผล:</b> ${esc(x.reason)}</p>`:''}${x.q1?`<p><b>1)</b> ${esc(x.q1)}</p><p><b>2)</b> ${esc(x.q2)}</p><p><b>3)</b> ${esc(x.q3)}</p>`:''}${x.evidence?`<p><b>หลักฐาน:</b> ${esc(x.evidence)}</p>`:''}
+   ${x.rating?`<p><b>ความพึงพอใจต่อภารกิจ:</b> <span style="color:#e0a800">${'★'.repeat(x.rating)}</span>${'☆'.repeat(5-x.rating)}${x.comment?' · '+esc(x.comment):''}</p>`:''}
    ${x.photos?`<div class="thumbs">${String(x.photos).split(',').map(id=>`<button type="button" class="thumb" data-id="${esc(id)}">📷 ดูภาพ</button>`).join('')}</div>`:''}
    ${x.photos?`<div class="apv ${x.publicOk?'on':''}"><b>${x.publicOk?'✅ ภาพนี้แสดงบนหน้าเว็บแล้ว':'⏳ ภาพรออนุมัติ (ยังไม่แสดงบนหน้าเว็บ)'}</b>
      <input class="in" id="cap${i}" maxlength="160" placeholder="คำบรรยายภาพ เช่น เก็บขยะบริเวณสนาม (ไม่ต้องใส่ชื่อนักเรียน)" value="${esc(x.caption||'')}">

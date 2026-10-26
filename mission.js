@@ -27,7 +27,7 @@ async function loadMs(){const r=await api('publicMissions');
    <button class="btn btn-primary" style="padding:8px 20px" type="button" data-id="${esc(m.id)}">ทำภารกิจนี้</button></div>`).join('')||'<div class="pcard">ยังไม่มีภารกิจ</div>'}
 $('#mList').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(!b)return;
   MID=b.dataset.id;const m=MS.find(x=>x.id===MID);$('#fTitle').textContent='บันทึกผลภารกิจ: '+(m?m.title:'');
-  hide('#oDone');hide('#eSub');renderChips();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
+  hide('#oDone');hide('#eSub');RATE=0;drawStars();renderChips();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
 
 /* ===== ตัวเลือกคำตอบแบบแตะเลือก (ช่วยให้ไม่ต้องพิมพ์มาก) ===== */
 const CH={
@@ -43,6 +43,10 @@ const CH_M={
   m3:{q2:['ทุกคนที่ใช้ทรัพย์สินส่วนรวม','ครูผู้ดูแลสถานที่'],q3:['ติดตามการใช้งานต่อเนื่อง']}
 };
 const BEN=[5,10,20,50,100];
+CH.comment=['สนุก','ได้เรียนรู้','อยากทำอีก','ได้ช่วยคนอื่น','ยากไปหน่อย','ใช้เวลานาน','ควรมีอุปกรณ์เพิ่ม'];
+let RATE=0;const RT=['ยังไม่ได้ให้ดาว','ควรปรับปรุง','พอใช้','ดี','ดีมาก','ดีเยี่ยม'];
+function drawStars(){document.querySelectorAll('#stars button').forEach(b=>b.classList.toggle('on',+b.dataset.n<=RATE));$('#sTxt').textContent=RT[RATE]}
+$('#stars').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;RATE=RATE===+b.dataset.n?0:+b.dataset.n;drawStars()});
 function chipsFor(k){return (CH[k]||[]).concat(((CH_M[MID]||{})[k])||[])}
 function renderChips(){document.querySelectorAll('.qc').forEach(box=>{const k=box.dataset.for;
   box.innerHTML=k==='ben'?BEN.map(n=>`<button type="button" class="qchip" data-k="ben" data-v="${n}">${n} คน</button>`).join('')
@@ -53,7 +57,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.qchip');if(!b)r
   if(k==='ben'||k==='role')el.value=el.value===v?'':v;
   else{const parts=el.value.split(/;\s*/).filter(Boolean);const i=parts.indexOf(v);i>=0?parts.splice(i,1):parts.push(v);el.value=parts.join('; ')}
   syncChips(k)});
-['role','reason','q1','q2','q3','ben'].forEach(k=>{const el=$('#'+k);if(el)el.addEventListener('input',()=>syncChips(k))});
+['role','reason','q1','q2','q3','ben','comment'].forEach(k=>{const el=$('#'+k);if(el)el.addEventListener('input',()=>syncChips(k))});
 
 $('#bCancel').onclick=()=>{$('#vForm').hidden=true};
 
@@ -71,10 +75,10 @@ $('#fSub').addEventListener('submit',async e=>{e.preventDefault();hide('#eSub');
   if(st.value!=='ทำครบตามแผน'&&!$('#reason').value.trim())return show('#eSub','โปรดระบุเหตุผลเมื่อทำไม่ครบ');
   if((stage==='E'||stage==='T')&&q.some(x=>!x))return show('#eSub','ขั้น E และ T ต้องตอบคำถามสะท้อนคิดทั้ง 3 ข้อ');
   const b=$('#bSub');b.disabled=true;b.textContent='กำลังส่ง...';
-  const r=await api('submitByName',{name:ME.name,year:ME.year,no:ME.no,website:$('#hp').value,missionId:MID,stage,role:$('#role').value,status:st.value,reason:$('#reason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#evidence').value,photos:PHOTOS,beneficiaries:$('#ben').value});
+  const r=await api('submitByName',{name:ME.name,year:ME.year,no:ME.no,website:$('#hp').value,missionId:MID,stage,role:$('#role').value,status:st.value,reason:$('#reason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#evidence').value,photos:PHOTOS,beneficiaries:$('#ben').value,rating:RATE||'',comment:$('#comment').value});
   b.disabled=false;b.textContent='ส่งรายงานภารกิจ';
   if(!r.ok)return show('#eSub',r.error||'ส่งไม่สำเร็จ');
   show('#oDone','ส่งรายงานแล้ว (รหัส '+r.id+(r.photos?' · แนบ '+r.photos+' ภาพ':'')+') ผู้กำกับจะตรวจและให้ข้อเสนอแนะ ทำภารกิจอื่นต่อได้เลย');
-  $('#fSub').reset();PHOTOS=[];draw();renderChips();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
+  $('#fSub').reset();PHOTOS=[];RATE=0;drawStars();draw();renderChips();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
 
 if(ME&&ME.name){fillId();enter()}

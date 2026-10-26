@@ -95,6 +95,14 @@
         </div>
         <p class="small">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับ ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
 
+        <label class="f">ให้ดาวภารกิจนี้ <span class="small">(พอใจแค่ไหน แตะดาวได้เลย)</span></label>
+        <div class="stars" id="stars" role="radiogroup" aria-label="ให้ดาวความพึงพอใจ">
+          <button type="button" data-n="1" aria-label="1 ดาว">★</button><button type="button" data-n="2" aria-label="2 ดาว">★</button><button type="button" data-n="3" aria-label="3 ดาว">★</button><button type="button" data-n="4" aria-label="4 ดาว">★</button><button type="button" data-n="5" aria-label="5 ดาว">★</button>
+          <span class="stxt" id="sTxt">ยังไม่ได้ให้ดาว</span>
+        </div>
+        <div class="qc" data-for="comment"></div>
+        <input class="in" id="comment" maxlength="200" placeholder="ความคิดเห็นเกี่ยวกับภารกิจนี้ (ถ้ามี)">
+
         <label class="f" for="ben">มีคนได้ประโยชน์กี่คน <span class="small">(ถ้านับได้จริง)</span></label>
         <div class="qc" data-for="ben"></div><input class="in" id="ben" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
         <label class="f" for="evidence">อยากบอกอะไรเพิ่มเติม <span class="small">(ถ้ามี)</span></label><input class="in" id="evidence" maxlength="400">
