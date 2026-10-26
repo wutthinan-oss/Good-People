@@ -31,7 +31,11 @@
       <label class="f" for="iYear">ระดับชั้นปี นศท.</label>
       <select class="in" id="iYear" required>
         <option value="">เลือกชั้นปี</option>
-        <option value="1">นักศึกษาวิชาทหาร ชั้นปีที่ 1</option><option value="2">ชั้นปีที่ 2</option><option value="3">ชั้นปีที่ 3</option><option value="4">ชั้นปีที่ 4</option><option value="5">ชั้นปีที่ 5</option>
+        <option value="1">นักศึกษาวิชาทหาร ชั้นปีที่ 1</option>
+        <option value="2">นักศึกษาวิชาทหาร ชั้นปีที่ 2</option>
+        <option value="3">นักศึกษาวิชาทหาร ชั้นปีที่ 3</option>
+        <option value="4">นักศึกษาวิชาทหาร ชั้นปีที่ 4</option>
+        <option value="5">นักศึกษาวิชาทหาร ชั้นปีที่ 5</option>
       </select>
       <label class="f" for="iNo">ลำดับเลขที่ นศท.</label>
       <input class="in" id="iNo" type="number" min="1" max="999" inputmode="numeric" placeholder="เช่น 12" required>
@@ -53,25 +57,37 @@
       <p class="small">รายงานตามความเป็นจริง แม้งานยังไม่สำเร็จ ผู้กำกับไม่ตัดสินความเป็นคนดีจากคำตอบเดียว</p>
       <form id="fSub">
         <input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <div class="row2">
-          <div><label class="f" for="stage">ขั้นที่รายงาน</label>
-            <select class="in" id="stage" required>
-              <option value="C">C ใส่ใจปัญหา</option><option value="A">A รับภารกิจ</option><option value="D" selected>D ลงมือทำ</option><option value="E">E ตรวจสอบและสะท้อนคิด</option><option value="T">T สานต่อ</option>
-            </select></div>
-          <div style="grid-column:span 2"><label class="f" for="role">บทบาทของฉันในภารกิจนี้</label><input class="in" id="role" maxlength="200" placeholder="เช่น หัวหน้าหมู่ ผู้บันทึกผลตรวจ"></div>
-        </div>
-        <label class="f">สถานะการทำภารกิจ</label>
+        <label class="f" for="stage">ตอนนี้ฉันอยู่ขั้นไหน</label>
+        <select class="in" id="stage" required>
+          <option value="C">C · เริ่มต้น: ดูปัญหา สำรวจพื้นที่</option>
+          <option value="A">A · วางแผน: รับหน้าที่ แบ่งงาน</option>
+          <option value="D" selected>D · กำลังลงมือทำ</option>
+          <option value="E">E · ทำเสร็จแล้ว: ตรวจผลและทบทวน</option>
+          <option value="T">T · ติดตามผลและทำต่อ</option>
+        </select>
+
+        <label class="f" for="role">หน้าที่ของฉัน <span class="small">(แตะเลือกได้ หรือพิมพ์เอง)</span></label>
+        <div class="qc" data-for="role"></div>
+        <input class="in" id="role" maxlength="200" placeholder="เช่น หัวหน้าหมู่">
+
+        <label class="f">ผลการทำงานเป็นอย่างไร</label>
         <div class="opts2">
-          <label><input type="radio" name="st" value="ทำครบตามแผน"> ✅ ทำครบตามแผน</label>
+          <label><input type="radio" name="st" value="ทำครบตามแผน"> ✅ ทำครบแล้ว</label>
           <label><input type="radio" name="st" value="ทำได้บางส่วน"> 🟡 ทำได้บางส่วน</label>
           <label><input type="radio" name="st" value="ยังไม่ได้ทำ"> ⭕ ยังไม่ได้ทำ</label>
         </div>
-        <div id="reasonBox" hidden><label class="f" for="reason">เหตุผล (จำเป็นเมื่อทำไม่ครบ)</label><textarea class="in" id="reason" maxlength="600"></textarea></div>
-        <label class="f" for="q1">1) วันนี้ฉันรับผิดชอบอะไร และทำได้ตามข้อตกลงหรือไม่ <span class="small">(ขั้น E และ T ต้องตอบทั้ง 3 ข้อ)</span></label><textarea class="in" id="q1" maxlength="800"></textarea>
-        <label class="f" for="q2">2) ใครได้รับประโยชน์ และฉันรู้ได้อย่างไร</label><textarea class="in" id="q2" maxlength="800"></textarea>
-        <label class="f" for="q3">3) ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง</label><textarea class="in" id="q3" maxlength="800"></textarea>
+        <div id="reasonBox" hidden><label class="f" for="reason">เพราะอะไร <span class="small">(แตะเลือกได้ หรือพิมพ์เอง)</span></label>
+          <div class="qc" data-for="reason"></div><textarea class="in" id="reason" maxlength="600"></textarea></div>
 
-        <label class="f">ภาพหลักฐาน (ถ่ายหรือเลือกจากเครื่อง ไม่เกิน 3 ภาพ)</label>
+        <p class="small" style="margin-top:16px">ตอบ 3 ข้อสั้น ๆ แตะคำตอบที่ตรงกับตัวเองได้เลย (เลือกได้หลายข้อ) หรือพิมพ์เพิ่มเอง · ขั้น E และ T ต้องตอบทั้ง 3 ข้อ</p>
+        <label class="f" for="q1">1) วันนี้ฉันทำหน้าที่ได้ตามที่ตกลงไว้ไหม</label>
+        <div class="qc" data-for="q1"></div><textarea class="in" id="q1" maxlength="800"></textarea>
+        <label class="f" for="q2">2) ใครได้ประโยชน์จากงานนี้ และรู้ได้อย่างไร</label>
+        <div class="qc" data-for="q2"></div><textarea class="in" id="q2" maxlength="800"></textarea>
+        <label class="f" for="q3">3) ครั้งหน้าฉันจะทำให้ดีขึ้นอย่างไร</label>
+        <div class="qc" data-for="q3"></div><textarea class="in" id="q3" maxlength="800"></textarea>
+
+        <label class="f">ภาพหลักฐาน <span class="small">(ถ่ายหรือเลือกจากเครื่อง ไม่เกิน 3 ภาพ)</span></label>
         <div class="shots" id="shots"></div>
         <div class="shotbtns">
           <label class="btn btn-ghost shotbtn">📷 ถ่ายภาพ<input type="file" accept="image/*" capture="environment" id="fCam" hidden></label>
@@ -79,8 +95,9 @@
         </div>
         <p class="small">ภาพถูกย่อและตัดข้อมูลตำแหน่งออกก่อนส่ง เห็นเฉพาะผู้กำกับ ถ่ายเฉพาะงานและพื้นที่ ไม่ถ่ายใบหน้าผู้อื่นโดยไม่ได้รับอนุญาต</p>
 
-        <label class="f" for="ben">จำนวนผู้ได้รับประโยชน์จากงานครั้งนี้ (คน, ถ้าทราบ ใส่เฉพาะที่นับได้จริง)</label><input class="in" id="ben" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
-        <label class="f" for="evidence">หลักฐานเพิ่มเติม (ลิงก์หรือคำอธิบาย)</label><input class="in" id="evidence" maxlength="400">
+        <label class="f" for="ben">มีคนได้ประโยชน์กี่คน <span class="small">(ถ้านับได้จริง)</span></label>
+        <div class="qc" data-for="ben"></div><input class="in" id="ben" type="number" min="0" max="5000" inputmode="numeric" style="max-width:200px">
+        <label class="f" for="evidence">อยากบอกอะไรเพิ่มเติม <span class="small">(ถ้ามี)</span></label><input class="in" id="evidence" maxlength="400">
         <div class="err" id="eSub"></div>
         <p style="margin:18px 0 0"><button class="btn btn-primary" id="bSub">ส่งรายงานภารกิจ</button> <button class="btn btn-ghost" id="bCancel" type="button">ยกเลิก</button></p>
       </form>

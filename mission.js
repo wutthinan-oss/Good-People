@@ -27,7 +27,34 @@ async function loadMs(){const r=await api('publicMissions');
    <button class="btn btn-primary" style="padding:8px 20px" type="button" data-id="${esc(m.id)}">ทำภารกิจนี้</button></div>`).join('')||'<div class="pcard">ยังไม่มีภารกิจ</div>'}
 $('#mList').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(!b)return;
   MID=b.dataset.id;const m=MS.find(x=>x.id===MID);$('#fTitle').textContent='บันทึกผลภารกิจ: '+(m?m.title:'');
-  hide('#oDone');hide('#eSub');$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
+  hide('#oDone');hide('#eSub');renderChips();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
+
+/* ===== ตัวเลือกคำตอบแบบแตะเลือก (ช่วยให้ไม่ต้องพิมพ์มาก) ===== */
+const CH={
+  role:['หัวหน้าหมู่','สมาชิกหมู่','ผู้บันทึกผล','ผู้ถ่ายภาพ','ผู้ตรวจงาน','ผู้ดูแลอุปกรณ์'],
+  reason:['ฝนตก/อากาศไม่เอื้อ','อุปกรณ์ไม่พอ','เวลาไม่พอ','เพื่อนมาไม่ครบ','ไม่สบาย','รอผู้กำกับอนุญาต'],
+  q1:['ทำครบตามที่ตกลง','ทำตรงเวลา','ทำได้บางส่วน','ยังทำไม่ได้ตามที่ตกลง','มีคนช่วยเตือน','ทำเองโดยไม่ต้องเตือน'],
+  q2:['เพื่อนร่วมโรงเรียน','ครูและบุคลากร','ชุมชนและผู้ใช้พื้นที่','ผู้ใช้ห้องน้ำ','สิ่งแวดล้อม','รู้เพราะเห็นพื้นที่สะอาดขึ้น','รู้เพราะมีคนขอบคุณ','รู้เพราะผู้กำกับตรวจแล้ว','รู้เพราะมีภาพก่อน–หลัง'],
+  q3:['มาตรงเวลามากขึ้น','แบ่งงานให้ชัดขึ้น','เตรียมอุปกรณ์ล่วงหน้า','ช่วยเพื่อนมากขึ้น','ตรวจงานซ้ำก่อนส่ง','ชวนเพื่อนมาช่วยเพิ่ม']
+};
+const CH_M={
+  m1:{q2:['เพื่อนที่ใช้พื้นที่นี้','ครูประจำอาคาร'],q3:['ตรวจพื้นที่ซ้ำทุกสัปดาห์']},
+  m2:{q2:['คนในชุมชนที่ได้รับความช่วยเหลือ','ผู้ปกครอง'],q3:['ถามความต้องการก่อนลงมือ']},
+  m3:{q2:['ทุกคนที่ใช้ทรัพย์สินส่วนรวม','ครูผู้ดูแลสถานที่'],q3:['ติดตามการใช้งานต่อเนื่อง']}
+};
+const BEN=[5,10,20,50,100];
+function chipsFor(k){return (CH[k]||[]).concat(((CH_M[MID]||{})[k])||[])}
+function renderChips(){document.querySelectorAll('.qc').forEach(box=>{const k=box.dataset.for;
+  box.innerHTML=k==='ben'?BEN.map(n=>`<button type="button" class="qchip" data-k="ben" data-v="${n}">${n} คน</button>`).join('')
+    :chipsFor(k).map(t=>`<button type="button" class="qchip" data-k="${k}" data-v="${esc(t)}">${esc(t)}</button>`).join('')})}
+function syncChips(k){const el=$('#'+k);if(!el)return;const box=document.querySelector(`.qc[data-for="${k}"]`);if(!box)return;
+  box.querySelectorAll('.qchip').forEach(b=>b.classList.toggle('on',k==='ben'?el.value===b.dataset.v:el.value.includes(b.dataset.v)))}
+document.addEventListener('click',e=>{const b=e.target.closest('.qchip');if(!b)return;const k=b.dataset.k,v=b.dataset.v,el=$('#'+k);
+  if(k==='ben'||k==='role')el.value=el.value===v?'':v;
+  else{const parts=el.value.split(/;\s*/).filter(Boolean);const i=parts.indexOf(v);i>=0?parts.splice(i,1):parts.push(v);el.value=parts.join('; ')}
+  syncChips(k)});
+['role','reason','q1','q2','q3','ben'].forEach(k=>{const el=$('#'+k);if(el)el.addEventListener('input',()=>syncChips(k))});
+
 $('#bCancel').onclick=()=>{$('#vForm').hidden=true};
 
 document.querySelectorAll('input[name=st]').forEach(r=>r.onchange=()=>{$('#reasonBox').hidden=r.value==='ทำครบตามแผน'});
@@ -48,6 +75,6 @@ $('#fSub').addEventListener('submit',async e=>{e.preventDefault();hide('#eSub');
   b.disabled=false;b.textContent='ส่งรายงานภารกิจ';
   if(!r.ok)return show('#eSub',r.error||'ส่งไม่สำเร็จ');
   show('#oDone','ส่งรายงานแล้ว (รหัส '+r.id+(r.photos?' · แนบ '+r.photos+' ภาพ':'')+') ผู้กำกับจะตรวจและให้ข้อเสนอแนะ ทำภารกิจอื่นต่อได้เลย');
-  $('#fSub').reset();PHOTOS=[];draw();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
+  $('#fSub').reset();PHOTOS=[];draw();renderChips();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
 
 if(ME&&ME.name){fillId();enter()}

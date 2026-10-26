@@ -62,3 +62,9 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .starchk input{width:20px;height:20px;vertical-align:-4px;margin-right:6px}
 
 [hidden]{display:none!important}
+
+/* ตัวเลือกคำตอบแบบแตะ */
+.qc{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 8px}
+.qchip{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 14px;font:inherit;font-size:15px;color:var(--ink);cursor:pointer}
+.qchip.on{background:var(--green);border-color:var(--green);color:#fff}
+.qchip:active{transform:scale(.97)}
