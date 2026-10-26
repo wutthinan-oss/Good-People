@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f4a38">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>สร้างสรรค์คนดี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0f4a38;--g2:#1b6b52;--gold:#c9a24a;--bg:#faf8f1;--card:#fff;--ink:#1d2b26;--mut:#6b7a74;--line:#e5e0d0;--bad:#b3392f;--ok:#2d8a5b}
+@media(prefers-color-scheme:dark){:root:not(.light){--bg:#121a17;--card:#1b2622;--ink:#e8efe9;--mut:#9fb0a8;--line:#2c3a34}}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Sarabun',system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:76px;font-size:16px}
+header{background:var(--g);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:5;border-bottom:3px solid var(--gold)}
+header b{font-size:18px;display:block}header small{opacity:.85}
+main{padding:14px 16px;max-width:760px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;z-index:6;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;padding:9px 2px;color:var(--mut);font:inherit;font-size:12px;cursor:pointer}
+nav button span{display:block;font-size:20px}nav button.on{color:var(--g2);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+h2{font-size:18px;margin:4px 0 10px;color:var(--g2)}h3{font-size:16px;margin:12px 0 6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{text-align:center}.stat b{font-size:28px;color:var(--g2);display:block}.stat small{color:var(--mut)}
+label{display:block;font-size:14px;color:var(--mut);margin:8px 0 3px}
+input,select,textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:90px}
+.btn{display:inline-block;border:0;background:var(--g2);color:#fff;padding:10px 16px;border-radius:9px;font:inherit;font-weight:600;cursor:pointer;margin:4px 4px 4px 0}
+.btn.alt{background:none;border:1px solid var(--g2);color:var(--g2)}.btn.red{background:var(--bad)}.btn.sm{padding:5px 10px;font-size:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.item{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}
+.chip{display:inline-block;padding:3px 9px;border-radius:99px;background:var(--bg);border:1px solid var(--line);font-size:13px;margin:2px;cursor:pointer;user-select:none}
+.chip.on{background:var(--g2);color:#fff;border-color:var(--g2)}
+.mut{color:var(--mut);font-size:14px}
+.seg{display:flex;gap:6px;margin-bottom:10px}.seg button{flex:1}
+.sc{display:flex;gap:4px}.sc button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}.sc button.on{background:var(--gold);border-color:var(--gold);color:#222;font-weight:700}
+.demo{background:#fff3cd;color:#664d03;padding:8px 14px;font-size:14px;text-align:center;border-bottom:1px solid #e6cf7a}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:5px 7px;text-align:center}th{background:var(--bg)}
+td.l{text-align:left}.ph{display:flex;gap:6px;flex-wrap:wrap}.ph img{width:80px;height:80px;object-fit:cover;border-radius:8px}
+#rpt{display:none;position:fixed;inset:0;background:#d8d8d8;overflow:auto;z-index:20}
+#rpt .bar{position:sticky;top:0;background:var(--g);padding:8px 12px;display:flex;gap:8px;flex-wrap:wrap}
+.page{background:#fff;color:#000;width:210mm;max-width:100%;min-height:297mm;margin:12px auto;padding:22mm 20mm;box-shadow:0 1px 8px #0004;font-size:16pt;line-height:1.5;position:relative;overflow:hidden}
+.page h1{text-align:center;font-size:24pt;margin:0 0 12pt}.page h2{color:#0f4a38;font-size:18pt;border-bottom:2px solid #c9a24a;padding-bottom:3pt}
+.page p{text-indent:1.2cm;margin:0 0 6pt;text-align:justify}.page table{font-size:13pt}.page th{background:#e9efe9}.page td,.page th{border-color:#888}
+.page .ph img{width:48mm;height:36mm}
+.wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60pt;font-weight:700;color:#c00;opacity:.12;transform:rotate(-30deg);pointer-events:none;text-align:center}
+@media print{body>*:not(#rpt){display:none!important}#rpt{display:block!important;position:static;background:#fff}#rpt .bar{display:none}.page{box-shadow:none;margin:0;width:auto;min-height:0;page-break-after:always}}
+</style>
+</head>
+<body>
+<div id="demoBar" class="demo" style="display:none">โหมดข้อมูลตัวอย่าง: ข้อมูลทั้งหมดเป็นของสมมติ ใช้ทดลองระบบเท่านั้น ห้ามนำไปส่งเป็นผลงานจริง</div>
+<header><b id="hTitle">สร้างสรรค์คนดี</b><small id="hSub"></small></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="rpt"></div>
+<script>
+const TR=['ความพอเพียง','ความกตัญญู','ความซื่อสัตย์สุจริต','ความรับผิดชอบ','อุดมการณ์คุณธรรม'];
+const KEY='gp_v1';
+const D0=()=>({meta:{title:'นวัตกรรมสร้างสรรค์คนดี',owner:'นายวุฒินันท์ สีดีจริง',pos:'ครูชำนาญการ',school:'โรงเรียนมัธยมวัดหนองแขม',area:'สำนักงานเขตพื้นที่การศึกษามัธยมศึกษากรุงเทพมหานคร เขต 1',tel:'0899836693',email:'',type:'ด้านการเรียนการสอน',cls:'ม.6/12',traits:[...TR]},students:[],acts:[],good:[],scores:{pre:{},post:{}},text:{},pubs:[],awards:[],demo:false});
+let S=load(),tab='home',sub={act:'acts',asm:'pre'},asmTrait=0,openAct=null;
+function load(){try{const j=JSON.parse(localStorage.getItem(KEY));if(j){const d=D0();return{...d,...j,meta:{...d.meta,...j.meta},scores:{pre:{},post:{},...j.scores}}}}catch(e){}return D0()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('พื้นที่จัดเก็บเต็ม (มักเกิดจากรูปภาพ) กรุณาสำรองข้อมูลแล้วลดจำนวนรูป')}}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>new Date().toISOString().slice(0,10);
+const thDate=d=>{if(!d)return'';const m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],x=new Date(d);return`${x.getDate()} ${m[x.getMonth()]} ${x.getFullYear()+543}`};
+const nm=id=>(S.students.find(s=>s.id===id)||{}).name||'-';
+const $=s=>document.querySelector(s);
+
+/* ---------- สถิติ ---------- */
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/(a.length-1))};
+function lg(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.1208650973866179e-2,-.5395239384953e-5];let y=x,t=x+5.5;t-=(x+.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function bcf(a,b,x){const F=1e-30;let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<F)d=F;d=1/d;let h=d;for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-10)break}return h}
+function ib(x,a,b){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lg(a+b)-lg(a)-lg(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*bcf(a,b,x)/a:1-bt*bcf(b,a,1-x)/b}
+const pval=(t,df)=>ib(df/(df+t*t),df/2,.5);
+const lvl=m=>m>=4.5?'มากที่สุด':m>=3.5?'มาก':m>=2.5?'ปานกลาง':m>=1.5?'น้อย':'น้อยที่สุด';
+function stats(){ // ต่อคุณลักษณะ เฉพาะนักเรียนที่มีทั้งก่อนและหลัง
+  return TR.map((t,i)=>{const pr=[],po=[];S.students.forEach(s=>{const a=(S.scores.pre[s.id]||{})[i],b=(S.scores.post[s.id]||{})[i];if(a&&b){pr.push(a);po.push(b)}});
+    const n=pr.length;if(n<2)return{t,n};const d=po.map((v,k)=>v-pr[k]),sdd=sd(d),md=mean(d);const tt=sdd?md/(sdd/Math.sqrt(n)):0;
+    return{t,n,m1:mean(pr),s1:sd(pr),m2:mean(po),s2:sd(po),md,t:tt,tn:t,df:n-1,p:sdd?pval(tt,n-1):(md?0:1),up:d.filter(x=>x>0).length}});
+}
+const f2=x=>x.toFixed(2);
+
+/* ---------- เมนู ---------- */
+const TABS=[['home','🏠','หน้าหลัก'],['stu','👥','นักเรียน'],['act','📝','กิจกรรม'],['asm','📊','ประเมิน'],['rep','📖','เล่ม']];
+function nav(){$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')"><span>${i}</span>${l}</button>`).join('')}
+function go(t){tab=t;render();scrollTo(0,0)}
+function render(){nav();$('#hTitle').textContent=S.meta.title;$('#hSub').textContent=`${S.meta.school} · ${S.meta.cls}`;$('#demoBar').style.display=S.demo?'block':'none';
+  $('#app').innerHTML={home:vHome,stu:vStu,act:vAct,asm:vAsm,rep:vRep}[tab]()}
+
+/* ---------- หน้าหลัก ---------- */
+function vHome(){const st=stats().filter(x=>x.n>1);
+  return`<div class="grid"><div class="card stat"><b>${S.students.length}</b><small>นักเรียน</small></div><div class="card stat"><b>${S.acts.length}</b><small>กิจกรรม</small></div>
+  <div class="card stat"><b>${S.good.length}</b><small>บันทึกความดี</small></div><div class="card stat"><b>${Object.keys(S.scores.post).length}/${S.students.length}</b><small>ประเมินหลังแล้ว</small></div></div>
+  <div class="card"><h2>เริ่มต้นใช้งาน</h2><ol class="mut" style="padding-left:20px;margin:0"><li>แท็บ <b>นักเรียน</b>: วางรายชื่อห้อง</li><li>แท็บ <b>ประเมิน</b>: ประเมินก่อนเริ่มโครงการ</li><li>แท็บ <b>กิจกรรม</b>: บันทึกกิจกรรม/ความดีตามจริง แนบรูป</li><li>แท็บ <b>ประเมิน</b>: ประเมินหลังโครงการ</li><li>แท็บ <b>เล่ม</b>: สร้างเล่มนวัตกรรม พิมพ์เป็น PDF หรือดาวน์โหลด Word</li></ol></div>
+  ${st.length?`<div class="card"><h2>สรุปผลก่อน-หลังโดยย่อ</h2>${st.map(x=>`<div class="item"><span>${x.tn}</span><span>${f2(x.m1)} → <b>${f2(x.m2)}</b></span></div>`).join('')}</div>`:''}
+  <div class="card"><h2>ข้อมูลและการสำรอง</h2><p class="mut">ข้อมูลเก็บในเครื่องนี้เท่านั้น ไม่ถูกส่งไปที่ใด ควรสำรองสม่ำเสมอ</p>
+  <button class="btn" onclick="backup()">สำรองข้อมูล</button><label class="btn alt" style="margin:4px">นำเข้าข้อมูลสำรอง<input type="file" accept=".json" hidden onchange="restore(this)"></label>
+  <hr style="border:0;border-top:1px solid var(--line)"><p class="mut">ข้อมูลตัวอย่างใช้ทดลองระบบ (นักเรียนสมมติ) และจะมีลายน้ำ "ตัวอย่าง" ในเล่มเสมอ</p>
+  <button class="btn alt" onclick="loadDemo()">โหลดข้อมูลตัวอย่าง</button><button class="btn red" onclick="wipe()">ลบข้อมูลทั้งหมด</button></div>`}
+function backup(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download=`gp-backup-${today()}.json`;a.click()}
+function restore(el){const f=el.files[0];if(!f)return;f.text().then(t=>{try{S={...D0(),...JSON.parse(t)};save();render()}catch(e){alert('ไฟล์ไม่ถูกต้อง')}})}
+function wipe(){if(confirm('ลบข้อมูลทั้งหมดในเครื่องนี้? (ควรสำรองก่อน)')){S=D0();save();render()}}
+
+/* ---------- นักเรียน ---------- */
+function vStu(){return`<div class="card"><h2>นักเรียน (${S.students.length} คน)</h2>${S.students.map(s=>`<div class="item"><span>${s.no}. ${esc(s.name)} <span class="mut">${esc(s.sid)}</span></span><button class="btn sm red" onclick="delStu('${s.id}')">ลบ</button></div>`).join('')||'<p class="mut">ยังไม่มีรายชื่อ</p>'}</div>
+  <div class="card"><h2>นำเข้ารายชื่อ</h2><p class="mut">คัดลอกจากไฟล์ Excel/Word แล้ววาง แต่ละบรรทัด: เลขประจำตัว ชื่อ-สกุล ห้อง เลขที่ (คั่นด้วย Tab หรือเว้นวรรค) หรือเลือกไฟล์ .csv/.txt</p>
+  <textarea id="paste" placeholder="12345  นายตัวอย่าง  ใจดี  12  1"></textarea><button class="btn" onclick="importStu($('#paste').value)">นำเข้า</button>
+  <label class="btn alt" style="margin:4px">เลือกไฟล์<input type="file" accept=".csv,.txt,.tsv" hidden onchange="this.files[0].text().then(importStu)"></label>
+  <h3>เพิ่มทีละคน</h3><div class="row"><input id="n1" placeholder="เลขประจำตัว" style="flex:1"><input id="n2" placeholder="ชื่อ-สกุล" style="flex:2"></div><button class="btn alt" onclick="addStu()">เพิ่ม</button></div>`}
+function importStu(txt){if(S.demo&&!confirm('ลบข้อมูลตัวอย่างทั้งหมดก่อนนำเข้ารายชื่อจริง?'))return;
+  const out=[];txt.split(/\r?\n/).forEach(l=>{l=l.trim();if(!l)return;let p=l.split(/\t|,/).map(x=>x.trim()).filter(Boolean);
+    if(p.length<2){const m=l.match(/^(\d{3,})\s+(.+?)\s+(\d+)\s+(\d+)$/);p=m?[m[1],m[2],m[3],m[4]]:[]}
+    if(p.length<2||!/^\d+$/.test(p[0]))return;out.push({id:uid(),sid:p[0],name:p[1].replace(/\s+/g,' '),no:+p[3]||out.length+1})});
+  if(!out.length)return alert('อ่านรายชื่อไม่ได้ ตรวจรูปแบบอีกครั้ง');
+  if(S.demo)S={...D0(),meta:S.meta};S.students=out.sort((a,b)=>a.no-b.no);save();alert(`นำเข้า ${out.length} คน`);render()}
+function addStu(){const a=$('#n1').value.trim(),b=$('#n2').value.trim();if(!b)return;S.students.push({id:uid(),sid:a,name:b,no:S.students.length+1});save();render()}
+function delStu(id){if(confirm('ลบนักเรียนคนนี้ (รวมคะแนนและบันทึกของเขา)?')){S.students=S.students.filter(s=>s.id!==id);delete S.scores.pre[id];delete S.scores.post[id];S.good=S.good.filter(g=>g.sid!==id);save();render()}}
+
+/* ---------- กิจกรรม ---------- */
+function vAct(){const seg=`<div class="seg"><button class="btn ${sub.act==='acts'?'':'alt'}" onclick="sub.act='acts';render()">กิจกรรม</button><button class="btn ${sub.act==='good'?'':'alt'}" onclick="sub.act='good';render()">บันทึกความดี</button></div>`;
+  return seg+(sub.act==='acts'?vActs():vGood())}
+function vActs(){const A=[...S.acts].sort((a,b)=>b.date.localeCompare(a.date));
+  return`<div class="card"><h2>บันทึกกิจกรรมใหม่</h2><label>วันที่</label><input type="date" id="a1" value="${today()}"><label>ชื่อกิจกรรม</label><input id="a2"><label>คุณลักษณะที่ส่งเสริม</label>
+  <div id="a3">${TR.map((t,i)=>`<span class="chip" data-i="${i}" onclick="this.classList.toggle('on')">${t}</span>`).join('')}</div>
+  <label>รายละเอียด / สิ่งที่ทำจริง</label><textarea id="a4"></textarea>
+  <label>นักเรียนที่เข้าร่วม (แตะเพื่อเอาออก)</label><div id="a5">${S.students.map(s=>`<span class="chip on" data-id="${s.id}" onclick="this.classList.toggle('on')">${s.no}.${esc(s.name.split(' ')[0].replace(/^(นางสาว|นาย|นาง|เด็กชาย|เด็กหญิง)/,''))}</span>`).join('')||'<span class="mut">เพิ่มนักเรียนก่อน</span>'}</div>
+  <label>รูปภาพกิจกรรม (ถ่ายหรือเลือกรูปจริง)</label><input type="file" id="a6" accept="image/*" multiple><button class="btn" style="margin-top:10px" onclick="addAct()">บันทึกกิจกรรม</button></div>
+  <div class="card"><h2>รายการ (${A.length})</h2>${A.map(a=>`<div class="item"><div><b>${esc(a.title)}</b><div class="mut">${thDate(a.date)} · เข้าร่วม ${a.att.length} คน · ${a.tr.map(i=>TR[i]).join(', ')||'-'}</div>${a.photos.length?`<div class="ph">${a.photos.map(p=>`<img src="${p}">`).join('')}</div>`:''}</div><button class="btn sm red" onclick="delAct('${a.id}')">ลบ</button></div>`).join('')||'<p class="mut">ยังไม่มีกิจกรรม</p>'}</div>`}
+function shrink(f){return new Promise(r=>{const i=new Image(),u=URL.createObjectURL(f);i.onload=()=>{const k=Math.min(1,720/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);r(c.toDataURL('image/jpeg',.6))};i.onerror=()=>r(null);i.src=u})}
+async function addAct(){const t=$('#a2').value.trim();if(!t)return alert('กรอกชื่อกิจกรรม');
+  const ph=(await Promise.all([...$('#a6').files].map(shrink))).filter(Boolean);
+  if(S.demo&&!confirm('ตอนนี้เป็นข้อมูลตัวอย่าง ควรลบข้อมูลตัวอย่างก่อนบันทึกข้อมูลจริง ดำเนินการต่อหรือไม่?'))return;
+  S.acts.push({id:uid(),date:$('#a1').value,title:t,tr:[...$('#a3').querySelectorAll('.on')].map(e=>+e.dataset.i),detail:$('#a4').value,att:[...$('#a5').querySelectorAll('.on')].map(e=>e.dataset.id),photos:ph});save();render()}
+function delAct(id){if(confirm('ลบกิจกรรมนี้?')){S.acts=S.acts.filter(a=>a.id!==id);save();render()}}
+function vGood(){const G=[...S.good].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,40);
+  return`<div class="card"><h2>บันทึกความดี</h2><label>นักเรียน</label><select id="g1">${S.students.map(s=>`<option value="${s.id}">${s.no}. ${esc(s.name)}</option>`).join('')}</select>
+  <label>คุณลักษณะ</label><select id="g2">${TR.map((t,i)=>`<option value="${i}">${t}</option>`).join('')}</select><label>สิ่งที่ทำ</label><input id="g3" placeholder="เช่น เก็บกระเป๋าเงินได้และนำส่งครู"><label>วันที่</label><input type="date" id="g4" value="${today()}">
+  <button class="btn" style="margin-top:10px" onclick="addGood()">บันทึก</button></div>
+  <div class="card"><h2>ล่าสุด (${S.good.length} รายการ)</h2>${G.map(g=>`<div class="item"><div><b>${esc(nm(g.sid))}</b> · ${TR[g.t]}<div class="mut">${thDate(g.date)} ${esc(g.note)}</div></div><button class="btn sm red" onclick="delGood('${g.id}')">ลบ</button></div>`).join('')||'<p class="mut">ยังไม่มีรายการ</p>'}</div>`}
+function addGood(){if(!S.students.length)return alert('เพิ่มนักเรียนก่อน');if(S.demo&&!confirm('ตอนนี้เป็นข้อมูลตัวอย่าง ดำเนินการต่อหรือไม่?'))return;S.good.push({id:uid(),sid:$('#g1').value,t:+$('#g2').value,note:$('#g3').value,date:$('#g4').value});save();render()}
+function delGood(id){S.good=S.good.filter(g=>g.id!==id);save();render()}
+
+/* ---------- ประเมิน ---------- */
+function vAsm(){const ph=sub.asm,done=S.students.filter(s=>(S.scores[ph][s.id]||{})[asmTrait]).length;
+  return`<div class="seg"><button class="btn ${ph==='pre'?'':'alt'}" onclick="sub.asm='pre';render()">ก่อนโครงการ</button><button class="btn ${ph==='post'?'':'alt'}" onclick="sub.asm='post';render()">หลังโครงการ</button></div>
+  <div class="card"><h2>ให้คะแนน 1-5 ตามที่สังเกตจริง</h2><p class="mut">1=น้อยที่สุด … 5=มากที่สุด ประเมินครั้งละ 1 คุณลักษณะ</p>${TR.map((t,i)=>`<span class="chip ${asmTrait===i?'on':''}" onclick="asmTrait=${i};render()">${t}</span>`).join('')}
+  <p class="mut">ประเมินแล้ว ${done}/${S.students.length}</p>${S.students.map(s=>{const v=(S.scores[ph][s.id]||{})[asmTrait];return`<div class="item" style="align-items:center"><span>${s.no}. ${esc(s.name)}</span><div class="sc">${[1,2,3,4,5].map(n=>`<button class="${v===n?'on':''}" onclick="setSc('${s.id}',${n})">${n}</button>`).join('')}</div></div>`}).join('')||'<p class="mut">เพิ่มนักเรียนก่อน</p>'}</div>
+  <div class="card"><h2>ผลวิเคราะห์ (คำนวณจากคะแนนที่กรอก)</h2>${statTable()}</div>`}
+function setSc(id,n){(S.scores[sub.asm][id]=S.scores[sub.asm][id]||{})[asmTrait]=n;save();const y=scrollY;render();scrollTo(0,y)}
+function statTable(){const st=stats();if(!st.some(x=>x.n>1))return'<p class="mut">ต้องมีคะแนนทั้งก่อนและหลังอย่างน้อย 2 คน จึงจะวิเคราะห์ได้</p>';
+  return`<div style="overflow:auto"><table><tr><th>คุณลักษณะ</th><th>n</th><th>ก่อน x̄(SD)</th><th>หลัง x̄(SD)</th><th>ระดับหลัง</th><th>t</th><th>p</th></tr>${st.map(x=>x.n>1?`<tr><td class="l">${x.tn}</td><td>${x.n}</td><td>${f2(x.m1)} (${f2(x.s1)})</td><td>${f2(x.m2)} (${f2(x.s2)})</td><td>${lvl(x.m2)}</td><td>${f2(x.t)}</td><td>${x.p<.001?'<.001':f2(x.p)}</td></tr>`:`<tr><td class="l">${x.t}</td><td colspan="6" class="mut">ข้อมูลไม่พอ</td></tr>`).join('')}</table></div>`}
+
+/* ---------- เล่ม ---------- */
+const SEC=[['c1','1. ความสำคัญของผลงานนวัตกรรม'],['c2','2. จุดประสงค์และเป้าหมายของผลงานนวัตกรรม'],['c3','3. กระบวนการผลิตผลงานหรือขั้นตอนการดำเนินงาน'],['c4','4. ผลการดำเนินการ / ผลสัมฤทธิ์ / ประโยชน์ที่ได้รับ'],['c5','5. ปัจจัยความสำเร็จ'],['c6','6. บทเรียนที่ได้รับ (Lesson Learned)'],['c7','7. การเผยแพร่ / การได้รับการยอมรับ / รางวัลที่ได้รับ'],['c8','8. เงื่อนไขความสำเร็จ'],['pre','คำนำ']];
+function draft(k){const m=S.meta,n=S.students.length||'…',tl=m.traits.join(' ');const D={
+pre:`ผลงานนวัตกรรม "${m.title}" จัดทำขึ้นเพื่อพัฒนาคุณลักษณะด้านคุณธรรมของนักเรียนชั้น${m.cls} โรงเรียน${m.school.replace('โรงเรียน','')} ให้สอดคล้องกับแนวทางการขับเคลื่อนโรงเรียนคุณธรรม โดยมุ่งส่งเสริม ${tl}\nเอกสารเล่มนี้รวบรวมที่มา กระบวนการดำเนินงาน ผลการดำเนินงาน และบทเรียนที่ได้รับ เพื่อเป็นแนวทางให้ผู้สนใจนำไปประยุกต์ใช้ต่อไป\n\n${m.owner}\n${m.pos}`,
+c1:`คุณธรรมเป็นรากฐานสำคัญของการพัฒนาผู้เรียนให้เป็นคนดีและอยู่ร่วมกับผู้อื่นในสังคมได้อย่างมีความสุข ผู้เรียนในระดับมัธยมศึกษาตอนปลายอยู่ในช่วงเปลี่ยนผ่านสู่วัยผู้ใหญ่ จึงต้องการการปลูกฝังและฝึกปฏิบัติจนเป็นนิสัยอย่างต่อเนื่อง\n[ระบุสภาพปัญหาหรือความต้องการจากการสังเกตจริงของห้อง${m.cls} เช่น ปัญหาการมาสาย การไม่ส่งงาน การขาดความรับผิดชอบ]\nผู้จัดทำจึงพัฒนานวัตกรรม "${m.title}" โดยอาศัยแนวคิดการเรียนรู้ผ่านการปฏิบัติจริง การสะท้อนคิด และการเป็นแบบอย่างที่ดี ควบคู่กับหลักปรัชญาของเศรษฐกิจพอเพียงและคู่มือการขับเคลื่อนโรงเรียนคุณธรรม`,
+c2:`จุดประสงค์\n1) เพื่อส่งเสริมและพัฒนาคุณลักษณะ ${tl} ของนักเรียนชั้น${m.cls}\n2) เพื่อสร้างวัฒนธรรมการทำความดีและการสะท้อนคิดในห้องเรียน\nกลุ่มเป้าหมาย: นักเรียนชั้น${m.cls} จำนวน ${n} คน\nเป้าหมายเชิงคุณภาพ: นักเรียนมีคะแนนคุณลักษณะหลังดำเนินโครงการสูงกว่าก่อนดำเนินโครงการ [ระบุเกณฑ์ที่ตั้งไว้ เช่น ค่าเฉลี่ยไม่ต่ำกว่า 4.00]`,
+c3:`ดำเนินงานตามวงจร PDCA\nขั้นวางแผน (P): สำรวจสภาพปัญหา ประเมินคุณลักษณะก่อนเริ่มโครงการ กำหนดกิจกรรมและตัวชี้วัด\nขั้นปฏิบัติ (D): จัดกิจกรรมส่งเสริมคุณธรรมต่อเนื่อง ให้นักเรียนบันทึกความดีและสะท้อนคิด ครูบันทึกกิจกรรมพร้อมภาพประกอบผ่านแอปพลิเคชัน\nขั้นตรวจสอบ (C): ประเมินคุณลักษณะหลังโครงการ วิเคราะห์ผลเปรียบเทียบก่อน-หลัง\nขั้นปรับปรุง (A): สรุปผล ปรับปรุงกิจกรรม และขยายผล\n[เพิ่มรายละเอียดกิจกรรมที่ทำจริงในแต่ละขั้น]`,
+c4:'',c5:`1) ผู้บริหารและเพื่อนครูสนับสนุนการดำเนินงาน\n2) ครูเป็นแบบอย่างที่ดีและติดตามอย่างสม่ำเสมอ\n3) นักเรียนมีส่วนร่วมในการเลือกและวางแผนกิจกรรม\n4) ผู้ปกครองให้ความร่วมมือ\n[ปรับให้ตรงกับสิ่งที่เกิดขึ้นจริง]`,
+c6:`สิ่งที่ได้เรียนรู้: [เขียนจากประสบการณ์จริง]\nข้อค้นพบ: [วิธีการหรือรูปแบบใหม่ที่เกิดขึ้น]\nข้อควรปรับปรุง: [สิ่งที่จะทำต่างออกไปในครั้งต่อไป]`,c7:'',
+c8:`ข้อสังเกต: [สิ่งที่ต้องระวังจากการดำเนินงานจริง]\nข้อเสนอแนะ: ควรเริ่มจากการสร้างความเข้าใจร่วมกัน ติดตามอย่างต่อเนื่อง ให้ผู้เรียนเป็นเจ้าของกิจกรรม และบันทึกหลักฐานตามจริงทุกครั้ง`};return D[k]||''}
+function vRep(){const m=S.meta,f=(k,l,t='text')=>`<label>${l}</label><input ${t==='email'?'type="email"':''} value="${esc(m[k])}" onchange="S.meta.${k}=this.value;save();render()">`;
+  return`<div class="card"><h2>ข้อมูลเบื้องต้นของผลงาน</h2>${f('title','ชื่อผลงาน')}${f('owner','ชื่อเจ้าของผลงาน')}${f('pos','ตำแหน่ง')}${f('school','โรงเรียน')}${f('area','สังกัด สพป./สพม.')}${f('tel','โทรศัพท์')}${f('email','e-mail','email')}${f('cls','ชั้น/ห้อง')}
+  <label>ประเภทผลงาน</label><select onchange="S.meta.type=this.value;save()"><option ${m.type==='ด้านการเรียนการสอน'?'selected':''}>ด้านการเรียนการสอน</option><option ${m.type==='ด้านการบริหาร'?'selected':''}>ด้านการบริหาร</option></select>
+  <label>สอดคล้องกับคุณลักษณะ</label>${TR.map((t,i)=>`<span class="chip ${m.traits.includes(t)?'on':''}" onclick="togTr('${t}')">${t}</span>`).join('')}<span class="chip ${m.traits.includes('คุณธรรมอัตลักษณ์')?'on':''}" onclick="togTr('คุณธรรมอัตลักษณ์')">คุณธรรมอัตลักษณ์</span></div>
+  <div class="card"><h2>เนื้อหาแต่ละหัวข้อ</h2><p class="mut">กดปุ่ม "ร่าง" เพื่อใส่ข้อความตั้งต้น แล้วแก้ไขตามที่ทำจริง ข้อความในวงเล็บเหลี่ยม [ ] คือจุดที่ต้องเติมเอง หัวข้อ 4 และ 7 ดึงตารางจากข้อมูลจริงในแอปอัตโนมัติ</p>
+  ${SEC.map(([k,l])=>`<h3>${l} <button class="btn sm alt" onclick="makeDraft('${k}')">ร่าง</button></h3><textarea onchange="S.text['${k}']=this.value;save()">${esc(S.text[k]||'')}</textarea>`).join('')}</div>
+  <div class="card"><h2>การเผยแพร่ (ตามจริง)</h2>${S.pubs.map(p=>`<div class="item"><span>${esc(p.title)} · ${esc(p.ch)} · ${thDate(p.date)}</span><button class="btn sm red" onclick="S.pubs=S.pubs.filter(x=>x.id!=='${p.id}');save();render()">ลบ</button></div>`).join('')}
+  <div class="row"><input id="p1" placeholder="เรื่อง" style="flex:2"><input id="p2" placeholder="ช่องทาง เช่น เฟซบุ๊กโรงเรียน" style="flex:2"><input type="date" id="p3" style="flex:1"></div><button class="btn alt" onclick="addPub()">เพิ่มการเผยแพร่</button>
+  <h2 style="margin-top:14px">รางวัล / เกียรติบัตร (ตามจริง)</h2>${S.awards.map(p=>`<div class="item"><span>${esc(p.title)} · ${esc(p.org)} · ${thDate(p.date)}</span><button class="btn sm red" onclick="S.awards=S.awards.filter(x=>x.id!=='${p.id}');save();render()">ลบ</button></div>`).join('')}
+  <div class="row"><input id="w1" placeholder="รางวัล/คำชม" style="flex:2"><input id="w2" placeholder="หน่วยงานที่มอบ" style="flex:2"><input type="date" id="w3" style="flex:1"></div><button class="btn alt" onclick="addAw()">เพิ่มรางวัล</button></div>
+  <div class="card"><h2>ออกเล่ม</h2><button class="btn" onclick="showRpt()">ดูตัวอย่างเล่ม / พิมพ์ PDF</button><button class="btn alt" onclick="dlWord()">ดาวน์โหลด Word</button></div>`}
+function togTr(t){const a=S.meta.traits,i=a.indexOf(t);i<0?a.push(t):a.splice(i,1);save();render()}
+function makeDraft(k){if(S.text[k]&&!confirm('แทนที่ข้อความเดิมด้วยร่างใหม่?'))return;S.text[k]=draft(k);save();render()}
+function addPub(){const t=$('#p1').value.trim();if(!t)return;S.pubs.push({id:uid(),title:t,ch:$('#p2').value,date:$('#p3').value});save();render()}
+function addAw(){const t=$('#w1').value.trim();if(!t)return;S.awards.push({id:uid(),title:t,org:$('#w2').value,date:$('#w3').value});save();render()}
+
+/* ---------- ตัวเล่ม ---------- */
+const P=t=>String(t||'').split('\n').filter(x=>x.trim()).map(x=>`<p>${esc(x)}</p>`).join('');
+function autoC4(){const st=stats().filter(x=>x.n>1),a=S.acts.length,g=S.good.length;let h='';
+  h+=`<p>ตลอดโครงการมีการจัดกิจกรรม ${a} กิจกรรม และมีบันทึกความดีของนักเรียน ${g} รายการ</p>`;
+  if(!st.length)return h+'<p>[ยังไม่มีข้อมูลประเมินก่อน-หลังที่ครบถ้วน]</p>';
+  h+=`<p>ผลการประเมินคุณลักษณะของนักเรียนก่อนและหลังโครงการ แสดงดังตาราง</p><table><tr><th>คุณลักษณะ</th><th>n</th><th>ก่อน x̄</th><th>SD</th><th>หลัง x̄</th><th>SD</th><th>ระดับหลัง</th><th>t</th><th>p</th><th>คนที่ดีขึ้น</th></tr>${st.map(x=>`<tr><td style="text-align:left">${x.tn}</td><td>${x.n}</td><td>${f2(x.m1)}</td><td>${f2(x.s1)}</td><td>${f2(x.m2)}</td><td>${f2(x.s2)}</td><td>${lvl(x.m2)}</td><td>${f2(x.t)}</td><td>${x.p<.001?'<.001':f2(x.p)}</td><td>${x.up}</td></tr>`).join('')}</table>`;
+  const all1=mean(st.map(x=>x.m1)),all2=mean(st.map(x=>x.m2)),sig=st.filter(x=>x.p<.05&&x.md>0).length;
+  h+=`<p>โดยรวม ค่าเฉลี่ยคุณลักษณะเพิ่มจาก ${f2(all1)} เป็น ${f2(all2)} (ระดับ${lvl(all2)}) และมี ${sig} จาก ${st.length} คุณลักษณะที่เพิ่มขึ้นอย่างมีนัยสำคัญทางสถิติที่ระดับ .05</p>`;return h}
+function rptHTML(){const m=S.meta,demo=S.demo,wm=demo?'<div class="wm">ตัวอย่าง<br>ไม่ใช่ข้อมูลจริง</div>':'';
+  const pg=c=>`<div class="page">${wm}${c}</div>`;
+  const ac=[...S.acts].sort((a,b)=>a.date.localeCompare(b.date));
+  const ph=ac.filter(a=>a.photos.length);
+  const secHtml=([k,l])=>{if(k==='pre')return'';let body='';
+    if(k==='c4')body=autoC4()+P(S.text.c4);else if(k==='c7')body=(S.pubs.length?`<table><tr><th>เรื่อง</th><th>ช่องทาง</th><th>วันที่</th></tr>${S.pubs.map(p=>`<tr><td style="text-align:left">${esc(p.title)}</td><td>${esc(p.ch)}</td><td>${thDate(p.date)}</td></tr>`).join('')}</table>`:'')+(S.awards.length?`<br><table><tr><th>รางวัล/คำชม</th><th>หน่วยงาน</th><th>วันที่</th></tr>${S.awards.map(p=>`<tr><td style="text-align:left">${esc(p.title)}</td><td>${esc(p.org)}</td><td>${thDate(p.date)}</td></tr>`).join('')}</table>`:'')+P(S.text.c7)||'<p>[ยังไม่มีข้อมูล]</p>';
+    else body=P(S.text[k])||'<p>[ยังไม่ได้เขียน]</p>';return`<h2>${l}</h2>${body}`};
+  const toc=['คำนำ',...SEC.slice(0,8).map(x=>x[1]),'ภาคผนวก'];
+  return`<div class="bar"><button class="btn" onclick="print()">พิมพ์ / บันทึก PDF</button><button class="btn alt" style="background:#fff" onclick="dlWord()">Word</button><button class="btn alt" style="background:#fff" onclick="$('#rpt').style.display='none'">ปิด</button></div>`+
+  pg(`<div style="text-align:center;margin-top:50mm"><h1 style="font-size:30pt">${esc(m.title)}</h1><p style="text-indent:0;text-align:center">ผลงานนวัตกรรม สร้างสรรค์คนดี</p><br><p style="text-indent:0;text-align:center"><b>${esc(m.owner)}</b><br>${esc(m.pos)}<br>${esc(m.school)}<br>${esc(m.area)}</p></div>`)+
+  pg(`<h2>คำนำ</h2>${P(S.text.pre)||'<p>[ยังไม่ได้เขียน]</p>'}`)+
+  pg(`<h2>สารบัญ</h2>${toc.map(t=>`<p style="text-indent:0">${t}</p>`).join('')}`)+
+  pg(`<h2>ข้อมูลเบื้องต้นในแบบเสนอผลงาน</h2><table style="font-size:15pt">${[['ชื่อผลงาน',m.title],['ชื่อเจ้าของผลงาน',m.owner+' '+m.pos],['โรงเรียน/หน่วยงาน',m.school],['สังกัด',m.area],['โทรศัพท์/e-mail',m.tel+(m.email?' / '+m.email:'')],['ประเภทผลงาน',m.type],['สอดคล้องกับคุณลักษณะ',m.traits.join(', ')]].map(r=>`<tr><td style="text-align:left;width:38%"><b>${r[0]}</b></td><td style="text-align:left">${esc(r[1])}</td></tr>`).join('')}</table>`)+
+  SEC.slice(0,8).map(s=>pg(secHtml(s))).join('')+
+  pg(`<h2>ภาคผนวก ก ภาพกิจกรรม</h2>`+(ph.map(a=>`<h3>${esc(a.title)} (${thDate(a.date)})</h3><div class="ph">${a.photos.map(p=>`<img src="${p}">`).join('')}</div>`).join('')||'<p>[ยังไม่มีภาพ]</p>'))+
+  pg(`<h2>ภาคผนวก ข ทะเบียนกิจกรรม</h2><table><tr><th>วันที่</th><th>กิจกรรม</th><th>เข้าร่วม</th></tr>${ac.map(a=>`<tr><td>${thDate(a.date)}</td><td style="text-align:left">${esc(a.title)}</td><td>${a.att.length}</td></tr>`).join('')}</table>`)}
+function showRpt(){const r=$('#rpt');r.innerHTML=rptHTML();r.style.display='block';r.scrollTop=0}
+function dlWord(){const h=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>body{font-family:'TH SarabunPSK','Sarabun';font-size:16pt}h1{text-align:center}h2{color:#0f4a38}p{text-indent:1.2cm}table{border-collapse:collapse}td,th{border:1px solid #888;padding:3px}.page{page-break-after:always}.bar{display:none}.wm{color:#c00;font-size:28pt;text-align:center}</style></head><body>${rptHTML()}</body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿',h],{type:'application/msword'}));a.download=`${S.meta.title}.doc`;a.click()}
+
+/* ---------- ข้อมูลตัวอย่าง (สมมติ) ---------- */
+function loadDemo(){if(!confirm('แทนที่ข้อมูลปัจจุบันด้วยข้อมูลตัวอย่างสมมติ? (ควรสำรองข้อมูลจริงก่อน)'))return;
+  let x=7;const r=()=>(x=(x*16807)%2147483647)/2147483647;const d=D0();d.demo=true;
+  for(let i=1;i<=12;i++)d.students.push({id:'d'+i,sid:'D'+String(i).padStart(4,'0'),name:'นักเรียนตัวอย่าง '+String(i).padStart(2,'0'),no:i});
+  const T=['กิจกรรมจิตอาสาพัฒนาห้องเรียน','ธนาคารความดี','เล่าเรื่องความกตัญญู','ตลาดนัดพอเพียง','ค่ายคุณธรรม','ส่งต่อน้ำใจสู่ชุมชน'];
+  T.forEach((t,i)=>d.acts.push({id:'da'+i,date:`2026-0${i+5}-1${i+1}`.slice(0,10),title:'(ตัวอย่าง) '+t,tr:[i%5,(i+2)%5],detail:'',att:d.students.map(s=>s.id).slice(0,10+i%3),photos:[]}));
+  for(let i=0;i<15;i++)d.good.push({id:'dg'+i,sid:'d'+(1+i%12),t:i%5,note:'(ตัวอย่าง) พฤติกรรมความดีสมมติ',date:`2026-0${6+i%3}-0${1+i%9}`});
+  d.students.forEach(s=>{d.scores.pre[s.id]={};d.scores.post[s.id]={};for(let i=0;i<5;i++){const a=Math.max(1,Math.min(5,Math.round(2.5+r()*1.5)));d.scores.pre[s.id][i]=a;d.scores.post[s.id][i]=Math.max(1,Math.min(5,a+Math.round(r()*2)))}});
+  d.pubs.push({id:'dp1',title:'(ตัวอย่าง) เผยแพร่ผลงาน',ch:'ช่องทางสมมติ',date:'2026-09-01'});
+  S=d;SEC.forEach(([k])=>S.text[k]=draft(k));save();go('home')}
+
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+render();
+</script>
+</body>
+</html>
