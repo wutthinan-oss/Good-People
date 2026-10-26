@@ -268,3 +268,39 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 .res.live{border-style:solid;border-color:var(--green)}
 .res.live .bars{display:none}
 .live-note{font-size:14px;color:var(--mut);margin-top:14px}
+
+/* โมเดล CADET ภาพเดียวเข้าใจใน 5 วินาที */
+.cm{display:flex;align-items:stretch;gap:10px;margin-top:8px}
+.cm-end{flex:0 0 120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-radius:18px;padding:14px 8px;border:2px dashed rgba(255,255,255,.35);color:#fff}
+.cm-end span{font-size:36px;line-height:1}
+.cm-end b{font:700 18px var(--display);margin-top:6px}
+.cm-end small{color:#C9D3C4;font-size:13px;margin-top:4px}
+.cm-out{background:linear-gradient(160deg,#C9A227,#E7C95A);border:0;color:#123222}
+.cm-out small{color:#3b3410}
+.cm-arrow{align-self:center;color:var(--gold);font-size:26px}
+.cm-steps{flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cm-s{background:#fff;color:var(--ink);border-radius:18px;padding:14px 8px 14px;text-align:center;border-top:7px solid var(--c);position:relative;display:flex;flex-direction:column;align-items:center}
+.cm-s i{font:700 30px var(--display);font-style:normal;color:#fff;background:var(--c);width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin-top:-34px;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.cm-ico{font-size:34px;margin:8px 0 2px}
+.cm-s b{font:700 19px var(--display);color:var(--c)}
+.cm-s em{font-style:normal;font-weight:600;font-size:15px;margin-top:2px}
+.cm-s small{color:var(--mut);font-size:13px;margin-top:4px}
+.cm-s:not(:last-child)::after{content:"›";position:absolute;right:-12px;top:50%;color:var(--gold);font-size:26px;font-weight:700}
+.cm-loop{margin:22px 0 0;text-align:center;color:#EDEAD8;background:rgba(255,255,255,.08);border-radius:999px;padding:10px 18px;font-size:15.5px}
+.cm-out3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.cm-out3 div{background:rgba(255,255,255,.1);border-radius:14px;padding:12px;text-align:center;color:#fff}
+.cm-out3 b{display:block;font:700 17px var(--display)}
+.cm-out3 small{color:#C9D3C4;font-size:13.5px}
+@media(max-width:900px){
+  .cm{flex-direction:column}
+  .cm-end{flex:none;flex-direction:row;gap:12px;padding:12px}
+  .cm-end small{margin:0}
+  .cm-arrow{transform:rotate(90deg);align-self:center}
+  .cm-steps{grid-template-columns:1fr;gap:26px}
+  .cm-s{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;text-align:left;gap:0 12px;padding:14px 14px 14px 76px;min-height:84px;border-top:0;border-left:8px solid var(--c);align-items:flex-start}
+  .cm-s i{position:absolute;left:12px;top:14px;margin:0;width:48px;height:48px}
+  .cm-ico{position:absolute;right:12px;top:12px;margin:0;font-size:30px}
+  .cm-s b,.cm-s em,.cm-s small{display:block;width:100%}
+  .cm-s:not(:last-child)::after{content:"▼";right:auto;left:26px;top:auto;bottom:-24px;font-size:16px}
+  .cm-out3{grid-template-columns:1fr}
+}

@@ -5,6 +5,7 @@ const STEPS=[
  {l:'D',n:'ลงมือทำ',en:'Do',c:'var(--c3)',m:'ปฏิบัติงานตามข้อตกลง',d:'ทำภารกิจร่วมกับเพื่อนและแก้ปัญหาระหว่างดำเนินงาน',w:'ผลงาน หลักฐาน และปัญหาที่เกิดขึ้น',q:'ระหว่างทำพบอุปสรรคอะไร และแก้อย่างไร'},
  {l:'E',n:'ทบทวน',en:'Examine · AAR',c:'var(--c4)',m:'ทบทวนการกระทำและผลต่อผู้อื่น (After Action Review)',d:'ตรวจความครบถ้วน รายงานตามจริง และรับข้อเสนอแนะ',w:'สิ่งที่ทำได้ สิ่งที่ยังไม่สำเร็จ และสิ่งที่จะปรับ',q:'วันนี้ฉันรับผิดชอบอะไร ทำได้ตามข้อตกลงหรือไม่ ใครได้ประโยชน์'},
  {l:'T',n:'สานต่อ',en:'Transfer',c:'var(--c5)',m:'ทำต่อเนื่องและใช้บทเรียนในบริบทใหม่',d:'กลับไปติดตามงาน หรือริเริ่มภารกิจถัดไป',w:'ผลติดตามและเป้าหมายพัฒนาตนเอง',q:'ครั้งหน้าฉันจะปรับการกระทำอะไรหนึ่งอย่าง'}];
+if(document.getElementById('stepper')){
 const st=document.getElementById('stepper'),pn=document.getElementById('panel');
 STEPS.forEach((s,i)=>{const b=document.createElement('button');b.className='st';b.style.setProperty('--c',s.c);b.type='button';b.setAttribute('role','tab');
   b.innerHTML=`<div class="l">${s.l}</div><div class="n">${s.n}</div>`;b.onclick=()=>showStep(i);st.appendChild(b)});
@@ -16,6 +17,7 @@ function showStep(i){const s=STEPS[i];[...st.children].forEach((b,k)=>{b.classLi
 showStep(0);let cur=0;
 document.addEventListener('keydown',e=>{if(!st.contains(document.activeElement))return;if(e.key==='ArrowRight'){cur=(cur+1)%5;showStep(cur);st.children[cur].focus()}if(e.key==='ArrowLeft'){cur=(cur+4)%5;showStep(cur);st.children[cur].focus()}});
 [...st.children].forEach((b,i)=>b.addEventListener('click',()=>cur=i));
+}
 
 /* photos: ถ้ามีไฟล์ใน assets/photos/ จะแสดงเอง */
 document.querySelectorAll('[data-photo]').forEach(el=>{const f='assets/photos/'+el.dataset.photo,i=new Image();
