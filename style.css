@@ -221,3 +221,43 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
 @media print{header.top,.toTop,.cta{display:none}section{padding:20px 0}}
+
+/* photo strip */
+.strip-wrap{overflow:hidden;background:var(--green-d);border-block:3px solid var(--gold);padding:10px 0;position:relative}
+.strip{display:flex;gap:10px;width:max-content;animation:marq 70s linear infinite}
+.strip-wrap:hover .strip{animation-play-state:paused}
+.strip img{height:130px;width:auto;border-radius:10px;flex:none;object-fit:cover;background:#2a4a35;cursor:pointer}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media(max-width:620px){.strip img{height:96px}}
+@media(prefers-reduced-motion:reduce){.strip-wrap{overflow-x:auto}.strip{animation:none}}
+.photo[data-badge].has::after{content:attr(data-badge);position:absolute;left:10px;bottom:10px;background:rgba(18,50,34,.78);color:#fff;border-radius:999px;padding:3px 12px;font-size:12.5px}
+/* works */
+.wstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:640px;margin-bottom:26px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 16px;font:600 15px var(--display);color:var(--green-d);cursor:pointer;transition:.15s}
+.chip small{font-weight:500;color:var(--mut);margin-left:6px}
+.chip:hover{border-color:var(--green)}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff}.chip.on small{color:#CFE0CC}
+.album-info{min-height:52px;margin:6px 0 18px;padding:10px 16px;border-left:5px solid var(--gold);background:var(--paper);border-radius:0 12px 12px 0;font-size:16px;color:var(--mut)}
+.album-info b{color:var(--green-d);font-family:var(--display);font-size:18px}
+.masonry{column-count:4;column-gap:12px}
+@media(max-width:1000px){.masonry{column-count:3}}@media(max-width:700px){.masonry{column-count:2}}
+.masonry button{display:block;width:100%;margin:0 0 12px;padding:0;border:0;border-radius:12px;overflow:hidden;background:#e5dfc6;cursor:zoom-in;break-inside:avoid;position:relative;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.masonry button:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(18,50,34,.22)}
+.masonry img{width:100%;height:auto;display:block;opacity:0;transition:opacity .4s}
+.masonry img.ld{opacity:1}
+.masonry button::after{content:"⤢";position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;background:rgba(18,50,34,.7);color:#fff;display:grid;place-items:center;font-size:15px;opacity:0;transition:.2s}
+.masonry button:hover::after,.masonry button:focus-visible::after{opacity:1}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,20,13,.94);display:grid;grid-template-columns:64px 1fr 64px;align-items:center;padding:16px}
+.lb[hidden]{display:none}
+.lb figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;max-height:100%;min-width:0}
+.lb img{max-width:100%;max-height:calc(100vh - 120px);border-radius:10px;object-fit:contain;background:#12301f}
+.lb figcaption{color:#E4EBDF;font-size:15.5px;margin-top:12px;text-align:center;max-width:760px}
+.lb figcaption small{display:block;color:#9FB09B;margin-top:2px}
+.lb-n,.lb-x{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:50%;width:48px;height:48px;font-size:28px;cursor:pointer;line-height:1}
+.lb-n:hover,.lb-x:hover{background:var(--gold);color:var(--green-d)}
+.lb-x{position:absolute;right:14px;top:14px;font-size:20px;z-index:2}
+@media(max-width:700px){.lb{grid-template-columns:1fr;padding:10px}.lb-n{position:absolute;bottom:14px;width:52px;height:52px}.lb-prev{left:14px}.lb-next{right:14px}.lb img{max-height:calc(100vh - 170px)}.lb figcaption{margin-bottom:56px}}
+.about.nophoto{grid-template-columns:1fr;max-width:760px}
+.wstats .fact b{font-size:clamp(22px,3.4vw,30px);white-space:nowrap}

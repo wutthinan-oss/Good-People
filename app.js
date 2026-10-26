@@ -60,3 +60,48 @@ const secs=[...document.querySelectorAll('main section[id]')],links=[...document
 addEventListener('scroll',()=>{tt.style.display=scrollY>600?'block':'none';let cur='';secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s.id});links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur))},{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* hero photo: teacher.jpg missing -> hide block (replaces earlier loader) */
+document.querySelectorAll('[data-photo="teacher.jpg"]').forEach(el=>{
+  const i=new Image();i.onerror=()=>{el.style.display='none';document.getElementById('about').classList.add('nophoto')};i.src='assets/photos/teacher.jpg'});
+
+/* ===== ผลงานอ้างอิง: แกลเลอรี + lightbox ===== */
+(function(){
+  if(!window.PHOTOS)return;
+  const P=window.PHOTOS,A=window.ALBUMS,aMap=Object.fromEntries(A.map(a=>[a.k,a]));
+  const BASE='assets/photos/ref/',PAGE=16;let cur='all',shown=0,list=P.slice();
+  const gal=document.getElementById('gal'),chips=document.getElementById('chips'),info=document.getElementById('albInfo'),more=document.getElementById('more');
+  document.getElementById('wCount').textContent=P.length;document.getElementById('wAlb').textContent=A.length;
+  const cap=p=>{const a=aMap[p.a];return `<b>${a.t}</b>${a.d?' · '+a.d:''}<small>${a.s}</small>`};
+  function chip(k,label,n){const b=document.createElement('button');b.type='button';b.className='chip'+(k===cur?' on':'');b.innerHTML=`${label}<small>${n}</small>`;b.onclick=()=>setAlb(k);b.dataset.k=k;chips.appendChild(b)}
+  chip('all','ทั้งหมด',P.length);
+  A.forEach(a=>chip(a.k,a.t.replace('จิตอาสา 3 แสนนาย: ','3 แสนนาย: '),a.n));
+  function setAlb(k){cur=k;[...chips.children].forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+    list=k==='all'?P.slice():P.filter(p=>p.a===k);gal.innerHTML='';shown=0;
+    if(k==='all')info.innerHTML='<b>ภาพทั้งหมด</b> กิจกรรมจิตอาสาและกิจกรรมนักศึกษาวิชาทหารที่ผ่านมา เลือกอัลบั้มเพื่อกรองภาพ แตะภาพเพื่อดูขยาย';
+    else{const a=aMap[k];info.innerHTML=`<b>${a.t}</b>${a.d?' · '+a.d:''}<br>${a.s} · ${a.n} ภาพ${a.d?'':' · อัลบั้มนี้ไม่ได้ระบุวันที่'}`}
+    render()}
+  function render(){const s0=shown,next=list.slice(shown,shown+PAGE);
+    next.forEach((p,i)=>{const idx=s0+i,b=document.createElement('button');b.type='button';b.setAttribute('aria-label','ดูภาพขยาย: '+aMap[p.a].t);
+      const im=new Image();im.width=p.w;im.height=p.h;im.loading='lazy';im.alt=aMap[p.a].t+' '+aMap[p.a].s;im.onload=()=>im.classList.add('ld');im.src=BASE+'t/'+p.f;if(im.complete)im.classList.add('ld');
+      b.appendChild(im);b.onclick=()=>openLb(idx);gal.appendChild(b)});
+    shown+=next.length;more.style.display=shown<list.length?'':'none';more.textContent=`ดูภาพเพิ่ม (เหลือ ${list.length-shown})`}
+  more.onclick=render;
+  /* lightbox */
+  const lb=document.getElementById('lb'),li=document.getElementById('lbImg'),lc=document.getElementById('lbCap');let k0=0,last=null;
+  function show(i){k0=(i+list.length)%list.length;const p=list[k0];li.src=BASE+p.f;li.alt=aMap[p.a].t+' '+aMap[p.a].s;lc.innerHTML=cap(p)+`<small>${k0+1} / ${list.length}</small>`;
+    [1,-1].forEach(d=>{const q=list[(k0+d+list.length)%list.length],x=new Image();x.src=BASE+q.f})}
+  function openLb(i){last=document.activeElement;lb.hidden=false;document.body.style.overflow='hidden';show(i);document.getElementById('lbX').focus()}
+  function closeLb(){lb.hidden=true;document.body.style.overflow='';if(last)last.focus()}
+  document.getElementById('lbX').onclick=closeLb;document.getElementById('lbP').onclick=()=>show(k0-1);document.getElementById('lbN').onclick=()=>show(k0+1);
+  lb.addEventListener('click',e=>{if(e.target===lb||e.target.tagName==='FIGURE')closeLb()});
+  addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')show(k0+1);if(e.key==='ArrowLeft')show(k0-1)});
+  let tx=null;lb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+  lb.addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(k0+(d<0?1:-1));tx=null});
+  setAlb('all');
+  /* แถบภาพใต้ hero */
+  const strip=document.getElementById('strip'),S=['tree-01','clean67-04','field-01','tree-04','volunteer-04','may68-03','tree-08','clean67-09','volunteer-07','tree-02','clean-02','club-01'];
+  const pm=Object.fromEntries(P.map(p=>[p.f.replace('.jpg',''),p]));
+  [...S,...S].forEach(k=>{const p=pm[k];if(!p)return;const im=new Image();im.src=BASE+'t/'+p.f;im.alt='ภาพกิจกรรมจิตอาสา';im.loading='lazy';
+    im.onclick=()=>{setAlb(p.a);document.getElementById('works').scrollIntoView();setTimeout(()=>openLb(list.findIndex(x=>x.f===p.f)),350)};strip.appendChild(im)});
+})();
