@@ -88,3 +88,6 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .stars button{background:none;border:0;font-size:40px;line-height:1;color:#d8d2bb;cursor:pointer;padding:0 2px}
 .stars button.on{color:#e0a800}
 .stars .stxt{margin-left:10px;color:var(--mut);font-size:15px}
+
+.opts-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:620px){.opts-2{grid-template-columns:1fr}}

@@ -27,7 +27,7 @@ async function loadMs(){const r=await api('publicMissions');
    <button class="btn btn-primary" style="padding:8px 20px" type="button" data-id="${esc(m.id)}">ทำภารกิจนี้</button></div>`).join('')||'<div class="pcard">ยังไม่มีภารกิจ</div>'}
 $('#mList').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(!b)return;
   MID=b.dataset.id;const m=MS.find(x=>x.id===MID);$('#fTitle').textContent='บันทึกผลภารกิจ: '+(m?m.title:'');
-  hide('#oDone');hide('#eSub');RATE=0;drawStars();renderChips();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
+  hide('#oDone');hide('#eSub');RATE=0;drawStars();applyMode();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
 
 /* ===== ตัวเลือกคำตอบแบบแตะเลือก (ช่วยให้ไม่ต้องพิมพ์มาก) ===== */
 const CH={
@@ -43,6 +43,13 @@ const CH_M={
   m3:{q2:['ทุกคนที่ใช้ทรัพย์สินส่วนรวม','ครูผู้ดูแลสถานที่'],q3:['ติดตามการใช้งานต่อเนื่อง']}
 };
 const BEN=[5,10,20,50,100];
+const ROLE_SOLO=['เวรประจำวัน','ดูแลพื้นที่ของตัวเอง','ช่วยงานครู','ดูแลอุปกรณ์','เก็บขยะประจำจุด','ตรวจความเรียบร้อย'];
+const ROLE_GROUP=CH.role.slice();
+function curMode(){const r=document.querySelector('input[name=mode]:checked');return r?r.value:'หมู่'}
+function applyMode(){const solo=curMode()==='เดี่ยว';CH.role=solo?ROLE_SOLO:ROLE_GROUP;
+  $('#modeHint').textContent=solo?'ทำคนเดียวตามหน้าที่ที่ได้รับ เช่น เวรประจำวันหรือพื้นที่ที่รับผิดชอบเอง':'ทำร่วมกับเพื่อนในหมู่ แบ่งหน้าที่กันตามที่ตกลง';
+  $('#role').placeholder=solo?'เช่น เวรประจำวัน':'เช่น หัวหน้าหมู่';$('#role').value='';renderChips()}
+document.querySelectorAll('input[name=mode]').forEach(r=>r.onchange=applyMode);
 CH.comment=['สนุก','ได้เรียนรู้','อยากทำอีก','ได้ช่วยคนอื่น','ยากไปหน่อย','ใช้เวลานาน','ควรมีอุปกรณ์เพิ่ม'];
 let RATE=0;const RT=['ยังไม่ได้ให้ดาว','ควรปรับปรุง','พอใช้','ดี','ดีมาก','ดีเยี่ยม'];
 function drawStars(){document.querySelectorAll('#stars button').forEach(b=>b.classList.toggle('on',+b.dataset.n<=RATE));$('#sTxt').textContent=RT[RATE]}
@@ -75,10 +82,10 @@ $('#fSub').addEventListener('submit',async e=>{e.preventDefault();hide('#eSub');
   if(st.value!=='ทำครบตามแผน'&&!$('#reason').value.trim())return show('#eSub','โปรดระบุเหตุผลเมื่อทำไม่ครบ');
   if((stage==='E'||stage==='T')&&q.some(x=>!x))return show('#eSub','ขั้น E และ T ต้องตอบคำถามสะท้อนคิดทั้ง 3 ข้อ');
   const b=$('#bSub');b.disabled=true;b.textContent='กำลังส่ง...';
-  const r=await api('submitByName',{name:ME.name,year:ME.year,no:ME.no,website:$('#hp').value,missionId:MID,stage,role:$('#role').value,status:st.value,reason:$('#reason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#evidence').value,photos:PHOTOS,beneficiaries:$('#ben').value,rating:RATE||'',comment:$('#comment').value});
+  const r=await api('submitByName',{name:ME.name,year:ME.year,no:ME.no,website:$('#hp').value,missionId:MID,stage,role:$('#role').value,status:st.value,reason:$('#reason').value,q1:q[0],q2:q[1],q3:q[2],evidence:$('#evidence').value,photos:PHOTOS,beneficiaries:$('#ben').value,rating:RATE||'',comment:$('#comment').value,mode:curMode()});
   b.disabled=false;b.textContent='ส่งรายงานภารกิจ';
   if(!r.ok)return show('#eSub',r.error||'ส่งไม่สำเร็จ');
   show('#oDone','ส่งรายงานแล้ว (รหัส '+r.id+(r.photos?' · แนบ '+r.photos+' ภาพ':'')+') ผู้กำกับจะตรวจและให้ข้อเสนอแนะ ทำภารกิจอื่นต่อได้เลย');
-  $('#fSub').reset();PHOTOS=[];RATE=0;drawStars();draw();renderChips();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
+  $('#fSub').reset();PHOTOS=[];RATE=0;drawStars();draw();applyMode();$('#reasonBox').hidden=true;$('#vForm').hidden=true;scrollTo({top:0,behavior:'smooth'})});
 
 if(ME&&ME.name){fillId();enter()}

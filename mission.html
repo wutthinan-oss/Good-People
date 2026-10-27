@@ -66,6 +66,13 @@
           <option value="T">T · ติดตามผลและทำต่อ</option>
         </select>
 
+        <label class="f">ฉันทำภารกิจนี้แบบไหน</label>
+        <div class="opts2 opts-2">
+          <label><input type="radio" name="mode" value="หมู่" checked> 👥 ทำเป็นหมู่</label>
+          <label><input type="radio" name="mode" value="เดี่ยว"> 🧍 ทำคนเดียว (หน้าที่ส่วนตัว)</label>
+        </div>
+        <p class="small" id="modeHint">ทำร่วมกับเพื่อนในหมู่ แบ่งหน้าที่กันตามที่ตกลง</p>
+
         <label class="f" for="role">หน้าที่ของฉัน <span class="small">(แตะเลือกได้ หรือพิมพ์เอง)</span></label>
         <div class="qc" data-for="role"></div>
         <input class="in" id="role" maxlength="200" placeholder="เช่น หัวหน้าหมู่">
