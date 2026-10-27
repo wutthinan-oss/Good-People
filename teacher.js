@@ -51,7 +51,7 @@ async function approve(i,on){const x=REPS[i];const r=await call('approvePhotos',
   if(!r.ok){$('#apm'+i).textContent=r.error||'ไม่สำเร็จ';return}await loadReports()}
 async function saveReview(i){const x=REPS[i],g=id=>$('#'+id+i).value;const r=await call('review',{id:x.id,reviewStatus:g('rs'),feedback:g('rf'),b1:g('rb1'),b2:g('rb2'),b3:g('rb3'),star:$('#rst'+i).checked?1:0,starNote:$('#rsn'+i).value});
   $('#rm'+i).textContent=r.ok?'บันทึกแล้ว':(r.error||'บันทึกไม่สำเร็จ')}
-function exportCsv(){const h=['id','ts','sid','name','missionId','stage','role','status','reason','q1','q2','q3','evidence','reviewStatus','feedback','b1','b2','b3','star','starNote'];
+function exportCsv(){const h=['id','ts','sid','name','missionId','stage','role','status','reason','q1','q2','q3','evidence','reviewStatus','feedback','b1','b2','b3','star','starNote','rating','comment','mode','beneficiaries','photos','publicOk','caption','source','year','no'];
   const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv='﻿'+[h.join(',')].concat(REPS.map(r=>h.map(k=>q(r[k])).join(','))).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cadet-reports.csv';a.click()}
 $('#fScore').addEventListener('submit',async e=>{e.preventDefault();hide('#eSc');hide('#oSc');

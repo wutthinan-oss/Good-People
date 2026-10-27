@@ -16,7 +16,7 @@ $('#gGrid').addEventListener('click',e=>{const c=e.target.closest('.gcard');if(!
   $('#glbImg').src=x.full||x.src;$('#glbCap').textContent=(x.caption||x.mission)+' · '+x.mission;$('#glb').hidden=false});
 const close=()=>{$('#glb').hidden=true;$('#glbImg').src=''};
 $('#glbX').onclick=close;$('#glb').addEventListener('click',e=>{if(e.target.id==='glb')close()});addEventListener('keydown',e=>{if(e.key==='Escape')close()});
-api('gallery').then(r=>{ITEMS=(r&&r.ok)?r.items:[];
-  $('#gStats').innerHTML=`<div><b>${ITEMS.length}</b><span>ภาพที่อนุมัติแล้ว</span></div><div><b>${new Set(ITEMS.map(x=>x.missionId)).size}</b><span>ภารกิจที่มีภาพ</span></div>`;
+api('gallery').then(r=>{ITEMS=(r&&r.ok)?r.items:[];const TOTAL=(r&&r.ok&&r.count)?r.count:ITEMS.length;
+  $('#gStats').innerHTML=`<div><b>${TOTAL}</b><span>ภาพที่อนุมัติแล้ว${TOTAL>ITEMS.length?' (แสดง '+ITEMS.length+' ภาพล่าสุด)':''}</span></div><div><b>${new Set(ITEMS.map(x=>x.missionId)).size}</b><span>ภารกิจที่มีภาพ</span></div>`;
   chips();draw()});
 })();
