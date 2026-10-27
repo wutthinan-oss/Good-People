@@ -397,3 +397,19 @@ img,video,canvas,svg{max-width:100%;height:auto}
   .cm:not(.cm4) .cm-steps{grid-template-columns:repeat(5,1fr)}
   .cm:not(.cm4) .cm-s small{font-size:12px}
 }
+
+/* แบนเนอร์/หน้าต่างชวนติดตั้งแอป */
+.inst-bar{position:fixed;left:10px;right:10px;bottom:10px;z-index:60;display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--gold);border-radius:18px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.28);max-width:560px;margin-inline:auto}
+.inst-bar[hidden],.inst-modal[hidden]{display:none}
+.inst-bar img{border-radius:12px;flex:none}
+.inst-txt{flex:1;min-width:0;line-height:1.3}
+.inst-txt b{display:block;font:700 16px var(--display);color:var(--green-d)}
+.inst-txt span{font-size:13px;color:var(--mut)}
+.inst-bar .btn{padding:8px 16px;flex:none}
+.inst-x{background:none;border:0;font-size:26px;line-height:1;color:var(--mut);cursor:pointer;padding:0 4px}
+.inst-modal{position:fixed;inset:0;z-index:70;background:rgba(10,20,14,.7);display:flex;align-items:center;justify-content:center;padding:18px}
+.inst-card{position:relative;background:#fff;border-radius:20px;padding:22px 20px 18px;max-width:420px;width:100%}
+.inst-card h3{margin:0 0 10px;color:var(--green-d)}
+.inst-card ol{margin:0 0 16px;padding-left:22px;line-height:1.7}
+.inst-card .inst-x{position:absolute;top:8px;right:10px}
+@media(max-width:620px){.hero-logo img{max-height:44vh;width:auto;margin-inline:auto}}
