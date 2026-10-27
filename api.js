@@ -32,15 +32,34 @@
       return{ok:true,stats:{students:1,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,byMission:{},review:rv,reviewAvg:{},scoresByPhase:ph,photoPending:db.reports.filter(r=>r.photos&&r.publicOk!=1&&r.publicOk!=='no').length,photoApproved:db.reports.filter(r=>r.publicOk==1).length,photoRejected:db.reports.filter(r=>r.publicOk==='no').length,stars:db.reports.filter(r=>r.star==1).length,topStars:db.reports.filter(r=>r.star==1).length?[{sid:'demo',name:'นักศึกษาตัวอย่าง',stars:db.reports.filter(r=>r.star==1).length}]:[]}}}
     return{ok:false,error:'ไม่รองรับ'};
   }
+  const WRITE_ACTIONS=['submit','submitByName','review','saveScore','approvePhotos'];
+  async function once(body){
+    const res=await fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),redirect:'follow'});
+    const txt=await res.text();
+    try{return JSON.parse(txt)}catch(e){return{ok:false,error:'เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ (ตรวจว่า deploy เป็น Web app และมีฟังก์ชัน doPost)'}}
+  }
   window.api=async function(action,data){
     const body=Object.assign({action},data||{});
     if(DEMO){await new Promise(r=>setTimeout(r,250));return mock(action,body)}
     if(!URL_)return{ok:false,error:'ยังไม่ได้ตั้งค่า API ในไฟล์ config.js'};
-    try{
-      const res=await fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),redirect:'follow'});
-      const txt=await res.text();
-      try{return JSON.parse(txt)}catch(e){return{ok:false,error:'เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ (ตรวจว่า deploy เป็น Web app และมีฟังก์ชัน doPost)'}}
-    }catch(e){return{ok:false,error:'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่'}}
+    const isWrite=WRITE_ACTIONS.indexOf(action)>=0;
+    const tries=isWrite?2:3;
+    let last={ok:false,error:'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่'};
+    for(let i=0;i<tries;i++){
+      try{
+        const r=await once(body);
+        last=r;
+        // เซิร์ฟเวอร์ยุ่ง (คิวล็อกเต็ม): ยังไม่ได้ทำรายการ จึงลองซ้ำได้อย่างปลอดภัย แม้เป็นคำสั่งเขียน
+        if(r&&r.ok===false&&/หมดเวลาการล็อก|ผู้ใช้งานพร้อมกันมาก/.test(r.error||'')&&i<tries-1){await new Promise(x=>setTimeout(x,1500*(i+1)));continue}
+        return r;
+      }catch(e){
+        last={ok:false,error:'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่'};
+        // ข้อผิดพลาดเครือข่าย: ลองซ้ำเฉพาะคำสั่งอ่าน (คำสั่งเขียนอาจสำเร็จไปแล้ว จึงไม่ลองซ้ำเอง เพื่อไม่ให้ส่งซ้ำ)
+        if(!isWrite&&i<tries-1){await new Promise(x=>setTimeout(x,1200*(i+1)));continue}
+        return last;
+      }
+    }
+    return last;
   };
   /* บีบอัดภาพจากมือถือ: ย่อด้านยาวไม่เกิน 1280px แล้วแปลงเป็น JPEG (การวาดใหม่ลงแคนวาสจะตัดข้อมูลตำแหน่ง GPS/EXIF ออกด้วย) */
   window.shrinkImage=function(file,max,limit){return new Promise((res,rej)=>{

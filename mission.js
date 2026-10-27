@@ -33,8 +33,8 @@ $('#fId').addEventListener('submit',e=>{e.preventDefault();hide('#eId');
   ME={name,year,no};try{localStorage.setItem('cadet_me',JSON.stringify(ME))}catch(x){}enter()});
 $('#bEdit').onclick=()=>{$('#vApp').hidden=true;$('#vId').hidden=false;fillId()};
 
-async function loadMs(){const r=await api('publicMissions');
-  if(!r.ok){$('#mList').innerHTML=`<div class="pcard">${esc(r.error||'โหลดภารกิจไม่ได้')}</div>`;return}
+async function loadMs(){$('#mList').innerHTML='<div class="pcard small">กำลังโหลดภารกิจ...</div>';const r=await api('publicMissions');
+  if(!r.ok){$('#mList').innerHTML=`<div class="pcard">${esc(r.error||'โหลดภารกิจไม่ได้')}<p style="margin:12px 0 0"><button class="btn btn-primary" type="button" id="retryMs">ลองใหม่</button></p></div>`;$('#retryMs').onclick=loadMs;return}
   MS=r.missions;
   $('#mList').innerHTML=MS.map(m=>`<div class="mcard"><h3>${esc(m.title)}</h3><div class="meta">${esc(m.level)} · ${esc(m.weeks)}</div>
    <div>${String(m.stages).split('|').map(s=>`<span class="stg">${esc(s)}</span>`).join('')}</div>
