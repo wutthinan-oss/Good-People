@@ -355,3 +355,10 @@ section[id] .sec-head h2{font-size:clamp(26px,4.4vw,40px)}
 .guide-card .gc-txt{flex:1;min-width:220px}
 .guide-card .gc-txt b{display:block;font:700 20px var(--display);color:var(--green-d)}
 .guide-card .gc-txt span{color:var(--mut);font-size:15.5px}
+
+/* มือถือ: บังคับให้ภาพ 4/5 ขั้นเรียงแนวตั้ง (กฎ .cm4 ด้านบนมีน้ำหนักมากกว่าเดิม) และกันหน้าเว็บล้นจอ */
+@media(max-width:900px){
+  .cm4 .cm-steps,.cm-steps{grid-template-columns:1fr}
+  .cm-panel{overflow:hidden}
+}
+html,body{max-width:100%;overflow-x:hidden}
