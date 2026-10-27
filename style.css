@@ -291,7 +291,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 .cm-out3 div{background:rgba(255,255,255,.1);border-radius:14px;padding:12px;text-align:center;color:#fff}
 .cm-out3 b{display:block;font:700 17px var(--display)}
 .cm-out3 small{color:#C9D3C4;font-size:13.5px}
-@media(max-width:900px){
+@media(max-width:0px){
   .cm{flex-direction:column}
   .cm-end{flex:none;flex-direction:row;gap:12px;padding:12px}
   .cm-end small{margin:0}
@@ -332,7 +332,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
 .cm-panel{background:var(--green-d);border-radius:26px;padding:44px 18px 20px;box-shadow:var(--shadow)}
 .cm-panel .cm{margin-top:0}
 .cm-panel .cm-loop{margin-top:20px}
-@media(max-width:900px){.cm-panel{padding:24px 14px 16px}}
+@media(max-width:0px){.cm-panel{padding:24px 14px 16px}}
 
 #why .sec-head .eyebrow{justify-content:center}
 #why .sec-head .lead{margin-inline:auto}
@@ -357,8 +357,43 @@ section[id] .sec-head h2{font-size:clamp(26px,4.4vw,40px)}
 .guide-card .gc-txt span{color:var(--mut);font-size:15.5px}
 
 /* มือถือ: บังคับให้ภาพ 4/5 ขั้นเรียงแนวตั้ง (กฎ .cm4 ด้านบนมีน้ำหนักมากกว่าเดิม) และกันหน้าเว็บล้นจอ */
-@media(max-width:900px){
+@media(max-width:0px){
   .cm4 .cm-steps,.cm-steps{grid-template-columns:1fr}
-  .cm-panel{overflow:hidden}
 }
 html,body{max-width:100%;overflow-x:hidden}
+
+/* ===== ปรับขนาดอัตโนมัติตามความกว้างจริงของกรอบเนื้อหา (container query) ===== */
+#why .wrap,#model .wrap,#system .wrap{container-type:inline-size;container-name:cmc}
+.cm-panel{overflow:hidden}
+img,video,canvas,svg{max-width:100%;height:auto}
+.hero-logo img{max-width:min(100%,460px);height:auto}
+
+/* ระดับ 1: กรอบแคบกว่า 900px (แท็บเล็ต/มือถือแนวนอน) -> เรียงลงมา การ์ดเป็นตาราง auto-fit */
+@container cmc (max-width:900px){
+  .cm{flex-direction:column}
+  .cm-end{flex:none;flex-direction:row;gap:14px;padding:12px;justify-content:center}
+  .cm-end small{margin:0}
+  .cm-arrow{transform:rotate(90deg);align-self:center}
+  .cm-steps,.cm4 .cm-steps{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:36px 10px}
+  .cm-s:not(:last-child)::after{display:none}
+  .cm-out3{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .cm-panel{padding:40px 14px 16px}
+}
+/* ระดับ 2: กรอบแคบกว่า 520px (มือถือแนวตั้ง) -> การ์ดแถวเดียวต่อขั้น */
+@container cmc (max-width:520px){
+  .cm-panel{padding:26px 12px 14px}
+  .cm-steps,.cm4 .cm-steps{grid-template-columns:1fr;gap:26px}
+  .cm-s{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;text-align:left;gap:0 12px;padding:14px 14px 14px 76px;min-height:84px;border-top:0;border-left:8px solid var(--c);align-items:flex-start}
+  .cm-s i{position:absolute;left:12px;top:14px;margin:0;width:48px;height:48px}
+  .cm-ico{position:absolute;right:12px;top:12px;margin:0;font-size:30px}
+  .cm-s b,.cm-s em,.cm-s small{display:block;width:100%}
+  .cm-s:not(:last-child)::after{display:block;content:"▼";right:auto;left:26px;top:auto;bottom:-24px;font-size:16px}
+  .cm-out3{grid-template-columns:1fr}
+}
+/* หน้าจอใหญ่มาก: จำกัดความกว้างอ่านง่าย */
+@media(min-width:1500px){.wrap{max-width:1280px}}
+/* แท็บเล็ต: 5 ขั้นของโมเดลเรียงครบในแถวเดียว ไม่เหลือการ์ดโดดเดี่ยว */
+@container cmc (min-width:620px) and (max-width:900px){
+  .cm:not(.cm4) .cm-steps{grid-template-columns:repeat(5,1fr)}
+  .cm:not(.cm4) .cm-s small{font-size:12px}
+}
