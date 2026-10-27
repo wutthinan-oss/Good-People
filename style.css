@@ -348,3 +348,10 @@ section.dark .eyebrow .no{background:var(--green-d);color:var(--gold)}
 section[id]{border-top:6px solid var(--gold)}
 section.dark{border-top-color:#E7C95A}
 section[id] .sec-head h2{font-size:clamp(26px,4.4vw,40px)}
+
+/* การ์ดดาวน์โหลดคู่มือครู */
+.guide-card{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;background:var(--paper);border:2px solid var(--gold);border-radius:18px;padding:16px 20px;box-shadow:var(--shadow)}
+.guide-card .gc-ico{font-size:40px}
+.guide-card .gc-txt{flex:1;min-width:220px}
+.guide-card .gc-txt b{display:block;font:700 20px var(--display);color:var(--green-d)}
+.guide-card .gc-txt span{color:var(--mut);font-size:15.5px}
