@@ -13,7 +13,7 @@ function enter(){$('#vId').hidden=true;$('#vApp').hidden=false;$('#who').textCon
 $('#fId').addEventListener('submit',e=>{e.preventDefault();hide('#eId');
   const name=$('#iName').value.trim(),year=+$('#iYear').value,no=+$('#iNo').value;
   if(name.length<3)return show('#eId','พิมพ์ชื่อ-สกุลให้ครบ');
-  if(!(year>=1&&year<=5))return show('#eId','เลือกระดับชั้นปี นศท.');
+  if(!(year>=1&&year<=3))return show('#eId','เลือกระดับชั้นปี นศท.');
   if(!(no>=1&&no<=999))return show('#eId','กรอกลำดับเลขที่ นศท. เป็นตัวเลข');
   ME={name,year,no};try{localStorage.setItem('cadet_me',JSON.stringify(ME))}catch(x){}enter()});
 $('#bEdit').onclick=()=>{$('#vApp').hidden=true;$('#vId').hidden=false;fillId()};
