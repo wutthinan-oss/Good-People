@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261027b"><link rel="stylesheet" href="portal.css?v=20261027b">
+<link rel="stylesheet" href="style.css?v=20261027b"><link rel="stylesheet" href="portal.css?v=20261027h">
 </head>
 <body class="portal">
 <header class="top"><div class="wrap">
@@ -26,8 +26,6 @@
     <h2 style="text-align:center">ทำภารกิจที่ได้รับ</h2>
     <p class="small" style="text-align:center">นักศึกษาวิชาทหารทุกชั้นปีทำได้ กรอกข้อมูลของตนเอง แล้วเลือกภารกิจที่ได้รับเพื่อบันทึกผล ไม่ต้องล็อกอิน</p>
     <form id="fId" autocomplete="off">
-      <label class="f" for="iName">ชื่อ-สกุล</label>
-      <input class="in" id="iName" maxlength="80" placeholder="พิมพ์ชื่อและนามสกุล ไม่ต้องมีคำนำหน้า" required autocomplete="name">
       <label class="f" for="iYear">ระดับชั้นปี นศท.</label>
       <select class="in" id="iYear" required>
         <option value="">เลือกชั้นปี</option>
@@ -35,6 +33,10 @@
         <option value="2">นักศึกษาวิชาทหาร ชั้นปีที่ 2</option>
         <option value="3">นักศึกษาวิชาทหาร ชั้นปีที่ 3</option>
       </select>
+      <label class="f" for="iName">ชื่อ-สกุล <span class="small">(พิมพ์ชื่อ แล้วแตะชื่อตัวเองในรายการ)</span></label>
+      <input class="in" id="iName" maxlength="80" placeholder="พิมพ์ชื่อหรือนามสกุล เช่น ปิยะ" required autocomplete="off">
+      <div class="sug" id="sug" hidden role="listbox" aria-label="รายชื่อที่ตรงกัน"></div>
+      
       <label class="f" for="iNo">ลำดับเลขที่ นศท.</label>
       <input class="in" id="iNo" type="number" min="1" max="999" inputmode="numeric" placeholder="เช่น 12" required>
       <div class="err" id="eId"></div>
@@ -117,6 +119,6 @@
     </section>
   </div>
 </main>
-<script src="config.js?v=20261027b"></script><script src="api.js?v=20261027b"></script><script src="pwa.js?v=20261027g"></script><script src="mission.js?v=20261027b"></script>
+<script src="config.js?v=20261027b"></script><script src="api.js?v=20261027h"></script><script src="pwa.js?v=20261027g"></script><script src="mission.js?v=20261027h"></script>
 </body>
 </html>

@@ -91,3 +91,11 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 
 .opts-2{grid-template-columns:repeat(2,1fr)}
 @media(max-width:620px){.opts-2{grid-template-columns:1fr}}
+
+/* รายการแนะนำชื่อ */
+.sug{display:flex;flex-direction:column;gap:6px;margin:6px 0 0;padding:6px;background:var(--cream);border:1.5px solid var(--green);border-radius:14px}
+.sug[hidden]{display:none}
+.sug-i{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;cursor:pointer}
+.sug-i:hover,.sug-i:focus{border-color:var(--green);background:var(--green-l);outline:0}
+.sug-i b{font-family:var(--display)}
+.sug-i span{color:var(--mut);font-size:13.5px;white-space:nowrap}

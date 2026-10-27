@@ -7,6 +7,19 @@ if(window.CADET_DEMO)$('#demoBar').hidden=false;
 try{ME=JSON.parse(localStorage.getItem('cadet_me')||'null')}catch(e){}
 const yearTxt=y=>'นศท. ชั้นปีที่ '+y;
 
+/* แนะนำชื่อจากรายชื่อ (ค้นที่ฝั่งฐานข้อมูล ไม่ได้ฝังรายชื่อไว้ในหน้าเว็บ) */
+let sugTimer=null,sugSeq=0;
+function hideSug(){const b=$('#sug');b.hidden=true;b.innerHTML=''}
+function runSug(){const q=$('#iName').value.trim();if(q.length<2){hideSug();return}
+  const my=++sugSeq;api('suggest',{q,year:$('#iYear').value}).then(r=>{if(my!==sugSeq)return;
+    if(!r||!r.ok||!r.names.length){hideSug();return}
+    const b=$('#sug');b.innerHTML=r.names.map(x=>`<button type="button" class="sug-i" data-n="${esc(x.name)}" data-y="${esc(x.year)}" data-no="${esc(x.no)}"><b>${esc(x.name)}</b><span>${x.year?'ชั้นปีที่ '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</span></button>`).join('');b.hidden=false})}
+$('#iName').addEventListener('input',()=>{clearTimeout(sugTimer);sugTimer=setTimeout(runSug,250)});
+$('#iYear').addEventListener('change',()=>{if($('#iName').value.trim().length>=2)runSug()});
+$('#sug').addEventListener('click',e=>{const b=e.target.closest('.sug-i');if(!b)return;
+  $('#iName').value=b.dataset.n;if(b.dataset.y)$('#iYear').value=b.dataset.y;if(b.dataset.no)$('#iNo').value=b.dataset.no;hideSug();$('#iNo').focus()});
+document.addEventListener('click',e=>{if(!e.target.closest('#sug')&&e.target.id!=='iName')hideSug()});
+
 function fillId(){if(!ME)return;$('#iName').value=ME.name;$('#iYear').value=ME.year;$('#iNo').value=ME.no}
 function enter(){$('#vId').hidden=true;$('#vApp').hidden=false;$('#who').textContent='สวัสดี '+ME.name+' · '+yearTxt(ME.year)+' เลขที่ '+ME.no;loadMs()}
 
