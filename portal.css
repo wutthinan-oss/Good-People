@@ -99,3 +99,5 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .sug-i:hover,.sug-i:focus{border-color:var(--green);background:var(--green-l);outline:0}
 .sug-i b{font-family:var(--display)}
 .sug-i span{color:var(--mut);font-size:13.5px;white-space:nowrap}
+
+.sug-msg{padding:10px 12px;color:var(--mut);font-size:14.5px}
