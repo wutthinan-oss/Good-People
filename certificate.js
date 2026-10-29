@@ -36,8 +36,8 @@ async function draw(){const cv=$('#cv'),c=cv.getContext('2d');
   const nm=String(NAME).replace(/^\s*(นศท\.?|นักศึกษาวิชาทหาร)\s*/,'').trim();let fs=44;
   do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(nm).width>900&&fs>30);
   c.fillText(nm,745,592);
-  const d=new Date();c.font='500 28px Sarabun,sans-serif';
-  c.fillText(String(d.getDate()),596,806);c.fillText(THM[d.getMonth()],758,806);c.fillText(String(d.getFullYear()+543),926,806)}
+  const d=new Date();c.font='500 23px Sarabun,sans-serif';
+  c.fillText(String(d.getDate()),596,803);c.fillText(THM[d.getMonth()],758,803);c.fillText(String(d.getFullYear()+543),926,803)}
 
 $('#bPng').onclick=()=>{$('#cv').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='เกียรติบัตร-CADET-รดหัวใจอาสา.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},'image/png')};
 $('#bPrint').onclick=()=>window.print();

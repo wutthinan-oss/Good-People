@@ -3,14 +3,14 @@ const $=s=>document.querySelector(s),PAGE=48;
 const THM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 const IMG=new Image();IMG.src='assets/certificate.webp';
 const imgReady=new Promise(r=>IMG.complete&&IMG.naturalWidth?r():(IMG.onload=r,IMG.onerror=r));
-const fontReady=()=>Promise.all([document.fonts.load('600 56px Sarabun'),document.fonts.load('500 28px Sarabun')]).catch(()=>{});
+const fontReady=()=>Promise.all([document.fonts.load('600 56px Sarabun'),document.fonts.load('500 23px Sarabun')]).catch(()=>{});
 let ALL=[],SHOWN=PAGE,LIST=[];
 function drawCert(cv,name,date){const c=cv.getContext('2d'),W=1491,H=1055;cv.width=W;cv.height=H;
   c.drawImage(IMG,0,0,W,H);c.textAlign='center';c.textBaseline='alphabetic';c.fillStyle='#0f2a5a';
   let fs=44;do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(name).width>900&&fs>30);
   c.fillText(name,745,592);
   const d=date?new Date(date+'T00:00:00'):null;
-  if(d&&!isNaN(d)){c.font='500 28px Sarabun,sans-serif';c.fillText(String(d.getDate()),596,806);c.fillText(THM[d.getMonth()],758,806);c.fillText(String(d.getFullYear()+543),926,806)}}
+  if(d&&!isNaN(d)){c.font='500 23px Sarabun,sans-serif';c.fillText(String(d.getDate()),596,803);c.fillText(THM[d.getMonth()],758,803);c.fillText(String(d.getFullYear()+543),926,803)}}
 const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);const x=LIST[+e.target.dataset.i];if(x)drawCert(e.target,x.name,x.date)}}),{rootMargin:'300px'}):null;
 function render(){const q=$('#hnQ').value.trim();
   LIST=ALL.filter(x=>!q||x.name.includes(q));
