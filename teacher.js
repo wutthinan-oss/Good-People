@@ -12,7 +12,7 @@ $('#fLogin').addEventListener('submit',async e=>{e.preventDefault();hide('#eLogi
   if(!r.ok)return show('#eLogin',r.error||'เข้าสู่ระบบไม่สำเร็จ');TOKEN=r.token;try{sessionStorage.setItem('cadet_ttok',TOKEN)}catch(x){}$('#key').value='';enter()});
 document.querySelectorAll('#tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
   ['stats','photos','reports','scores'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
-  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos();if(t.dataset.t==='scores')loadScoreNames()});
+  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos();if(t.dataset.t==='scores')loadScoreNames();loadBulk()});
 async function init(){const r=await call('missions');if(r.ok){MS=r.missions;$('#fM').innerHTML='<option value="">ทั้งหมด</option>'+MS.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join('')}loadStats();badge()}
 const nm=id=>(MS.find(m=>m.id===id)||{}).title||id;
 
@@ -92,3 +92,31 @@ $('#phBulk').onclick=async()=>{const sel=[...document.querySelectorAll('.phck:ch
   if(!confirm('อนุมัติ '+sel.length+' รายการให้แสดงบนหน้าเว็บ? ตรวจแล้วว่าไม่มีข้อมูลส่วนตัวและได้รับความยินยอม'))return;
   let ok=0;for(const i of sel){const r=await call('approvePhotos',{id:PL[i].id,approve:true,caption:$('#pc'+i).value});if(r.ok)ok++}
   $('#phMsg').textContent='อนุมัติแล้ว '+ok+' รายการ';await loadPhotos();badge()};
+
+/* ===== ประเมินทั้งห้อง ===== */
+let BK=[],BKS={};
+const LV='<option value="">–</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>';
+async function loadBulk(){const box=$('#bkRows');box.innerHTML='<p class="small">กำลังโหลดรายชื่อ...</p>';
+  const [r,s]=await Promise.all([call('reports',{}),call('scores',{})]);
+  if(!r.ok){box.innerHTML='<p class="small">โหลดรายชื่อไม่ได้</p>';return}
+  const m={};r.reports.forEach(x=>{if(!m[x.sid])m[x.sid]=x});
+  BK=Object.values(m).sort((a,b)=>String(a.name).localeCompare(String(b.name),'th'));
+  BKS={};((s&&s.scores)||[]).forEach(x=>{BKS[x.phase+'|'+x.sid]=x});renderBulk()}
+function renderBulk(){const ph=$('#bkPh').value,q=$('#bkQ').value.trim(),box=$('#bkRows');
+  const l=BK.filter(x=>!q||String(x.name).includes(q));
+  if(!BK.length){box.innerHTML='<p class="small">ยังไม่มีนักศึกษาที่ส่งรายงาน</p>';$('#bkCount').textContent='';return}
+  box.innerHTML=l.map(x=>{const o=BKS[ph+'|'+x.sid]||{};
+    const sel=k=>`<select class="in" data-sid="${esc(x.sid)}" data-k="${k}" aria-label="${k}">${LV.replace(`value="${o[k]}"`,`value="${o[k]}" selected`)}</select>`;
+    return `<div class="bk-row"><div class="bk-n">${esc(x.name)}<small>${x.year?'ปี '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</small></div>${sel('b1')}${sel('b2')}${sel('b3')}</div>`}).join('');
+  $('#bkCount').textContent='แสดง '+l.length+' จาก '+BK.length+' คน'}
+$('#bkPh').addEventListener('change',renderBulk);$('#bkQ').addEventListener('input',renderBulk);
+$('#bkSave').addEventListener('click',async()=>{hide('#eBk');hide('#oBk');const ph=$('#bkPh').value,rows={};
+  document.querySelectorAll('#bkRows select').forEach(s=>{const sid=s.dataset.sid;(rows[sid]=rows[sid]||{sid})[s.dataset.k]=s.value});
+  const send=Object.values(rows).filter(r=>{const o=BKS[ph+'|'+r.sid]||{};return r.b1&&r.b2&&r.b3&&(String(o.b1)!==r.b1||String(o.b2)!==r.b2||String(o.b3)!==r.b3)});
+  const part=Object.values(rows).filter(r=>[r.b1,r.b2,r.b3].some(Boolean)&&![r.b1,r.b2,r.b3].every(Boolean)).length;
+  if(!send.length)return show('#eBk',part?'มี '+part+' คนที่เลือกไม่ครบ 3 ด้าน (ต้องเลือกให้ครบจึงจะบันทึก)':'ยังไม่มีรายการที่แก้ไข');
+  const b=$('#bkSave');b.disabled=true;b.textContent='กำลังบันทึก...';
+  const r=await call('saveScores',{phase:ph,assessor:$('#bkAs').value,rows:send});b.disabled=false;b.textContent='บันทึกที่แก้ไข';
+  if(!r.ok)return show('#eBk',r.error||'บันทึกไม่สำเร็จ');
+  send.forEach(x=>{BKS[ph+'|'+x.sid]={phase:ph,sid:x.sid,b1:x.b1,b2:x.b2,b3:x.b3}});
+  show('#oBk','บันทึกแล้ว '+r.saved+' คน'+(r.skipped?' (ข้าม '+r.skipped+')':'')+(part?' · ยังมี '+part+' คนที่เลือกไม่ครบ':''))});

@@ -101,3 +101,12 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .sug-i span{color:var(--mut);font-size:13.5px;white-space:nowrap}
 
 .sug-msg{padding:10px 12px;color:var(--mut);font-size:14.5px}
+/* ประเมินทั้งห้อง */
+.bk-head,.bk-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;align-items:center}
+.bk-head{margin-top:10px;font-size:13.5px;color:var(--mut);padding:0 4px}
+.bk-rows{max-height:62vh;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:6px}
+.bk-row{padding:6px 8px;border-bottom:1px solid var(--line)}
+.bk-row:nth-child(even){background:#faf7ec}
+.bk-n{font-weight:600;line-height:1.3}.bk-n small{display:block;font-weight:400;color:var(--mut);font-size:13px}
+.bk-row .in{padding:6px 8px;min-width:0}
+@media(max-width:620px){.bk-head{grid-template-columns:1fr 1fr 1fr;font-size:12px}.bk-head b:first-child{display:none}.bk-row{grid-template-columns:1fr 1fr 1fr}.bk-n{grid-column:1/-1}}

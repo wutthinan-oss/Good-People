@@ -26,13 +26,15 @@
     if(a==='photo')return db.photos[d.fileId]?{ok:true,data:db.photos[d.fileId]}:{ok:false,error:'ไม่พบภาพ'};
     if(a==='reports'){let l=db.reports.slice().reverse();if(d.photoStatus==='pending')l=l.filter(r=>r.photos&&r.publicOk!=1&&r.publicOk!=='no');if(d.photoStatus==='rejected')l=l.filter(r=>r.publicOk==='no');if(d.photoStatus==='approved')l=l.filter(r=>r.publicOk==1);return{ok:true,reports:l}}
     if(a==='review'){const r=db.reports.find(x=>x.id===d.id);if(!r)return{ok:false,error:'ไม่พบรายงาน'};Object.assign(r,{reviewStatus:d.reviewStatus,feedback:d.feedback,b1:d.b1,b2:d.b2,b3:d.b3,reviewTs:new Date().toISOString(),star:d.star?1:'',starNote:d.star?(d.starNote||''):''});return{ok:true}}
+    if(a==='saveScores'){(d.rows||[]).forEach(x=>db.scores.push({ts:new Date().toISOString(),sid:x.sid,phase:d.phase,b1:+x.b1,b2:+x.b2,b3:+x.b3}));return{ok:true,saved:(d.rows||[]).length,skipped:0}}
+    if(a==='scores')return{ok:true,scores:db.scores};
     if(a==='saveScore'){db.scores.push({ts:new Date().toISOString(),sid:d.sid,phase:d.phase,b1:+d.b1,b2:+d.b2,b3:+d.b3});return{ok:true}}
     if(a==='stats'){const by={},rv={'รอตรวจ':0,'ผ่าน':0,'ขอแก้ไข':0},ph={};db.reports.forEach(r=>{by[r.status]=(by[r.status]||0)+1;rv[r.reviewStatus]++});
       db.scores.forEach(s=>{const p=ph[s.phase]=ph[s.phase]||{n:0,b1:0,b2:0,b3:0};p.n++;p.b1+=s.b1;p.b2+=s.b2;p.b3+=s.b3});Object.values(ph).forEach(p=>['b1','b2','b3'].forEach(b=>p[b]=Math.round(p[b]/p.n*100)/100));
       return{ok:true,stats:{students:1,reports:db.reports.length,submitters:db.reports.length?1:0,byStatus:by,byMission:{},review:rv,reviewAvg:{},scoresByPhase:ph,photoPending:db.reports.filter(r=>r.photos&&r.publicOk!=1&&r.publicOk!=='no').length,photoApproved:db.reports.filter(r=>r.publicOk==1).length,photoRejected:db.reports.filter(r=>r.publicOk==='no').length,stars:db.reports.filter(r=>r.star==1).length,topStars:db.reports.filter(r=>r.star==1).length?[{sid:'demo',name:'นักศึกษาตัวอย่าง',stars:db.reports.filter(r=>r.star==1).length}]:[]}}}
     return{ok:false,error:'ไม่รองรับ'};
   }
-  const WRITE_ACTIONS=['submit','submitByName','review','saveScore','approvePhotos'];
+  const WRITE_ACTIONS=['submit','submitByName','review','saveScore','saveScores','approvePhotos'];
   async function once(body){
     const res=await fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),redirect:'follow'});
     const txt=await res.text();

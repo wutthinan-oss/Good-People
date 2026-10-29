@@ -8,7 +8,7 @@
 <title>คอนโซลผู้กำกับ — CADET ภารกิจทำดี</title>
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261029a"><link rel="stylesheet" href="portal.css?v=20261029a">
+<link rel="stylesheet" href="style.css?v=20261029b"><link rel="stylesheet" href="portal.css?v=20261029b">
 </head>
 <body class="portal">
 <header class="top"><div class="wrap">
@@ -67,8 +67,21 @@
 
     <section id="tScores" hidden>
       <div class="pcard">
-        <h2>บันทึกคะแนนพฤติกรรม</h2>
-        <p class="small">เป็นการประเมินโดยครูผู้กำกับ จากการสังเกตและหลักฐานในรายงานของนักศึกษา ไม่ใช่การวัดอิสระ · ช่วง “ก่อน” = ประเมินย้อนหลังจากที่ครูสังเกตมาก่อนเริ่มโครงการ (ระบุในเล่มว่าเป็นการประเมินย้อนหลัง) · ช่วง “หลัง” = ประเมินจากรายงานจริง ไม่ควรให้ระดับสูงถ้าไม่มีหลักฐาน</p>
+        <h2>ประเมินทั้งห้อง</h2>
+        <p class="small">เป็นการประเมินโดยครูผู้กำกับ จากการสังเกตและหลักฐานในรายงาน ไม่ใช่การวัดอิสระ · ช่วง “ก่อน” = ประเมินย้อนหลังจากที่ครูสังเกตมาก่อนเริ่มโครงการ (ต้องระบุในเล่มว่าเป็นการประเมินย้อนหลัง) · ช่วง “หลัง” = ประเมินจากรายงานจริง</p>
+        <div class="row2">
+          <div><label class="f" for="bkPh">ช่วงการประเมิน</label><select class="in" id="bkPh"><option>ก่อน</option><option>ระหว่าง</option><option>หลัง</option></select></div>
+          <div><label class="f" for="bkAs">ผู้ประเมิน</label><input class="in" id="bkAs" value="ผู้กำกับ" maxlength="60"></div>
+          <div><label class="f" for="bkQ">ค้นหาชื่อ</label><input class="in" id="bkQ" placeholder="พิมพ์ชื่อเพื่อกรอง"></div>
+        </div>
+        <p class="small">ระดับ: 4 ดีเยี่ยม (สม่ำเสมอเป็นแบบอย่าง) · 3 ดี (สม่ำเสมอ) · 2 ผ่าน (เป็นบางครั้ง) · 1 ไม่ผ่าน (ยังไม่ปฏิบัติ) · ช่องว่างจะไม่ถูกบันทึก</p>
+        <div class="bk-head"><b>นักศึกษา</b><b>ความรับผิดชอบ</b><b>ซื่อสัตย์ในการรายงาน</b><b>จิตสาธารณะ</b></div>
+        <div id="bkRows" class="bk-rows"><p class="small">กำลังโหลดรายชื่อ...</p></div>
+        <div class="err" id="eBk"></div><div class="ok" id="oBk"></div>
+        <p style="margin:14px 0 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="bkSave" type="button">บันทึกที่แก้ไข</button><span class="small" id="bkCount"></span></p>
+      </div>
+      <div class="pcard" style="margin-top:16px">
+        <h2>ประเมินรายคน</h2>
         <form id="fScore">
           <div class="row2">
             <div><label class="f" for="scSid">นักศึกษา (เลือกจากผู้ที่ส่งรายงานแล้ว)</label><select class="in" id="scSid" required><option value="" disabled selected>กำลังโหลดรายชื่อ...</option></select></div>
@@ -88,6 +101,6 @@
     </section>
   </div>
 </main>
-<script src="config.js?v=20261029a"></script><script src="api.js?v=20261029a"></script><script src="teacher.js?v=20261029a"></script>
+<script src="config.js?v=20261029b"></script><script src="api.js?v=20261029b"></script><script src="teacher.js?v=20261029b"></script>
 </body>
 </html>
