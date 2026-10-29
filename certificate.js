@@ -1,4 +1,4 @@
-/* แดชบอร์ดเกียรติบัตร: นักศึกษาที่ลงมือทำภารกิจอย่างน้อย MIN รายการ (สถานะไม่ใช่ "ยังไม่ได้ทำ") รับเกียรติบัตรได้
+/* แดชบอร์ดเกียรติบัตร: นักศึกษาที่ลงมือทำภารกิจอย่างน้อย MIN รายการ (ส่งรูปหลักฐานมาด้วย) รับเกียรติบัตรได้
    ภาพต้นแบบอยู่ใน assets/certificate.webp ไม่มีชื่อใคร ชื่อถูกวาดลงในเครื่องผู้ใช้เท่านั้น */
 const MIN=1,$=s=>document.querySelector(s);
 let TOKEN=null,NAME='',OK=false;
@@ -17,15 +17,15 @@ $('#fLogin').addEventListener('submit',async e=>{e.preventDefault();const er=$('
 
 async function enter(){$('#vLogin').hidden=true;$('#vApp').hidden=false;$('#who').textContent='สวัสดี '+NAME;
   const r=await call('myReports');if(!r||!r.ok){$('#cdTitle').textContent='โหลดข้อมูลไม่ได้';$('#cdSub').textContent=(r&&r.error)||'ลองรีเฟรชอีกครั้ง';return}
-  const done=r.reports.filter(x=>x.status&&x.status!=='ยังไม่ได้ทำ'),st=new Set(done.map(x=>String(x.stage||'').toUpperCase()));
+  const done=r.reports.filter(x=>String(x.photos||'').trim()),st=new Set(done.map(x=>String(x.stage||'').toUpperCase()));
   const left=['C','A','D','E','T'].filter(s=>!st.has(s));
   $('#nRep').textContent=done.length;$('#nStar').textContent=r.stars||0;$('#nStg').textContent=(5-left.length)+'/5';
   document.querySelectorAll('#cdSteps i').forEach(i=>i.classList.toggle('on',st.has(i.dataset.s)));
   OK=done.length>=MIN;
   $('#cdTitle').textContent=OK?'ขอบคุณที่ลงมือทำความดี':'เริ่มต้นความดีวันนี้';
-  $('#cdSub').textContent=OK?'คุณทำภารกิจจิตอาสาแล้ว '+done.length+' ภารกิจ รับเกียรติบัตรได้เลย':'ส่งรายงานภารกิจที่ทำจริงอย่างน้อย '+MIN+' ภารกิจ ก็รับเกียรติบัตรได้';
-  $('#cdMsg').textContent=!OK?'ทุกความดีเริ่มจากก้าวแรก ไปทำภารกิจแล้วกลับมารับเกียรติบัตรนะ':!left.length?'ยอดเยี่ยมมาก ผ่านครบทั้ง 5 ขั้น CADET แล้ว ความดีของคุณเป็นแบบอย่างให้เพื่อน ๆ':'เก่งมาก! ถ้าอยากไปต่อ ลองทำขั้น '+left.join(', ')+' อีกนิด ความดีที่ทำต่อเนื่องคือพลังของนักศึกษาวิชาทหาร';
-  const l=$('#cdLock');l.hidden=OK;l.textContent=OK?'':'🔒 ส่งภารกิจแรกของคุณ แล้วเกียรติบัตรจะปลดล็อก';$('#cdWrap').classList.toggle('cd-lock',!OK);
+  $('#cdSub').textContent=OK?'คุณส่งรูปภารกิจจิตอาสาแล้ว '+done.length+' ภารกิจ รับเกียรติบัตรได้เลย':'ส่งรายงานพร้อมรูปภาพภารกิจที่ทำจริงอย่างน้อย '+MIN+' ภารกิจ ก็รับเกียรติบัตรได้';
+  $('#cdMsg').textContent=!OK?'ทุกความดีเริ่มจากก้าวแรก ไปทำภารกิจ ถ่ายรูปส่ง แล้วกลับมารับเกียรติบัตรนะ':!left.length?'ยอดเยี่ยมมาก ผ่านครบทั้ง 5 ขั้น CADET แล้ว ความดีของคุณเป็นแบบอย่างให้เพื่อน ๆ':'เก่งมาก! ถ้าอยากไปต่อ ลองทำขั้น '+left.join(', ')+' อีกนิด ความดีที่ทำต่อเนื่องคือพลังของนักศึกษาวิชาทหาร';
+  const l=$('#cdLock');l.hidden=OK;l.textContent=OK?'':'🔒 ส่งรูปภารกิจแรกของคุณ แล้วเกียรติบัตรจะปลดล็อก';$('#cdWrap').classList.toggle('cd-lock',!OK);
   $('#bPng').disabled=$('#bPrint').disabled=!OK;await draw()}
 
 async function draw(){const cv=$('#cv'),c=cv.getContext('2d');
