@@ -1,7 +1,7 @@
 /* ผู้ได้รับเกียรติบัตร: รายชื่อจากฐานข้อมูล (api 'honor') วาดเกียรติบัตรลง canvas ในเครื่องผู้ชม ภาพต้นแบบ assets/certificate.webp ไม่มีชื่อ */
 const $=s=>document.querySelector(s),PAGE=48;
 const THM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const IMG=new Image();IMG.src='assets/certificate.webp';
+const IMG=new Image();IMG.src='assets/certificate.webp?v=q';
 const imgReady=new Promise(r=>IMG.complete&&IMG.naturalWidth?r():(IMG.onload=r,IMG.onerror=r));
 const fontReady=()=>Promise.all([document.fonts.load('600 56px Sarabun'),document.fonts.load('500 23px Sarabun')]).catch(()=>{});
 let ALL=[],SHOWN=PAGE,LIST=[];
@@ -10,7 +10,7 @@ function drawCert(cv,name,date){const c=cv.getContext('2d'),W=1491,H=1055;cv.wid
   let fs=44;do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(name).width>900&&fs>30);
   c.fillText(name,745,592);
   const d=date?new Date(date+'T00:00:00'):null;
-  if(d&&!isNaN(d)){c.font='500 23px Sarabun,sans-serif';c.fillText(String(d.getDate()),596,803);c.fillText(THM[d.getMonth()],758,803);c.fillText(String(d.getFullYear()+543),926,803)}}
+  if(d&&!isNaN(d)){c.font='500 23px Sarabun,sans-serif';c.fillText(String(d.getDate()),573,816);c.fillText(THM[d.getMonth()],762,816);c.fillText(String(d.getFullYear()+543),960,816)}}
 const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);const x=LIST[+e.target.dataset.i];if(x)drawCert(e.target,x.name,x.date)}}),{rootMargin:'300px'}):null;
 function render(){const q=$('#hnQ').value.trim();
   LIST=ALL.filter(x=>!q||x.name.includes(q));

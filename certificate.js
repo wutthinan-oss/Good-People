@@ -4,7 +4,7 @@ const MIN=1,$=s=>document.querySelector(s);
 let TOKEN=null,NAME='',OK=false;
 try{TOKEN=sessionStorage.getItem('cadet_tok');NAME=sessionStorage.getItem('cadet_name')||''}catch(e){}
 if(window.CADET_DEMO)$('#demoBar').hidden=false;
-const IMG=new Image();IMG.src='assets/certificate.webp';
+const IMG=new Image();IMG.src='assets/certificate.webp?v=q';
 const THM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 async function call(a,d){const r=await api(a,Object.assign({token:TOKEN},d||{}));if(r&&r.auth)out(true);return r}
 function out(exp){TOKEN=null;try{sessionStorage.removeItem('cadet_tok');sessionStorage.removeItem('cadet_name')}catch(e){}
@@ -37,7 +37,7 @@ async function draw(){const cv=$('#cv'),c=cv.getContext('2d');
   do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(nm).width>900&&fs>30);
   c.fillText(nm,745,592);
   const d=new Date();c.font='500 23px Sarabun,sans-serif';
-  c.fillText(String(d.getDate()),596,803);c.fillText(THM[d.getMonth()],758,803);c.fillText(String(d.getFullYear()+543),926,803)}
+  c.fillText(String(d.getDate()),573,816);c.fillText(THM[d.getMonth()],762,816);c.fillText(String(d.getFullYear()+543),960,816)}
 
 $('#bPng').onclick=()=>{$('#cv').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='เกียรติบัตร-CADET-รดหัวใจอาสา.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},'image/png')};
 $('#bPrint').onclick=()=>window.print();
