@@ -21,7 +21,7 @@
     if(r.beneficiaries!==null&&r.beneficiaries!==undefined)tile('tBen',fmt(r.beneficiaries)+' คน','รวมจาก '+fmt(r.beneficiaryReports)+' รายงานที่ระบุจำนวน (นักศึกษารายงานเอง)');
     else tile('tBen',null,'รอข้อมูลจริง');
     if(r.scorePairs>=5&&r.before!=null&&r.after!=null){const dd=r.after-r.before;
-      tile('tBeh','ก่อน '+Number(r.before).toFixed(2)+' → หลัง '+Number(r.after).toFixed(2)+' (จาก '+(r.scale===4?4:3)+')','จับคู่ก่อน–หลัง '+fmt(r.scorePairs)+' คน'+(r.scale===4?'':' · ระดับคุณภาพหลัง: '+band(r.after))+' · เปลี่ยนแปลง '+(dd>=0?'+':'')+dd.toFixed(2)+' (ประเมินโดยผู้กำกับ)')}
+      tile('tBeh','ก่อน '+Number(r.before).toFixed(2)+' → หลัง '+Number(r.after).toFixed(2),'จับคู่ก่อน–หลัง '+fmt(r.scorePairs)+' คน'+' · ระดับคุณภาพหลัง: '+band(r.after)+' · เปลี่ยนแปลง '+(dd>=0?'+':'')+dd.toFixed(2)+' (ประเมินโดยผู้กำกับ)')}
     else tile('tBeh',null,'รอผู้กำกับตรวจรายงานและบันทึกระดับพฤติกรรม'+(r.scorePairs?' (ตอนนี้มี '+r.scorePairs+' คู่ ยังน้อยเกินกว่าจะสรุป)':'')+' จึงยังไม่อ้างว่าพฤติกรรมเพิ่มขึ้น');
   }).catch(()=>{$('jStamp').textContent='เชื่อมต่อฐานข้อมูลไม่ได้ในขณะนี้ ลองรีเฟรชอีกครั้ง'});
 
