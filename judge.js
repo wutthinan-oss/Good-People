@@ -27,7 +27,7 @@
   api('gallery').then(g=>{
     const items=(g&&g.items)||[],box=$('jStrip');
     if(!items.length){tile('tPhoto',null,'ยังไม่มีภาพที่อนุมัติ');box.innerHTML='<p class="j-empty">ยังไม่มีภาพที่ผู้กำกับอนุมัติ</p>';return}
-    tile('tPhoto',fmt(items.length)+' ภาพ','ผู้กำกับตรวจและกดอนุมัติทีละภาพก่อนเผยแพร่ ไม่แสดงชื่อนักศึกษา');
+    tile('tPhoto',fmt(g.count||items.length)+' ภาพ','ผู้กำกับตรวจและกดอนุมัติทีละภาพก่อนเผยแพร่ ไม่แสดงชื่อนักศึกษา');
     box.innerHTML='';
     // สุ่มกระจายภาพเพื่อให้เห็นหลายภารกิจ
     const pool=[],step=Math.max(1,Math.floor(items.length/18));
