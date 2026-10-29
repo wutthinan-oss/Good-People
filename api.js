@@ -10,6 +10,7 @@
   const db={reports:[],scores:[],seq:1,photos:{}};
   function mock(a,d){
     if(a==='ping')return{ok:true};
+    if(a==='featureReport'){db.feat=db.feat||[];db.feat=db.feat.filter(v=>v!==d.id);if(d.on)db.feat.push(d.id);return{ok:true,featured:db.feat}}
     if(a==='honor'){const by={};db.reports.forEach(r=>{if(r.photos&&r.photos.length&&!by[r.sid])by[r.sid]={name:r.name,year:1,date:String(r.ts).slice(0,10)}});const items=Object.values(by);return{ok:true,count:items.length,items}}
     if(a==='gallery'){const items=[];db.reports.filter(r=>r.publicOk==1&&r.photos).forEach(r=>String(r.photos).split(',').filter(Boolean).forEach((k,i)=>{const m=MS.find(x=>x.id===r.missionId);items.push({id:r.id+'_'+(i+1),mission:m?m.title:'',missionId:r.missionId,stage:r.stage,date:String(r.ts).slice(0,10),year:r.year||'',caption:r.caption||'',src:db.photos[k],full:db.photos[k]})}));return{ok:true,count:items.length,items}}
     if(a==='approvePhotos'){const r=db.reports.find(x=>x.id===d.id);if(!r||!r.photos)return{ok:false,error:'รายงานนี้ไม่มีภาพ'};r.publicOk=d.approve?1:(d.reject?'no':'');r.caption=d.approve?(d.caption||''):'';return{ok:true}}

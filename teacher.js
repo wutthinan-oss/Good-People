@@ -68,21 +68,23 @@ document.addEventListener('click',async e=>{const b=e.target.closest('.thumb');i
   b.dataset.done=1;b.outerHTML=`<img class="pimg" src="${r.data}" alt="ภาพหลักฐาน">`});
 
 /* ===== อนุมัติภาพ ===== */
-let PHS='pending',PL=[];
+let PHS='pending',PL=[],FEAT=new Set();
 async function badge(){const r=await call('stats');if(r.ok){const n=r.stats.photoPending||0;const b=$('#pBadge');b.hidden=!n;b.textContent=n}}
 document.querySelectorAll('#phTabs .tab').forEach(b=>b.onclick=()=>{PHS=b.dataset.s;document.querySelectorAll('#phTabs .tab').forEach(x=>x.classList.toggle('on',x===b));loadPhotos()});
 async function loadPhotos(){const g=$('#phGrid');g.innerHTML='<div class="pcard">กำลังโหลด...</div>';$('#phMsg').textContent='';
   const r=await call('reports',{photoStatus:PHS});if(!r.ok){g.innerHTML=`<div class="pcard">${esc(r.error)}</div>`;return}
-  PL=r.reports.filter(x=>x.photos);$('#phBar').style.display=PHS==='pending'&&PL.length?'flex':'none';$('#phAll').checked=false;
+  PL=r.reports.filter(x=>x.photos);FEAT=new Set();if(PHS==='approved'){try{const gg=await api('gallery');(gg.featured||[]).forEach(v=>FEAT.add(v))}catch(e){}}$('#phBar').style.display=PHS==='pending'&&PL.length?'flex':'none';$('#phAll').checked=false;
   if(!PL.length){g.innerHTML=`<div class="pcard small">${PHS==='pending'?'ไม่มีภาพรออนุมัติ':PHS==='approved'?'ยังไม่มีภาพที่อนุมัติ':'ไม่มีภาพที่ไม่อนุมัติ'}</div>`;badge();return}
   g.innerHTML=PL.map((x,i)=>`<div class="phcard"><div class="phimgs" id="phi${i}">${String(x.photos).split(',').filter(Boolean).map(id=>`<span class="phload" data-id="${esc(id)}">กำลังโหลดภาพ...</span>`).join('')}</div>
     <div class="phmeta"><b>${esc(nm(x.missionId))}</b> · ขั้น ${esc(x.stage)} · ${esc(fmtD(x.ts))}<br><span class="small">${esc(x.name)} · ${x.year?'นศท. ปี '+esc(x.year)+' เลขที่ '+esc(x.no):esc(x.sid)}${x.source==='open'?' · ไม่อยู่ในรายชื่อ':''}</span></div>
     ${PHS==='pending'?`<label class="phsel"><input type="checkbox" class="phck" data-i="${i}"> เลือกอนุมัติ</label>`:''}
     <input class="in" id="pc${i}" maxlength="160" placeholder="คำบรรยายภาพ (ไม่ต้องใส่ชื่อนักเรียน)" value="${esc(x.caption||nm(x.missionId))}">
-    <div class="phbtn">${PHS==='approved'?`<button class="btn btn-ghost" onclick="phAct(${i},'off')" type="button">ถอดภาพออก</button>`
+    <div class="phbtn">${PHS==='approved'?`<button class="btn ${FEAT.has(x.id)?'btn-primary':'btn-ghost'}" onclick="phFeat(${i})" type="button" title="ภาพที่เห็นหน้านักศึกษาชัด ขึ้นหน้าแรกก่อน">${FEAT.has(x.id)?'★ ภาพเด่นหน้าแรก (กดเพื่อเอาออก)':'☆ เลือกเป็นภาพเด่นหน้าแรก'}</button><button class="btn btn-ghost" onclick="phAct(${i},'off')" type="button">ถอดภาพออก</button>`
       :`<button class="btn btn-primary" onclick="phAct(${i},'ok')" type="button">✅ อนุมัติ</button>${PHS==='pending'?`<button class="btn btn-ghost" onclick="phAct(${i},'no')" type="button">ไม่อนุมัติ</button>`:''}`}<span class="small" id="pm${i}"></span></div></div>`).join('');
   document.querySelectorAll('.phload').forEach(async el=>{const p=await call('photo',{fileId:el.dataset.id});
     el.outerHTML=p.ok?`<img class="phimg" src="${p.data}" alt="ภาพหลักฐาน">`:`<span class="small">โหลดภาพไม่ได้</span>`})}
+async function phFeat(i){const x=PL[i],on=!FEAT.has(x.id);const r=await call('featureReport',{id:x.id,on});
+  if(!r.ok){$('#pm'+i).textContent=r.error||'ไม่สำเร็จ';return}await loadPhotos()}
 async function phAct(i,act){const x=PL[i];const o={id:x.id,caption:$('#pc'+i).value};
   if(act==='ok')o.approve=true;else if(act==='no')o.reject=true;
   const r=await call('approvePhotos',o);if(!r.ok){$('#pm'+i).textContent=r.error||'ไม่สำเร็จ';return}await loadPhotos();badge()}

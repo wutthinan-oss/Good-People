@@ -31,8 +31,9 @@
     tile('tPhoto',fmt(g.count||items.length)+' ภาพ','ผู้กำกับตรวจและกดอนุมัติทีละภาพก่อนเผยแพร่ ไม่แสดงชื่อนักศึกษา');
     box.innerHTML='';
     // สุ่มกระจายภาพเพื่อให้เห็นหลายภารกิจ
-    const pool=[],step=Math.max(1,Math.floor(items.length/18));
-    for(let i=0;i<items.length&&pool.length<18;i+=step)pool.push(items[i]);
+    // ภาพเด่นที่ผู้กำกับเลือก (เห็นหน้านักศึกษา) มาก่อน แล้วเติมด้วยภาพสุ่มกระจาย
+    const pool=items.filter(x=>x.featured).slice(0,12),step=Math.max(1,Math.floor(items.length/18));
+    for(let i=0;i<items.length&&pool.length<18;i+=step)if(!items[i].featured)pool.push(items[i]);
     let shown=0,next=0;
     // ภาพที่โหลดไม่ขึ้น (เช่น Drive ตอบช้า) ถูกข้าม แล้วใช้ภาพถัดไปแทน จนครบ 6 ภาพ
     function add(){if(shown>=6||next>=pool.length)return;const it=pool[next++],a=document.createElement('a');
