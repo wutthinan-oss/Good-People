@@ -110,3 +110,8 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .bk-n{font-weight:600;line-height:1.3}.bk-n small{display:block;font-weight:400;color:var(--mut);font-size:13px}
 .bk-row .in{padding:6px 8px;min-width:0}
 @media(max-width:620px){.bk-head{grid-template-columns:1fr 1fr 1fr;font-size:12px}.bk-head b:first-child{display:none}.bk-row{grid-template-columns:1fr 1fr 1fr}.bk-n{grid-column:1/-1}}
+.bk-all{background:var(--green-l);border:1px solid #B9CDB6;border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.bk-all-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bk-all-g label{font-size:13.5px;font-weight:600;display:flex;flex-direction:column;gap:2px}
+.bk-chk{flex-direction:row!important;align-items:center;gap:8px!important;font-weight:400!important}
+@media(max-width:620px){.bk-all-g{grid-template-columns:1fr 1fr}}

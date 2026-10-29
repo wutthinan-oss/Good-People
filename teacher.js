@@ -94,29 +94,37 @@ $('#phBulk').onclick=async()=>{const sel=[...document.querySelectorAll('.phck:ch
   $('#phMsg').textContent='อนุมัติแล้ว '+ok+' รายการ';await loadPhotos();badge()};
 
 /* ===== ประเมินทั้งห้อง ===== */
-let BK=[],BKS={};
+let BK=[],BKS={},BKE={};
 const LV='<option value="">–</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>';
+const bkVal=(ph,sid,k)=>{const e=BKE[ph+'|'+sid];if(e&&k in e)return e[k];const o=BKS[ph+'|'+sid];return o&&o[k]!==undefined?String(o[k]):''};
 async function loadBulk(){const box=$('#bkRows');box.innerHTML='<p class="small">กำลังโหลดรายชื่อ...</p>';
   const [r,s]=await Promise.all([call('reports',{}),call('scores',{})]);
   if(!r.ok){box.innerHTML='<p class="small">โหลดรายชื่อไม่ได้</p>';return}
   const m={};r.reports.forEach(x=>{if(!m[x.sid])m[x.sid]=x});
   BK=Object.values(m).sort((a,b)=>String(a.name).localeCompare(String(b.name),'th'));
-  BKS={};((s&&s.scores)||[]).forEach(x=>{BKS[x.phase+'|'+x.sid]=x});renderBulk()}
-function renderBulk(){const ph=$('#bkPh').value,q=$('#bkQ').value.trim(),box=$('#bkRows');
-  const l=BK.filter(x=>!q||String(x.name).includes(q));
+  BKS={};((s&&s.scores)||[]).forEach(x=>{BKS[x.phase+'|'+x.sid]=x});BKE={};renderBulk()}
+function bkShown(){const q=$('#bkQ').value.trim();return BK.filter(x=>!q||String(x.name).includes(q))}
+function renderBulk(){const ph=$('#bkPh').value,box=$('#bkRows'),l=bkShown();
   if(!BK.length){box.innerHTML='<p class="small">ยังไม่มีนักศึกษาที่ส่งรายงาน</p>';$('#bkCount').textContent='';return}
-  box.innerHTML=l.map(x=>{const o=BKS[ph+'|'+x.sid]||{};
-    const sel=k=>`<select class="in" data-sid="${esc(x.sid)}" data-k="${k}" aria-label="${k}">${LV.replace(`value="${o[k]}"`,`value="${o[k]}" selected`)}</select>`;
+  box.innerHTML=l.map(x=>{
+    const sel=k=>`<select class="in" data-sid="${esc(x.sid)}" data-k="${k}" aria-label="${k}">${LV.replace(`value="${bkVal(ph,x.sid,k)}"`,`value="${bkVal(ph,x.sid,k)}" selected`)}</select>`;
     return `<div class="bk-row"><div class="bk-n">${esc(x.name)}<small>${x.year?'ปี '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</small></div>${sel('b1')}${sel('b2')}${sel('b3')}</div>`}).join('');
   $('#bkCount').textContent='แสดง '+l.length+' จาก '+BK.length+' คน'}
+function bkSet(sid,k,v){const key=$('#bkPh').value+'|'+sid;(BKE[key]=BKE[key]||{})[k]=v}
+$('#bkRows').addEventListener('change',e=>{const s=e.target.closest('select');if(s)bkSet(s.dataset.sid,s.dataset.k,s.value)});
 $('#bkPh').addEventListener('change',renderBulk);$('#bkQ').addEventListener('input',renderBulk);
-$('#bkSave').addEventListener('click',async()=>{hide('#eBk');hide('#oBk');const ph=$('#bkPh').value,rows={};
-  document.querySelectorAll('#bkRows select').forEach(s=>{const sid=s.dataset.sid;(rows[sid]=rows[sid]||{sid})[s.dataset.k]=s.value});
-  const send=Object.values(rows).filter(r=>{const o=BKS[ph+'|'+r.sid]||{};return r.b1&&r.b2&&r.b3&&(String(o.b1)!==r.b1||String(o.b2)!==r.b2||String(o.b3)!==r.b3)});
-  const part=Object.values(rows).filter(r=>[r.b1,r.b2,r.b3].some(Boolean)&&![r.b1,r.b2,r.b3].every(Boolean)).length;
+$('#bkApply').addEventListener('click',()=>{hide('#eBk');hide('#oBk');const ph=$('#bkPh').value,onlyEmpty=$('#bkEmpty').checked,all=$('#bkAll').value;
+  const v={b1:all||$('#bkA1').value,b2:all||$('#bkA2').value,b3:all||$('#bkA3').value};
+  if(!v.b1&&!v.b2&&!v.b3)return show('#eBk','เลือกระดับที่ต้องการใส่ให้ทุกคนก่อน');
+  let n=0;bkShown().forEach(x=>['b1','b2','b3'].forEach(k=>{if(v[k]&&(!onlyEmpty||!bkVal(ph,x.sid,k))){bkSet(x.sid,k,v[k]);n++}}));
+  renderBulk();show('#oBk','ใส่ระดับให้ '+bkShown().length+' คนที่แสดงอยู่แล้ว ('+n+' ช่อง) ตรวจแล้วกด “บันทึกที่แก้ไข”')});
+$('#bkSave').addEventListener('click',async()=>{hide('#eBk');hide('#oBk');const ph=$('#bkPh').value,send=[];let part=0;
+  BK.forEach(x=>{const r={sid:x.sid,b1:bkVal(ph,x.sid,'b1'),b2:bkVal(ph,x.sid,'b2'),b3:bkVal(ph,x.sid,'b3')},o=BKS[ph+'|'+x.sid]||{};
+    if([r.b1,r.b2,r.b3].some(Boolean)&&![r.b1,r.b2,r.b3].every(Boolean))part++;
+    if(r.b1&&r.b2&&r.b3&&(String(o.b1)!==r.b1||String(o.b2)!==r.b2||String(o.b3)!==r.b3))send.push(r)});
   if(!send.length)return show('#eBk',part?'มี '+part+' คนที่เลือกไม่ครบ 3 ด้าน (ต้องเลือกให้ครบจึงจะบันทึก)':'ยังไม่มีรายการที่แก้ไข');
   const b=$('#bkSave');b.disabled=true;b.textContent='กำลังบันทึก...';
   const r=await call('saveScores',{phase:ph,assessor:$('#bkAs').value,rows:send});b.disabled=false;b.textContent='บันทึกที่แก้ไข';
   if(!r.ok)return show('#eBk',r.error||'บันทึกไม่สำเร็จ');
-  send.forEach(x=>{BKS[ph+'|'+x.sid]={phase:ph,sid:x.sid,b1:x.b1,b2:x.b2,b3:x.b3}});
+  send.forEach(x=>{BKS[ph+'|'+x.sid]={phase:ph,sid:x.sid,b1:x.b1,b2:x.b2,b3:x.b3};delete BKE[ph+'|'+x.sid]});renderBulk();
   show('#oBk','บันทึกแล้ว '+r.saved+' คน'+(r.skipped?' (ข้าม '+r.skipped+')':'')+(part?' · ยังมี '+part+' คนที่เลือกไม่ครบ':''))});
