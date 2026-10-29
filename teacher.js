@@ -96,7 +96,9 @@ $('#phBulk').onclick=async()=>{const sel=[...document.querySelectorAll('.phck:ch
 /* ===== ประเมินทั้งห้อง ===== */
 let BK=[],BKS={},BKE={};
 const LV='<option value="">–</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0</option>';
-const bkVal=(ph,sid,k)=>{const e=BKE[ph+'|'+sid];if(e&&k in e)return e[k];const o=BKS[ph+'|'+sid];return o&&o[k]!==undefined?String(o[k]):''};
+const bkRaw=(sid,ph,k)=>{const o=BKS[ph+'|'+sid];return o&&o[k]!==undefined&&o[k]!==null?String(o[k]):''};
+/* ค่าที่บันทึกไว้ต้องเป็น 0-3 เท่านั้น ค่าอื่น (เช่น 4 จากมาตราเดิมที่ยังไม่แปลง) ถือว่าไม่ถูกต้อง = ช่องขาด */
+const bkVal=(ph,sid,k)=>{const e=BKE[ph+'|'+sid];if(e&&k in e)return e[k];const v=bkRaw(sid,ph,k);return /^[0-3]$/.test(v)?v:''};
 async function loadBulk(){const box=$('#bkRows');box.innerHTML='<p class="small">กำลังโหลดรายชื่อ...</p>';
   const [r,s]=await Promise.all([call('reports',{}),call('scores',{})]);
   if(!r.ok){box.innerHTML='<p class="small">โหลดรายชื่อไม่ได้</p>';return}
@@ -110,9 +112,11 @@ function bkShown(){const q=$('#bkQ').value.trim(),only=$('#bkF').value==='miss',
 /* ตรวจความครบ: นับทั้งห้อง (ไม่ขึ้นกับช่องค้นหา) และอัปเดตสดเมื่อเลือกระดับ */
 function bkCheck(){const ph=$('#bkPh').value,box=$('#bkChk');if(!BK.length){box.hidden=true;return}
   const bad=BK.map(x=>({x,m:bkMiss(ph,x.sid)})).filter(o=>o.m.length),none=bad.filter(o=>o.m.length===3).length;
-  box.hidden=false;box.classList.toggle('bk-chk-ok',!bad.length);
-  if(!bad.length){box.innerHTML='<b>✓ ครบทุกคน</b> ทั้ง '+BK.length+' คนมีระดับครบ 3 ด้านแล้ว กดบันทึกได้เลย';return}
-  box.innerHTML='<b>⚠ ยังกรอกไม่ครบ '+bad.length+' คน จาก '+BK.length+' คน</b> <span>(ยังไม่ได้เลือกเลย '+none+' คน · เลือกไม่ครบ '+(bad.length-none)+' คน)</span> คนที่ไม่ครบจะไม่ถูกบันทึก'
+  const oldN=BK.filter(x=>['b1','b2','b3'].some(k=>{const r=bkRaw(x.sid,ph,k),e=BKE[ph+'|'+x.sid];return r&&!/^[0-3]$/.test(r)&&!(e&&k in e)})).length,
+    warn=oldN?'<br><b>พบ '+oldN+' คนที่มีคะแนนมาตราเดิม (ค่า 4 หรือค่านอก 0-3) ที่บันทึกไว้ในฐานข้อมูล</b> ยังไม่ได้แปลงมาตรา ให้รัน migrateScaleTo03 ใน Apps Script (ดูขั้นตอนที่ผมแจ้งไว้) หรือเลือกระดับใหม่เอง':'';
+  box.hidden=false;box.classList.toggle('bk-chk-ok',!bad.length&&!oldN);
+  if(!bad.length){box.innerHTML='<b>✓ ครบทุกคน</b> ทั้ง '+BK.length+' คนมีระดับครบ 3 ด้านแล้ว กดบันทึกได้เลย'+warn;return}
+  box.innerHTML='<b>⚠ ยังกรอกไม่ครบ '+bad.length+' คน จาก '+BK.length+' คน</b> <span>(ยังไม่ได้เลือกเลย '+none+' คน · เลือกไม่ครบ '+(bad.length-none)+' คน)</span> คนที่ไม่ครบจะไม่ถูกบันทึก'+warn
     +'<details><summary>ดูรายชื่อและช่องที่ขาด</summary><ul>'+bad.map(o=>'<li><button type="button" class="bk-go" data-sid="'+esc(o.x.sid)+'">'+esc(o.x.name)+'</button> ขาด: '+o.m.map(k=>BKN[k]).join(', ')+'</li>').join('')+'</ul></details>'}
 function bkMark(sid){const ph=$('#bkPh').value,row=$('#bkRows').querySelector('.bk-row[data-sid="'+CSS.escape(sid)+'"]');if(!row)return;
   const m=bkMiss(ph,sid);row.classList.toggle('bk-bad',m.length>0);
