@@ -126,3 +126,6 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .bk-row .in.bk-miss{border-color:#D9534F;background:#FFE9E7}
 .bk-row.bk-flash{animation:bkf 1.6s}
 @keyframes bkf{0%,60%{background:#FFE08A}100%{}}
+
+header.top .wrap{flex-wrap:nowrap;gap:8px}header.top nav.main{position:static!important;flex-direction:row!important;align-items:center;padding:0!important;border:0!important;background:none!important;width:auto;margin-left:auto;gap:12px}header.top nav.main a{white-space:nowrap}
+@media(max-width:480px){.brand small{display:none}header.top nav.main a{font-size:14px}}

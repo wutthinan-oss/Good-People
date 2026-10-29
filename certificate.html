@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>เกียรติบัตรของฉัน — CADET รด.หัวใจอาสา</title>
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261029k"><link rel="stylesheet" href="portal.css?v=20261029k">
+<style>
+.cd-hero{background:linear-gradient(135deg,var(--green-d),var(--green));color:#fff;border-radius:18px;padding:18px 20px;margin-bottom:14px}
+.cd-hero h1{color:#fff;font-size:clamp(22px,4vw,30px);margin:0 0 4px}.cd-hero p{margin:0;color:#e3eedf;font-size:16px;line-height:1.6}
+.cd-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.cd-stats div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
+.cd-stats b{display:block;font-family:var(--display);font-size:30px;color:var(--green);line-height:1.1}.cd-stats span{font-size:14px;color:var(--mut)}
+.cd-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 4px}
+.cd-steps i{font-style:normal;text-align:center;border:1px dashed var(--line);border-radius:10px;padding:8px 2px;color:var(--mut);font-weight:600}
+.cd-steps i.on{background:var(--green-l);border:1px solid var(--green-m);color:var(--green-d)}
+.cd-msg{font-size:17px;line-height:1.7;margin:10px 0 0}
+.cd-wrap{position:relative;margin-top:14px}
+.cd-wrap canvas{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow);display:block}
+.cd-lock canvas{filter:blur(5px) grayscale(.5);opacity:.6}
+.cd-lockmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:clamp(16px,3vw,22px);font-weight:600;color:var(--green-d)}
+.cd-lockmsg[hidden]{display:none}
+.cd-act{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+@media print{body *{visibility:hidden}#cdWrap,#cdWrap *{visibility:visible}#cdWrap{position:absolute;left:0;top:0;width:100%}.cd-lockmsg{display:none}@page{size:A4 landscape;margin:0}}
+</style>
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>เกียรติบัตรของฉัน</small></span></a>
+  <nav class="main" style="display:flex"><a href="portal.html">ทำภารกิจ</a><a href="./">หน้าแรก</a></nav>
+</div></header>
+<div class="demo-banner" id="demoBar" hidden>โหมดสาธิต: ข้อมูลอยู่ในหน้านี้เท่านั้น · ล็อกอินด้วย demo / 1234</div>
+
+<main class="pwrap">
+  <section class="pcard login" id="vLogin" style="padding:26px">
+    <h2 style="margin-top:0">เข้าสู่ระบบเพื่อดูเกียรติบัตร</h2>
+    <p class="small">ใช้เลขประจำตัวและ PIN เดียวกับตอนส่งภารกิจ</p>
+    <form id="fLogin" autocomplete="off">
+      <label class="f" for="sid">เลขประจำตัว</label><input class="in" id="sid" inputmode="numeric" required>
+      <label class="f" for="pin">PIN</label><input class="in" id="pin" type="password" inputmode="numeric" maxlength="10" required>
+      <div class="err" id="eLogin"></div>
+      <p style="margin:18px 0 0"><button class="btn btn-primary" style="width:100%;justify-content:center" id="bLogin">เข้าสู่ระบบ</button></p>
+    </form>
+  </section>
+
+  <div id="vApp" hidden>
+    <div class="ptop"><b id="who"></b><span class="sp"></span><button class="btn btn-ghost" style="padding:8px 18px" id="bOut" type="button">ออกจากระบบ</button></div>
+    <div class="cd-hero"><h1 id="cdTitle">กำลังโหลด…</h1><p id="cdSub"></p></div>
+    <div class="cd-stats">
+      <div><b id="nRep">0</b><span>ภารกิจที่ลงมือทำ</span></div>
+      <div><b id="nStar">0</b><span>ดาวจากผู้กำกับ</span></div>
+      <div><b id="nStg">0/5</b><span>ขั้น CADET ที่ผ่าน</span></div>
+    </div>
+    <div class="pcard">
+      <b>ขั้น CADET ที่ฉันทำแล้ว</b>
+      <div class="cd-steps" id="cdSteps"><i data-s="C">C</i><i data-s="A">A</i><i data-s="D">D</i><i data-s="E">E</i><i data-s="T">T</i></div>
+      <p class="cd-msg" id="cdMsg"></p>
+    </div>
+    <div class="cd-wrap" id="cdWrap"><canvas id="cv" width="1491" height="1055" aria-label="เกียรติบัตร CADET รด.หัวใจอาสา"></canvas><div class="cd-lockmsg" id="cdLock" hidden></div></div>
+    <div class="cd-act"><button class="btn btn-primary" id="bPng" type="button" disabled>⬇ บันทึกเป็นรูปภาพ</button><button class="btn btn-ghost" id="bPrint" type="button" disabled>🖨 พิมพ์</button><a class="btn btn-ghost" href="portal.html">← กลับไปทำภารกิจ</a></div>
+    <p class="small" style="margin-top:10px">เกียรติบัตรสร้างในเครื่องของคุณจากชื่อในระบบ ไม่ถูกส่งหรือเก็บไว้ที่ใด · ชื่อไม่ถูกต้องให้แจ้งผู้กำกับ</p>
+  </div>
+</main>
+<script src="config.js?v=20261029k"></script><script src="api.js?v=20261029k"></script>
+<script src="certificate.js?v=20261029k"></script>
+</body>
+</html>
