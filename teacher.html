@@ -8,7 +8,7 @@
 <title>คอนโซลผู้กำกับ — CADET ภารกิจทำดี</title>
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261027b"><link rel="stylesheet" href="portal.css?v=20261027b">
+<link rel="stylesheet" href="style.css?v=20261029a"><link rel="stylesheet" href="portal.css?v=20261029a">
 </head>
 <body class="portal">
 <header class="top"><div class="wrap">
@@ -68,18 +68,19 @@
     <section id="tScores" hidden>
       <div class="pcard">
         <h2>บันทึกคะแนนพฤติกรรม</h2>
-        <p class="small">ระดับ 4 = ดีเยี่ยม, 3 = ดี, 2 = ผ่าน, 1 = ไม่ผ่าน</p>
+        <p class="small">เป็นการประเมินโดยครูผู้กำกับ จากการสังเกตและหลักฐานในรายงานของนักศึกษา ไม่ใช่การวัดอิสระ · ช่วง “ก่อน” = ประเมินย้อนหลังจากที่ครูสังเกตมาก่อนเริ่มโครงการ (ระบุในเล่มว่าเป็นการประเมินย้อนหลัง) · ช่วง “หลัง” = ประเมินจากรายงานจริง ไม่ควรให้ระดับสูงถ้าไม่มีหลักฐาน</p>
         <form id="fScore">
           <div class="row2">
-            <div><label class="f" for="scSid">เลขประจำตัว</label><input class="in" id="scSid" inputmode="numeric" required></div>
+            <div><label class="f" for="scSid">นักศึกษา (เลือกจากผู้ที่ส่งรายงานแล้ว)</label><select class="in" id="scSid" required><option value="" disabled selected>กำลังโหลดรายชื่อ...</option></select></div>
             <div><label class="f" for="scPh">ช่วงการประเมิน</label><select class="in" id="scPh"><option>ก่อน</option><option>ระหว่าง</option><option>หลัง</option></select></div>
             <div><label class="f" for="scAs">ผู้ประเมิน</label><input class="in" id="scAs" value="ผู้กำกับ" maxlength="60"></div>
           </div>
           <div class="row2">
-            <div><label class="f" for="b1">ความรับผิดชอบ</label><select class="in" id="b1"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
-            <div><label class="f" for="b2">ความซื่อสัตย์ในการรายงาน</label><select class="in" id="b2"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
-            <div><label class="f" for="b3">จิตสาธารณะ</label><select class="in" id="b3"><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+            <div><label class="f" for="b1">ความรับผิดชอบ</label><select class="in" id="b1" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">ทำตามบทบาท ครบถ้วน แก้ไขงานเมื่อบกพร่อง</p></div>
+            <div><label class="f" for="b2">ความซื่อสัตย์ในการรายงาน</label><select class="in" id="b2" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">รายงานตรงกับหลักฐานและผลที่ตรวจ</p></div>
+            <div><label class="f" for="b3">จิตสาธารณะ</label><select class="in" id="b3" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">ช่วยเหลือผู้อื่น ทำเพื่อส่วนรวมโดยสมัครใจ</p></div>
           </div>
+          <p class="small">4 ดีเยี่ยม = ปฏิบัติสม่ำเสมอเป็นแบบอย่าง · 3 ดี = ปฏิบัติสม่ำเสมอ · 2 ผ่าน = ปฏิบัติเป็นบางครั้ง · 1 ไม่ผ่าน = ยังไม่ปฏิบัติ</p>
           <div class="err" id="eSc"></div><div class="ok" id="oSc"></div>
           <p style="margin:16px 0 0"><button class="btn btn-primary">บันทึกคะแนน</button></p>
         </form>
@@ -87,6 +88,6 @@
     </section>
   </div>
 </main>
-<script src="config.js?v=20261027b"></script><script src="api.js?v=20261027b"></script><script src="teacher.js?v=20261027b"></script>
+<script src="config.js?v=20261029a"></script><script src="api.js?v=20261029a"></script><script src="teacher.js?v=20261029a"></script>
 </body>
 </html>

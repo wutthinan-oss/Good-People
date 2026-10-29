@@ -12,7 +12,7 @@ $('#fLogin').addEventListener('submit',async e=>{e.preventDefault();hide('#eLogi
   if(!r.ok)return show('#eLogin',r.error||'เข้าสู่ระบบไม่สำเร็จ');TOKEN=r.token;try{sessionStorage.setItem('cadet_ttok',TOKEN)}catch(x){}$('#key').value='';enter()});
 document.querySelectorAll('#tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
   ['stats','photos','reports','scores'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
-  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos()});
+  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos();if(t.dataset.t==='scores')loadScoreNames()});
 async function init(){const r=await call('missions');if(r.ok){MS=r.missions;$('#fM').innerHTML='<option value="">ทั้งหมด</option>'+MS.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join('')}loadStats();badge()}
 const nm=id=>(MS.find(m=>m.id===id)||{}).title||id;
 
@@ -54,9 +54,13 @@ async function saveReview(i){const x=REPS[i],g=id=>$('#'+id+i).value;const r=awa
 function exportCsv(){const h=['id','ts','sid','name','missionId','stage','role','status','reason','q1','q2','q3','evidence','reviewStatus','feedback','b1','b2','b3','star','starNote','rating','comment','mode','beneficiaries','photos','publicOk','caption','source','year','no'];
   const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv='﻿'+[h.join(',')].concat(REPS.map(r=>h.map(k=>q(r[k])).join(','))).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cadet-reports.csv';a.click()}
+async function loadScoreNames(){const s=$('#scSid'),r=await call('reports',{});
+  if(!r.ok){s.innerHTML='<option value="" disabled selected>โหลดรายชื่อไม่ได้</option>';return}
+  const m={};r.reports.forEach(x=>{if(!m[x.sid])m[x.sid]=x});const l=Object.values(m).sort((a,b)=>String(a.name).localeCompare(String(b.name),'th'));
+  s.innerHTML='<option value="" disabled selected>เลือกนักศึกษา ('+l.length+' คน)</option>'+l.map(x=>`<option value="${esc(x.sid)}">${esc(x.name)}${x.year?' · ปี '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</option>`).join('')}
 $('#fScore').addEventListener('submit',async e=>{e.preventDefault();hide('#eSc');hide('#oSc');
   const r=await call('saveScore',{sid:$('#scSid').value.trim(),phase:$('#scPh').value,assessor:$('#scAs').value,b1:$('#b1').value,b2:$('#b2').value,b3:$('#b3').value});
-  if(!r.ok)return show('#eSc',r.error||'บันทึกไม่สำเร็จ');show('#oSc','บันทึกคะแนนแล้ว');$('#scSid').value='';$('#scSid').focus()});
+  if(!r.ok)return show('#eSc',r.error||'บันทึกไม่สำเร็จ');show('#oSc','บันทึกคะแนนแล้ว');['b1','b2','b3'].forEach(k=>$('#'+k).selectedIndex=0);$('#scSid').focus()});
 if(TOKEN)enter();
 
 document.addEventListener('click',async e=>{const b=e.target.closest('.thumb');if(!b||b.dataset.done)return;b.textContent='กำลังโหลด...';
