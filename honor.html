@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>เกียรติบัตรผู้ลงมือทำความดี — CADET รด.หัวใจอาสา</title>
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261029n"><link rel="stylesheet" href="portal.css?v=20261029n">
+<style>
+.hn-hero{background:linear-gradient(135deg,var(--green-d),var(--green));color:#fff;border-radius:18px;padding:18px 20px;margin:14px 0}
+.hn-hero h1{color:#fff;font-size:clamp(22px,4vw,32px);margin:0 0 4px}.hn-hero p{margin:0;color:#e3eedf;font-size:16px;line-height:1.6}
+.hn-big{font-family:var(--display);font-size:clamp(34px,6vw,52px);color:var(--gold-l);line-height:1}
+.hn-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.hn-bar .in{flex:1;min-width:200px;max-width:420px}
+.hn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.hn-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:var(--shadow);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.hn-card canvas{width:100%;height:auto;display:block;border-radius:8px;background:var(--green-l);aspect-ratio:1491/1055}
+.hn-card span{display:block;padding:6px 4px 2px;font-weight:600;color:var(--green-d);font-size:15px}
+.hn-more{display:block;margin:16px auto}
+.hn-modal{position:fixed;inset:0;background:rgba(10,25,16,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px;z-index:50}
+.hn-modal[hidden]{display:none}
+.hn-modal canvas{max-width:min(96vw,1100px);max-height:78vh;width:auto;height:auto;border-radius:10px}
+</style>
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>เกียรติบัตร</small></span></a>
+  <nav class="main" style="display:flex"><a href="./">สรุปผล</a><a href="gallery.html">ภาพกิจกรรม</a><a href="certificate.html">เกียรติบัตรของฉัน</a></nav>
+</div></header>
+
+<main class="pwrap" style="max-width:1100px">
+  <div class="hn-hero">
+    <div class="hn-big" id="hnN">–</div>
+    <h1>นักศึกษาที่ได้รับเกียรติบัตร CADET รด.หัวใจอาสา</h1>
+    <p>เกียรติบัตรมอบให้นักศึกษาทุกคนที่ลงมือทำภารกิจจิตอาสาและส่งรายงานพร้อมรูปภาพเข้าระบบ รายชื่อดึงจากฐานข้อมูลจริงทันที</p>
+  </div>
+  <div class="hn-bar">
+    <input class="in" id="hnQ" type="search" placeholder="🔎 พิมพ์ชื่อของตนเองเพื่อค้นหา" aria-label="ค้นหาชื่อ">
+    <span class="small" id="hnCount"></span>
+  </div>
+  <div class="hn-grid" id="hnGrid"><p class="small">กำลังโหลดรายชื่อ...</p></div>
+  <button class="btn btn-ghost hn-more" id="hnMore" type="button" hidden>แสดงเพิ่ม</button>
+  <p class="small" style="margin-top:14px">เกียรติบัตรทุกใบสร้างจากชื่อและวันที่ส่งรูปแรกในฐานข้อมูล ไม่มีเลขประจำตัวหรือรูปภาพส่วนตัว · ชื่อไม่ถูกต้องหรือไม่ต้องการแสดง แจ้งผู้กำกับ</p>
+</main>
+<div class="hn-modal" id="hnModal" hidden>
+  <canvas id="hnBig" width="1491" height="1055"></canvas>
+  <div class="cd-act" style="display:flex;gap:10px"><button class="btn btn-primary" id="hnPng" type="button">⬇ บันทึกเป็นรูปภาพ</button><button class="btn btn-ghost" id="hnClose" type="button" style="background:#fff">ปิด</button></div>
+</div>
+<script src="config.js?v=20261029n"></script><script src="api.js?v=20261029n"></script>
+<script src="honor.js?v=20261029n"></script>
+</body>
+</html>

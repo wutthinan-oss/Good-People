@@ -10,6 +10,7 @@
   const db={reports:[],scores:[],seq:1,photos:{}};
   function mock(a,d){
     if(a==='ping')return{ok:true};
+    if(a==='honor'){const by={};db.reports.forEach(r=>{if(r.photos&&r.photos.length&&!by[r.sid])by[r.sid]={name:r.name,year:1,date:String(r.ts).slice(0,10)}});const items=Object.values(by);return{ok:true,count:items.length,items}}
     if(a==='gallery'){const items=[];db.reports.filter(r=>r.publicOk==1&&r.photos).forEach(r=>String(r.photos).split(',').filter(Boolean).forEach((k,i)=>{const m=MS.find(x=>x.id===r.missionId);items.push({id:r.id+'_'+(i+1),mission:m?m.title:'',missionId:r.missionId,stage:r.stage,date:String(r.ts).slice(0,10),year:r.year||'',caption:r.caption||'',src:db.photos[k],full:db.photos[k]})}));return{ok:true,count:items.length,items}}
     if(a==='approvePhotos'){const r=db.reports.find(x=>x.id===d.id);if(!r||!r.photos)return{ok:false,error:'รายงานนี้ไม่มีภาพ'};r.publicOk=d.approve?1:(d.reject?'no':'');r.caption=d.approve?(d.caption||''):'';return{ok:true}}
     if(a==='suggest'){const L=[['นายสมชาย ตัวอย่างหนึ่ง',1,1],['นางสาวสมหญิง ตัวอย่างสอง',1,70],['นายสมศักดิ์ ตัวอย่างสาม',1,2]];const q=String(d.q||'').replace(/^(นางสาว|นาย)/,'').trim();return{ok:true,names:q.length<1?[]:L.filter(x=>x[0].includes(q)&&(!d.year||x[1]==d.year)).map(x=>({name:x[0],year:x[1],no:x[2]}))}}
