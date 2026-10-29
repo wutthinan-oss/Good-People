@@ -8,7 +8,7 @@
 <title>คอนโซลผู้กำกับ — CADET ภารกิจทำดี</title>
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261029e"><link rel="stylesheet" href="portal.css?v=20261029e">
+<link rel="stylesheet" href="style.css?v=20261029g"><link rel="stylesheet" href="portal.css?v=20261029g">
 </head>
 <body class="portal">
 <header class="top"><div class="wrap">
@@ -74,14 +74,14 @@
           <div><label class="f" for="bkAs">ผู้ประเมิน</label><input class="in" id="bkAs" value="ผู้กำกับ" maxlength="60"></div>
           <div><label class="f" for="bkQ">ค้นหาชื่อ</label><input class="in" id="bkQ" placeholder="พิมพ์ชื่อเพื่อกรอง"></div>
         </div>
-        <p class="small">ระดับ: 4 ดีเยี่ยม (สม่ำเสมอเป็นแบบอย่าง) · 3 ดี (สม่ำเสมอ) · 2 ผ่าน (เป็นบางครั้ง) · 1 ไม่ผ่าน (ยังไม่ปฏิบัติ) · ช่องว่างจะไม่ถูกบันทึก</p>
+        <p class="small">ระดับ: 3 ดีเยี่ยม (ปฏิบัติเป็นประจำ ร้อยละ 80 ขึ้นไป) · 2 ดี (เป็นบางครั้ง ร้อยละ 60–79) · 1 ผ่าน (น้อย ร้อยละ 50–59) · 0 ไม่ผ่าน (ไม่ชัดเจนหรือไม่มีหลักฐาน ต่ำกว่าร้อยละ 50) ตามคู่มือโรงเรียนคุณธรรม สพฐ. · ช่องว่างจะไม่ถูกบันทึก</p>
         <div class="bk-all">
           <b>ใส่ระดับให้ทุกคนที่แสดงอยู่</b>
           <div class="bk-all-g">
-            <label>ทั้ง 3 ด้านเท่ากัน<select class="in" id="bkAll"><option value="">–</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select></label>
-            <label>ความรับผิดชอบ<select class="in" id="bkA1"><option value="">–</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select></label>
-            <label>ซื่อสัตย์ในการรายงาน<select class="in" id="bkA2"><option value="">–</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select></label>
-            <label>จิตสาธารณะ<select class="in" id="bkA3"><option value="">–</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select></label>
+            <label>ทั้ง 3 ด้านเท่ากัน<select class="in" id="bkAll"><option value="">–</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select></label>
+            <label>ความรับผิดชอบ<select class="in" id="bkA1"><option value="">–</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select></label>
+            <label>ซื่อสัตย์ในการรายงาน<select class="in" id="bkA2"><option value="">–</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select></label>
+            <label>จิตสาธารณะ<select class="in" id="bkA3"><option value="">–</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select></label>
           </div>
           <label class="bk-chk"><input type="checkbox" id="bkEmpty" checked> ใส่เฉพาะช่องที่ยังว่าง (ไม่ทับที่เลือกไว้แล้ว)</label>
           <button class="btn btn-ghost" id="bkApply" type="button">ใส่ให้ทุกคน</button>
@@ -101,11 +101,11 @@
             <div><label class="f" for="scAs">ผู้ประเมิน</label><input class="in" id="scAs" value="ผู้กำกับ" maxlength="60"></div>
           </div>
           <div class="row2">
-            <div><label class="f" for="b1">ความรับผิดชอบ</label><select class="in" id="b1" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">ทำตามบทบาท ครบถ้วน แก้ไขงานเมื่อบกพร่อง</p></div>
-            <div><label class="f" for="b2">ความซื่อสัตย์ในการรายงาน</label><select class="in" id="b2" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">รายงานตรงกับหลักฐานและผลที่ตรวจ</p></div>
-            <div><label class="f" for="b3">จิตสาธารณะ</label><select class="in" id="b3" required><option value="" disabled selected>เลือกระดับ</option><option value="4">4 ดีเยี่ยม</option><option value="3">3 ดี</option><option value="2">2 ผ่าน</option><option value="1">1 ไม่ผ่าน</option></select><p class="small">ช่วยเหลือผู้อื่น ทำเพื่อส่วนรวมโดยสมัครใจ</p></div>
+            <div><label class="f" for="b1">ความรับผิดชอบ</label><select class="in" id="b1" required><option value="" disabled selected>เลือกระดับ</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select><p class="small">ทำตามบทบาท ครบถ้วน แก้ไขงานเมื่อบกพร่อง</p></div>
+            <div><label class="f" for="b2">ความซื่อสัตย์ในการรายงาน</label><select class="in" id="b2" required><option value="" disabled selected>เลือกระดับ</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select><p class="small">รายงานตรงกับหลักฐานและผลที่ตรวจ</p></div>
+            <div><label class="f" for="b3">จิตสาธารณะ</label><select class="in" id="b3" required><option value="" disabled selected>เลือกระดับ</option><option value="3">3 ดีเยี่ยม</option><option value="2">2 ดี</option><option value="1">1 ผ่าน</option><option value="0">0 ไม่ผ่าน</option></select><p class="small">ช่วยเหลือผู้อื่น ทำเพื่อส่วนรวมโดยสมัครใจ</p></div>
           </div>
-          <p class="small">4 ดีเยี่ยม = ปฏิบัติสม่ำเสมอเป็นแบบอย่าง · 3 ดี = ปฏิบัติสม่ำเสมอ · 2 ผ่าน = ปฏิบัติเป็นบางครั้ง · 1 ไม่ผ่าน = ยังไม่ปฏิบัติ</p>
+          <p class="small">ระดับ: 3 ดีเยี่ยม (ปฏิบัติเป็นประจำ ร้อยละ 80 ขึ้นไป) · 2 ดี (เป็นบางครั้ง ร้อยละ 60–79) · 1 ผ่าน (น้อย ร้อยละ 50–59) · 0 ไม่ผ่าน (ไม่ชัดเจนหรือไม่มีหลักฐาน ต่ำกว่าร้อยละ 50) ตามคู่มือโรงเรียนคุณธรรม สพฐ.</p>
           <div class="err" id="eSc"></div><div class="ok" id="oSc"></div>
           <p style="margin:16px 0 0"><button class="btn btn-primary">บันทึกคะแนน</button></p>
         </form>
@@ -113,6 +113,6 @@
     </section>
   </div>
 </main>
-<script src="config.js?v=20261029e"></script><script src="api.js?v=20261029e"></script><script src="teacher.js?v=20261029e"></script>
+<script src="config.js?v=20261029g"></script><script src="api.js?v=20261029g"></script><script src="teacher.js?v=20261029g"></script>
 </body>
 </html>

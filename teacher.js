@@ -21,7 +21,7 @@ async function loadStats(){const r=await call('stats');if(!r.ok){$('#sBox').text
   $('#sBox').innerHTML=`<div class="sgrid"><div><b>${s.students}</b><span>นักศึกษาในระบบ</span></div><div><b>${s.reports}</b><span>รายงานที่ส่ง</span></div><div><b>${s.submitters}</b><span>ผู้ส่งรายงาน</span></div><div><b>${(s.review||{})['รอตรวจ']||0}</b><span>รอตรวจ</span></div><div><b>⭐ ${s.stars||0}</b><span>ดาวที่มอบแล้ว</span></div><div><b>${s.ratingAvg===null||s.ratingAvg===undefined?'-':s.ratingAvg}</b><span>ดาวพึงพอใจเฉลี่ย (เต็ม 5)</span></div></div>
    ${(s.topStars||[]).length?`<h3>ดาวเด่น (สูงสุด 10 คน)</h3><table class="tt"><tr><th>ชื่อ</th><th>เลขประจำตัว</th><th>ดาว</th></tr>${s.topStars.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.sid)}</td><td>⭐ ${x.stars}</td></tr>`).join('')}</table>`:''}
    <h3>สถานะที่รายงาน</h3><p>${Object.entries(s.byStatus||{}).map(([k,v])=>`<span class="badge2">${esc(k)} ${v}</span>`).join(' ')||'ยังไม่มีข้อมูล'}</p>
-   <h3>คะแนนพฤติกรรมเฉลี่ยตามช่วง (ระดับ 1–4)</h3>
+   <h3>คะแนนพฤติกรรมเฉลี่ยตามช่วง (ระดับ 0–3)</h3>
    <table class="tt"><tr><th>ช่วง</th><th>จำนวนคน</th><th>ความรับผิดชอบ</th><th>ซื่อสัตย์ในการรายงาน</th><th>จิตสาธารณะ</th></tr>
    ${['ก่อน','ระหว่าง','หลัง'].map(k=>ph[k]?`<tr><td>${k}</td><td>${ph[k].n}</td><td>${ph[k].b1}</td><td>${ph[k].b2}</td><td>${ph[k].b3}</td></tr>`:`<tr><td>${k}</td><td colspan="4" class="small">ยังไม่มีข้อมูล</td></tr>`).join('')}</table>
    <p class="small">ตัวเลขคำนวณจากข้อมูลที่บันทึกจริงในระบบเท่านั้น</p>`}
@@ -40,9 +40,9 @@ async function loadReports(){$('#rList').innerHTML='<div class="pcard">กำล
    ${x.star?`<div class="starnote">⭐ มอบดาวแล้ว${x.starNote?': '+esc(x.starNote):''}</div>`:''}
    <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:600">ตรวจ / ให้ข้อเสนอแนะ</summary>
     <div class="row2"><div><label class="f">ผลการตรวจ</label><select class="in" id="rs${i}"><option ${x.reviewStatus==='ผ่าน'?'selected':''}>ผ่าน</option><option ${x.reviewStatus==='ขอแก้ไข'?'selected':''}>ขอแก้ไข</option></select></div>
-    <div><label class="f">ความรับผิดชอบ (1–4)</label><select class="in" id="rb1${i}">${[4,3,2,1].map(n=>`<option ${x.b1==n?'selected':''}>${n}</option>`).join('')}</select></div>
-    <div><label class="f">ซื่อสัตย์ในการรายงาน (1–4)</label><select class="in" id="rb2${i}">${[4,3,2,1].map(n=>`<option ${x.b2==n?'selected':''}>${n}</option>`).join('')}</select></div></div>
-    <div class="row2"><div><label class="f">จิตสาธารณะ (1–4)</label><select class="in" id="rb3${i}">${[4,3,2,1].map(n=>`<option ${x.b3==n?'selected':''}>${n}</option>`).join('')}</select></div></div>
+    <div><label class="f">ความรับผิดชอบ (0–3)</label><select class="in" id="rb1${i}"><option value="" ${x.b1===''||x.b1==null?'selected':''}>–</option>${[3,2,1,0].map(n=>`<option ${String(x.b1)===String(n)?'selected':''}>${n}</option>`).join('')}</select></div>
+    <div><label class="f">ซื่อสัตย์ในการรายงาน (0–3)</label><select class="in" id="rb2${i}"><option value="" ${x.b2===''||x.b2==null?'selected':''}>–</option>${[3,2,1,0].map(n=>`<option ${String(x.b2)===String(n)?'selected':''}>${n}</option>`).join('')}</select></div></div>
+    <div class="row2"><div><label class="f">จิตสาธารณะ (0–3)</label><select class="in" id="rb3${i}"><option value="" ${x.b3===''||x.b3==null?'selected':''}>–</option>${[3,2,1,0].map(n=>`<option ${String(x.b3)===String(n)?'selected':''}>${n}</option>`).join('')}</select></div></div>
     <label class="starchk"><input type="checkbox" id="rst${i}" ${x.star?'checked':''}> ⭐ มอบดาว (ทำได้ดี โดดเด่น)</label>
     <input class="in" id="rsn${i}" maxlength="200" placeholder="เหตุผลที่มอบดาว เช่น ช่วยเพื่อนจนงานเสร็จ" value="${esc(x.starNote||'')}">
     <label class="f">ข้อเสนอแนะ</label><textarea class="in" id="rf${i}" maxlength="800">${esc(x.feedback)}</textarea>
@@ -95,7 +95,7 @@ $('#phBulk').onclick=async()=>{const sel=[...document.querySelectorAll('.phck:ch
 
 /* ===== ประเมินทั้งห้อง ===== */
 let BK=[],BKS={},BKE={};
-const LV='<option value="">–</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>';
+const LV='<option value="">–</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0</option>';
 const bkVal=(ph,sid,k)=>{const e=BKE[ph+'|'+sid];if(e&&k in e)return e[k];const o=BKS[ph+'|'+sid];return o&&o[k]!==undefined?String(o[k]):''};
 async function loadBulk(){const box=$('#bkRows');box.innerHTML='<p class="small">กำลังโหลดรายชื่อ...</p>';
   const [r,s]=await Promise.all([call('reports',{}),call('scores',{})]);

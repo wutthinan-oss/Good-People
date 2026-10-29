@@ -6,6 +6,7 @@
     if(big!==null){b.textContent=big;c.classList.add('live')}
     if(sub)s.textContent=sub;
     if(bar!==undefined){const i=c.querySelector('.jt-bar i');if(i)i.style.width=Math.min(100,bar)+'%'}}
+  const band=v=>v>=2.5?'ดีเยี่ยม':v>=1.5?'ดี':v>=1?'ผ่าน':'ไม่ผ่าน';
   if(!window.api)return;
   api('public').then(r=>{
     if(!r||!r.ok){$('jStamp').textContent='เชื่อมต่อฐานข้อมูลไม่ได้ในขณะนี้ ลองรีเฟรชอีกครั้ง';return}
@@ -20,7 +21,7 @@
     if(r.beneficiaries!==null&&r.beneficiaries!==undefined)tile('tBen',fmt(r.beneficiaries)+' คน','รวมจาก '+fmt(r.beneficiaryReports)+' รายงานที่ระบุจำนวน (นักศึกษารายงานเอง)');
     else tile('tBen',null,'รอข้อมูลจริง');
     if(r.scorePairs>=5&&r.before!=null&&r.after!=null){const dd=r.after-r.before;
-      tile('tBeh','ก่อน '+Number(r.before).toFixed(2)+' → หลัง '+Number(r.after).toFixed(2)+' (จาก 4)','จับคู่ก่อน–หลัง '+fmt(r.scorePairs)+' คน · เปลี่ยนแปลง '+(dd>=0?'+':'')+dd.toFixed(2)+' (ประเมินโดยผู้กำกับ)')}
+      tile('tBeh','ก่อน '+Number(r.before).toFixed(2)+' → หลัง '+Number(r.after).toFixed(2)+' (จาก '+(r.scale===4?4:3)+')','จับคู่ก่อน–หลัง '+fmt(r.scorePairs)+' คน'+(r.scale===4?'':' · ระดับคุณภาพหลัง: '+band(r.after))+' · เปลี่ยนแปลง '+(dd>=0?'+':'')+dd.toFixed(2)+' (ประเมินโดยผู้กำกับ)')}
     else tile('tBeh',null,'รอผู้กำกับตรวจรายงานและบันทึกระดับพฤติกรรม'+(r.scorePairs?' (ตอนนี้มี '+r.scorePairs+' คู่ ยังน้อยเกินกว่าจะสรุป)':'')+' จึงยังไม่อ้างว่าพฤติกรรมเพิ่มขึ้น');
   }).catch(()=>{$('jStamp').textContent='เชื่อมต่อฐานข้อมูลไม่ได้ในขณะนี้ ลองรีเฟรชอีกครั้ง'});
 

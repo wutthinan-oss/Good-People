@@ -54,7 +54,7 @@ async function loadHistory(){$('#hList').innerHTML='<div class="pcard">กำล
     ${x.q1?`<p><b>1)</b> ${esc(x.q1)}</p><p><b>2)</b> ${esc(x.q2)}</p><p><b>3)</b> ${esc(x.q3)}</p>`:''}
     ${x.star?`<div class="starnote">⭐ ได้รับดาวจากผู้กำกับ${x.starNote?': '+esc(x.starNote):''}</div>`:''}
     ${x.photos?`<div class="thumbs" data-ph="${esc(x.photos)}">${String(x.photos).split(',').map(id=>`<button type="button" class="thumb" data-id="${esc(id)}">📷 ดูภาพ</button>`).join('')}</div>`:''}
-    ${x.feedback?`<div class="fb"><b>ข้อเสนอแนะจากผู้กำกับ:</b> ${esc(x.feedback)}${x.b1?` · ความรับผิดชอบ ${esc(x.b1)} · ซื่อสัตย์ในการรายงาน ${esc(x.b2)} · จิตสาธารณะ ${esc(x.b3)} (ระดับ 1–4)`:''}</div>`:''}</div>`).join('')||'<div class="pcard">ยังไม่มีรายงาน</div>'}
+    ${x.feedback?`<div class="fb"><b>ข้อเสนอแนะจากผู้กำกับ:</b> ${esc(x.feedback)}${x.b1!==''&&x.b1!=null?` · ความรับผิดชอบ ${esc(x.b1)} · ซื่อสัตย์ในการรายงาน ${esc(x.b2)} · จิตสาธารณะ ${esc(x.b3)} (ระดับ 0–3)`:''}</div>`:''}</div>`).join('')||'<div class="pcard">ยังไม่มีรายงาน</div>'}
 
 document.addEventListener('click',async e=>{const b=e.target.closest('.thumb');if(!b||b.dataset.done)return;b.textContent='กำลังโหลด...';
   const r=await call('photo',{fileId:b.dataset.id});if(!r.ok){b.textContent=r.error||'โหลดไม่ได้';return}
