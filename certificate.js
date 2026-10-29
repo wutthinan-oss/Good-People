@@ -33,7 +33,7 @@ async function draw(){const cv=$('#cv'),c=cv.getContext('2d');
   try{await Promise.all([document.fonts.load('600 56px Sarabun'),document.fonts.load('500 34px Sarabun')])}catch(e){}
   c.drawImage(IMG,0,0,cv.width,cv.height);if(!OK)return;
   c.textAlign='center';c.textBaseline='alphabetic';c.fillStyle='#0f2a5a';
-  const nm=String(NAME).replace(/^\s*(นศท\.?|นักศึกษาวิชาทหาร)\s*/,'').trim();let fs=56;
+  const nm=String(NAME).replace(/^\s*(นศท\.?|นักศึกษาวิชาทหาร)\s*/,'').trim();let fs=44;
   do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(nm).width>900&&fs>30);
   c.fillText(nm,745,592);
   const d=new Date();c.font='500 28px Sarabun,sans-serif';

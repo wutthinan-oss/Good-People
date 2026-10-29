@@ -7,7 +7,7 @@ const fontReady=()=>Promise.all([document.fonts.load('600 56px Sarabun'),documen
 let ALL=[],SHOWN=PAGE,LIST=[];
 function drawCert(cv,name,date){const c=cv.getContext('2d'),W=1491,H=1055;cv.width=W;cv.height=H;
   c.drawImage(IMG,0,0,W,H);c.textAlign='center';c.textBaseline='alphabetic';c.fillStyle='#0f2a5a';
-  let fs=56;do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(name).width>900&&fs>30);
+  let fs=44;do{c.font='600 '+fs+'px Sarabun,sans-serif';fs-=2}while(c.measureText(name).width>900&&fs>30);
   c.fillText(name,745,592);
   const d=date?new Date(date+'T00:00:00'):null;
   if(d&&!isNaN(d)){c.font='500 28px Sarabun,sans-serif';c.fillText(String(d.getDate()),596,806);c.fillText(THM[d.getMonth()],758,806);c.fillText(String(d.getFullYear()+543),926,806)}}
