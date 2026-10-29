@@ -413,3 +413,16 @@ img,video,canvas,svg{max-width:100%;height:auto}
 .inst-card ol{margin:0 0 16px;padding-left:22px;line-height:1.7}
 .inst-card .inst-x{position:absolute;top:8px;right:10px}
 @media(max-width:620px){.hero-logo img{max-height:44vh;width:auto;margin-inline:auto}}
+
+/* เมนูหน้ารายละเอียด: ลิงก์ไม่ตัดบรรทัด เมนูแฮมเบอร์เกอร์เมื่อจอแคบกว่า 1180px */
+.brand span{white-space:nowrap}
+nav.main.long{gap:2px}
+nav.main.long a{white-space:nowrap;padding:8px 10px;font-size:15px}
+nav.main.long a.btn{padding:6px 16px}
+@media(min-width:1181px){.brand small{white-space:nowrap}}
+@media(max-width:1180px){
+  .burger{display:block}
+  nav.main.long{position:absolute;top:100%;left:0;right:0;background:var(--green-d);flex-direction:column;align-items:stretch;padding:10px 16px 16px;display:none;border-bottom:3px solid var(--gold)}
+  nav.main.long.open{display:flex}
+  nav.main.long a{padding:12px}
+}
