@@ -8,7 +8,7 @@
 <title>คอนโซลผู้กำกับ — CADET ภารกิจทำดี</title>
 <link rel="icon" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261029g"><link rel="stylesheet" href="portal.css?v=20261029g">
+<link rel="stylesheet" href="style.css?v=20261029g"><link rel="stylesheet" href="portal.css?v=20261029i">
 </head>
 <body class="portal">
 <header class="top"><div class="wrap">
@@ -87,6 +87,8 @@
           <button class="btn btn-ghost" id="bkApply" type="button">ใส่ให้ทุกคน</button>
           <span class="small">ใช้กับนักศึกษาที่แสดงอยู่ตามช่องค้นหา · ยังไม่บันทึกจนกว่าจะกด “บันทึกที่แก้ไข” และแก้รายคนต่อได้</span>
         </div>
+        <div id="bkChk" class="bk-chkbox" hidden aria-live="polite"></div>
+        <label class="bk-filter">แสดง <select class="in" id="bkF"><option value="all">นักศึกษาทุกคน</option><option value="miss">เฉพาะคนที่กรอกไม่ครบ</option></select></label>
         <div class="bk-head"><b>นักศึกษา</b><b>ความรับผิดชอบ</b><b>ซื่อสัตย์ในการรายงาน</b><b>จิตสาธารณะ</b></div>
         <div id="bkRows" class="bk-rows"><p class="small">กำลังโหลดรายชื่อ...</p></div>
         <div class="err" id="eBk"></div><div class="ok" id="oBk"></div>
@@ -113,6 +115,6 @@
     </section>
   </div>
 </main>
-<script src="config.js?v=20261029g"></script><script src="api.js?v=20261029g"></script><script src="teacher.js?v=20261029g"></script>
+<script src="config.js?v=20261029g"></script><script src="api.js?v=20261029g"></script><script src="teacher.js?v=20261029i"></script>
 </body>
 </html>

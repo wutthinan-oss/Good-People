@@ -103,16 +103,32 @@ async function loadBulk(){const box=$('#bkRows');box.innerHTML='<p class="small"
   const m={};r.reports.forEach(x=>{if(!m[x.sid])m[x.sid]=x});
   BK=Object.values(m).sort((a,b)=>String(a.name).localeCompare(String(b.name),'th'));
   BKS={};((s&&s.scores)||[]).forEach(x=>{BKS[x.phase+'|'+x.sid]=x});BKE={};renderBulk()}
-function bkShown(){const q=$('#bkQ').value.trim();return BK.filter(x=>!q||String(x.name).includes(q))}
+const BKN={b1:'ความรับผิดชอบ',b2:'ซื่อสัตย์',b3:'จิตสาธารณะ'};
+const bkMiss=(ph,sid)=>['b1','b2','b3'].filter(k=>bkVal(ph,sid,k)==='');
+function bkShown(){const q=$('#bkQ').value.trim(),only=$('#bkF').value==='miss',ph=$('#bkPh').value;
+  return BK.filter(x=>(!q||String(x.name).includes(q))&&(!only||bkMiss(ph,x.sid).length))}
+/* ตรวจความครบ: นับทั้งห้อง (ไม่ขึ้นกับช่องค้นหา) และอัปเดตสดเมื่อเลือกระดับ */
+function bkCheck(){const ph=$('#bkPh').value,box=$('#bkChk');if(!BK.length){box.hidden=true;return}
+  const bad=BK.map(x=>({x,m:bkMiss(ph,x.sid)})).filter(o=>o.m.length),none=bad.filter(o=>o.m.length===3).length;
+  box.hidden=false;box.classList.toggle('bk-chk-ok',!bad.length);
+  if(!bad.length){box.innerHTML='<b>✓ ครบทุกคน</b> ทั้ง '+BK.length+' คนมีระดับครบ 3 ด้านแล้ว กดบันทึกได้เลย';return}
+  box.innerHTML='<b>⚠ ยังกรอกไม่ครบ '+bad.length+' คน จาก '+BK.length+' คน</b> <span>(ยังไม่ได้เลือกเลย '+none+' คน · เลือกไม่ครบ '+(bad.length-none)+' คน)</span> คนที่ไม่ครบจะไม่ถูกบันทึก'
+    +'<details><summary>ดูรายชื่อและช่องที่ขาด</summary><ul>'+bad.map(o=>'<li><button type="button" class="bk-go" data-sid="'+esc(o.x.sid)+'">'+esc(o.x.name)+'</button> ขาด: '+o.m.map(k=>BKN[k]).join(', ')+'</li>').join('')+'</ul></details>'}
+function bkMark(sid){const ph=$('#bkPh').value,row=$('#bkRows').querySelector('.bk-row[data-sid="'+CSS.escape(sid)+'"]');if(!row)return;
+  const m=bkMiss(ph,sid);row.classList.toggle('bk-bad',m.length>0);
+  row.querySelectorAll('select').forEach(s=>s.classList.toggle('bk-miss',m.includes(s.dataset.k)))}
 function renderBulk(){const ph=$('#bkPh').value,box=$('#bkRows'),l=bkShown();
-  if(!BK.length){box.innerHTML='<p class="small">ยังไม่มีนักศึกษาที่ส่งรายงาน</p>';$('#bkCount').textContent='';return}
-  box.innerHTML=l.map(x=>{
-    const sel=k=>`<select class="in" data-sid="${esc(x.sid)}" data-k="${k}" aria-label="${k}">${LV.replace(`value="${bkVal(ph,x.sid,k)}"`,`value="${bkVal(ph,x.sid,k)}" selected`)}</select>`;
-    return `<div class="bk-row"><div class="bk-n">${esc(x.name)}<small>${x.year?'ปี '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</small></div>${sel('b1')}${sel('b2')}${sel('b3')}</div>`}).join('');
-  $('#bkCount').textContent='แสดง '+l.length+' จาก '+BK.length+' คน'}
+  if(!BK.length){box.innerHTML='<p class="small">ยังไม่มีนักศึกษาที่ส่งรายงาน</p>';$('#bkCount').textContent='';bkCheck();return}
+  box.innerHTML=l.length?l.map(x=>{
+    const m=bkMiss(ph,x.sid),sel=k=>`<select class="in${m.includes(k)?' bk-miss':''}" data-sid="${esc(x.sid)}" data-k="${k}" aria-label="${k}">${LV.replace(`value="${bkVal(ph,x.sid,k)}"`,`value="${bkVal(ph,x.sid,k)}" selected`)}</select>`;
+    return `<div class="bk-row${m.length?' bk-bad':''}" data-sid="${esc(x.sid)}"><div class="bk-n">${esc(x.name)}<small>${x.year?'ปี '+esc(x.year):''}${x.no?' · เลขที่ '+esc(x.no):''}</small></div>${sel('b1')}${sel('b2')}${sel('b3')}</div>`}).join(''):'<p class="small">ไม่พบรายชื่อตามที่เลือก</p>';
+  $('#bkCount').textContent='แสดง '+l.length+' จาก '+BK.length+' คน';bkCheck()}
 function bkSet(sid,k,v){const key=$('#bkPh').value+'|'+sid;(BKE[key]=BKE[key]||{})[k]=v}
-$('#bkRows').addEventListener('change',e=>{const s=e.target.closest('select');if(s)bkSet(s.dataset.sid,s.dataset.k,s.value)});
-$('#bkPh').addEventListener('change',renderBulk);$('#bkQ').addEventListener('input',renderBulk);
+$('#bkRows').addEventListener('change',e=>{const s=e.target.closest('select');if(s){bkSet(s.dataset.sid,s.dataset.k,s.value);bkMark(s.dataset.sid);bkCheck()}});
+$('#bkChk').addEventListener('click',e=>{const b=e.target.closest('.bk-go');if(!b)return;
+  $('#bkF').value='all';$('#bkQ').value='';renderBulk();const r=$('#bkRows').querySelector('.bk-row[data-sid="'+CSS.escape(b.dataset.sid)+'"]');
+  if(r){r.scrollIntoView({block:'center'});r.classList.add('bk-flash')}});
+$('#bkPh').addEventListener('change',renderBulk);$('#bkQ').addEventListener('input',renderBulk);$('#bkF').addEventListener('change',renderBulk);
 $('#bkApply').addEventListener('click',()=>{hide('#eBk');hide('#oBk');const ph=$('#bkPh').value,onlyEmpty=$('#bkEmpty').checked,all=$('#bkAll').value;
   const v={b1:all||$('#bkA1').value,b2:all||$('#bkA2').value,b3:all||$('#bkA3').value};
   if(!v.b1&&!v.b2&&!v.b3)return show('#eBk','เลือกระดับที่ต้องการใส่ให้ทุกคนก่อน');
@@ -122,7 +138,7 @@ $('#bkSave').addEventListener('click',async()=>{hide('#eBk');hide('#oBk');const 
   BK.forEach(x=>{const r={sid:x.sid,b1:bkVal(ph,x.sid,'b1'),b2:bkVal(ph,x.sid,'b2'),b3:bkVal(ph,x.sid,'b3')},o=BKS[ph+'|'+x.sid]||{};
     if([r.b1,r.b2,r.b3].some(Boolean)&&![r.b1,r.b2,r.b3].every(Boolean))part++;
     if(r.b1&&r.b2&&r.b3&&(String(o.b1)!==r.b1||String(o.b2)!==r.b2||String(o.b3)!==r.b3))send.push(r)});
-  if(!send.length)return show('#eBk',part?'มี '+part+' คนที่เลือกไม่ครบ 3 ด้าน (ต้องเลือกให้ครบจึงจะบันทึก)':'ยังไม่มีรายการที่แก้ไข');
+  if(!send.length)return show('#eBk',part?'มี '+part+' คนที่เลือกไม่ครบ 3 ด้าน (ต้องเลือกให้ครบจึงจะบันทึก) ดูรายชื่อในกล่องตรวจความครบด้านบน':'ยังไม่มีรายการที่แก้ไข');
   const b=$('#bkSave');b.disabled=true;b.textContent='กำลังบันทึก...';
   const r=await call('saveScores',{phase:ph,assessor:$('#bkAs').value,rows:send});b.disabled=false;b.textContent='บันทึกที่แก้ไข';
   if(!r.ok)return show('#eBk',r.error||'บันทึกไม่สำเร็จ');

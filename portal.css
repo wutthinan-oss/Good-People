@@ -115,3 +115,14 @@ table.tt{width:100%;border-collapse:collapse;font-size:15px}
 .bk-all-g label{font-size:13.5px;font-weight:600;display:flex;flex-direction:column;gap:2px}
 .bk-chk{flex-direction:row!important;align-items:center;gap:8px!important;font-weight:400!important}
 @media(max-width:620px){.bk-all-g{grid-template-columns:1fr 1fr}}
+.bk-chkbox{margin:12px 0 6px;padding:10px 14px;border-radius:12px;background:#FFF1F0;border:1px solid #E7A8A2;color:#7a1f17;font-size:15px;line-height:1.6}
+.bk-chkbox.bk-chk-ok{background:#E8F4EA;border-color:#9CC9A6;color:#1d4d2b}
+.bk-chkbox summary{cursor:pointer;margin-top:4px;font-weight:600}
+.bk-chkbox ul{margin:6px 0 0;padding-left:20px;max-height:200px;overflow:auto;font-size:14px}
+.bk-go{background:none;border:0;padding:0;color:#7a1f17;text-decoration:underline;cursor:pointer;font:inherit;font-weight:600}
+.bk-filter{display:flex;align-items:center;gap:8px;margin:8px 0 2px;font-size:14px}
+.bk-filter .in{width:auto;padding:5px 8px}
+.bk-row.bk-bad{box-shadow:inset 4px 0 0 #D9534F;background:#FFF7F6}
+.bk-row .in.bk-miss{border-color:#D9534F;background:#FFE9E7}
+.bk-row.bk-flash{animation:bkf 1.6s}
+@keyframes bkf{0%,60%{background:#FFE08A}100%{}}
