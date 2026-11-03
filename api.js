@@ -11,6 +11,8 @@
   function mock(a,d){
     if(a==='ping')return{ok:true};
     if(a==='featureReport'){db.feat=db.feat||[];db.feat=db.feat.filter(v=>v!==d.id);if(d.on)db.feat.push(d.id);return{ok:true,featured:db.feat}}
+    if(a==='daily'){const day=new Date().toISOString().slice(0,10),ids=db.daily||[];const rs=db.reports.filter(r=>String(r.ts).slice(0,10)===day);return{ok:true,date:day,missions:MS.filter(m=>ids.includes(m.id)).map(m=>({id:m.id,title:m.title,level:m.level,goal:m.goal})),reportsToday:rs.length,studentsToday:new Set(rs.map(r=>r.sid)).size,photosToday:rs.filter(r=>r.photos&&r.photos.length).length,photoStudentsToday:new Set(rs.filter(r=>r.photos&&r.photos.length).map(r=>r.sid)).size,byMission:rs.reduce((o,r)=>(o[r.missionId]=(o[r.missionId]||0)+1,o),{})}}
+    if(a==='setDaily'){db.daily=(d.ids||[]).slice(0,6);return{ok:true,ids:db.daily}}
     if(a==='honor'){const by={};db.reports.forEach(r=>{if(r.photos&&r.photos.length&&!by[r.sid])by[r.sid]={name:r.name,year:1,date:String(r.ts).slice(0,10)}});const items=Object.values(by);return{ok:true,count:items.length,items}}
     if(a==='gallery'){const items=[];db.reports.filter(r=>r.publicOk==1&&r.photos).forEach(r=>String(r.photos).split(',').filter(Boolean).forEach((k,i)=>{const m=MS.find(x=>x.id===r.missionId);items.push({id:r.id+'_'+(i+1),mission:m?m.title:'',missionId:r.missionId,stage:r.stage,date:String(r.ts).slice(0,10),year:r.year||'',caption:r.caption||'',src:db.photos[k],full:db.photos[k]})}));return{ok:true,count:items.length,items}}
     if(a==='approvePhotos'){const r=db.reports.find(x=>x.id===d.id);if(!r||!r.photos)return{ok:false,error:'รายงานนี้ไม่มีภาพ'};r.publicOk=d.approve?1:(d.reject?'no':'');r.caption=d.approve?(d.caption||''):'';return{ok:true}}

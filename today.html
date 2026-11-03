@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#123222">
+<title>ภารกิจด่วนวันนี้ — CADET รด.หัวใจอาสา</title>
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261103a"><link rel="stylesheet" href="portal.css?v=20261103a">
+<style>
+.td-top{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin:14px 0}
+.td-timer{background:linear-gradient(135deg,var(--green-d),var(--green));color:#fff;border-radius:18px;padding:16px 18px;text-align:center}
+.td-timer small{color:#cfe3cd;font-size:15px}
+.td-clock{font-family:var(--mono);font-size:clamp(54px,12vw,104px);line-height:1;margin:4px 0;color:var(--gold-l);font-weight:600}
+.td-ph{font-family:var(--display);font-size:clamp(22px,4vw,32px);margin:0}
+.td-ph span{color:var(--gold-l)}
+.td-hint{margin:2px 0 8px;color:#e3eedf;font-size:17px}
+.td-ctl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.td-ctl .btn{padding:8px 18px}
+.td-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.td-steps i{font-style:normal;background:#ffffff1f;border-radius:10px;padding:6px 2px;font-size:14px;color:#cfe3cd}
+.td-steps i b{display:block;font-size:20px;color:#fff}
+.td-steps i.on{background:var(--gold);color:#3b2d00}.td-steps i.on b{color:#3b2d00}
+.td-steps i.done{opacity:.55}
+.td-live{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.td-live h2{margin:0 0 6px;font-size:20px}
+.td-big{font-family:var(--display);font-size:clamp(40px,8vw,64px);line-height:1;color:var(--green)}
+.td-bar{height:14px;background:var(--green-l);border-radius:99px;overflow:hidden;margin:8px 0}
+.td-bar i{display:block;height:100%;background:var(--gold);border-radius:99px;transition:width .8s}
+.td-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.td-mini div{background:var(--green-l);border-radius:12px;padding:8px 10px;font-size:15px}
+.td-mini b{display:block;font-size:26px;color:var(--green-d);font-family:var(--display)}
+.td-ms{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.td-m{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
+.td-m h3{margin:0 0 2px;font-size:20px}.td-m p{margin:4px 0 8px;font-size:15.5px;color:var(--mut);line-height:1.5}
+.td-m .n{font-size:14px;color:var(--green-d);font-weight:600;margin-left:6px}
+.td-empty{background:#FFF6D6;border:1px solid #E8D58A;border-radius:14px;padding:14px 16px;font-size:17px;line-height:1.6}
+@media(max-width:760px){.td-top{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="portal">
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="assets/logo.png" alt="" width="40" height="40"><span>CADET รด.หัวใจอาสา<small>ภารกิจด่วนวันนี้</small></span></a>
+  <nav class="main" style="display:flex"><a href="mission.html">ทำภารกิจ</a><a href="honor.html">เกียรติบัตร</a><a href="./">สรุปผล</a></nav>
+</div></header>
+
+<main class="pwrap" style="max-width:1100px">
+  <h1 style="margin:14px 0 0;font-size:clamp(24px,4vw,34px)">ภารกิจด่วนวันนี้ <span class="small" id="tdDate"></span></h1>
+  <div class="td-top">
+    <div class="td-timer" aria-live="off">
+      <small>เวลาในคาบ 30 นาที</small>
+      <div class="td-clock" id="tdClock">30:00</div>
+      <p class="td-ph" id="tdPh">พร้อมเริ่ม</p>
+      <p class="td-hint" id="tdHint">กด “เริ่ม” เมื่อพร้อม ระบบแจ้งเตือนทุกครั้งที่เปลี่ยนขั้น</p>
+      <div class="td-ctl">
+        <button class="btn btn-gold" id="tdGo" type="button">▶ เริ่ม</button>
+        <button class="btn btn-ghost" id="tdNext" type="button" style="background:#fff">ข้ามไปขั้นถัดไป</button>
+        <button class="btn btn-ghost" id="tdReset" type="button" style="background:#fff">รีเซ็ต</button>
+      </div>
+      <div class="td-steps" id="tdSteps"></div>
+    </div>
+    <div class="td-live">
+      <h2>ส่งแล้ววันนี้ (ข้อมูลสดจากระบบ)</h2>
+      <div class="td-big"><span id="tdN">–</span> <span style="font-size:.4em;color:var(--mut)">จาก 195 คน</span></div>
+      <div class="td-bar"><i id="tdBar" style="width:0"></i></div>
+      <div class="td-mini">
+        <div><b id="tdRep">–</b>รายงานที่ส่งวันนี้</div>
+        <div><b id="tdPho">–</b>คนที่แนบรูปแล้ว (ได้เกียรติบัตร)</div>
+      </div>
+      <p class="small" id="tdStamp" style="margin:8px 0 0">กำลังโหลด…</p>
+    </div>
+  </div>
+
+  <h2 style="margin:6px 0 8px">ภารกิจของวันนี้</h2>
+  <div id="tdMs"><p class="small">กำลังโหลด…</p></div>
+  <p class="small" style="margin-top:14px">ผู้กำกับเลือกภารกิจวันนี้ได้ที่หน้าผู้กำกับ แท็บ “ภารกิจด่วน” · ตัวเลขนับเฉพาะรายงานที่ส่งในวันนี้ตามเวลาไทย และรีเฟรชเองทุก 15 วินาที</p>
+</main>
+<script src="config.js?v=20261103a"></script><script src="api.js?v=20261103a"></script>
+<script src="today.js?v=20261103a"></script>
+</body>
+</html>

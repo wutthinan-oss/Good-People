@@ -11,8 +11,8 @@ $('#fLogin').addEventListener('submit',async e=>{e.preventDefault();hide('#eLogi
   const r=await api('tlogin',{key:$('#key').value});b.disabled=false;b.textContent='เข้าสู่ระบบ';
   if(!r.ok)return show('#eLogin',r.error||'เข้าสู่ระบบไม่สำเร็จ');TOKEN=r.token;try{sessionStorage.setItem('cadet_ttok',TOKEN)}catch(x){}$('#key').value='';enter()});
 document.querySelectorAll('#tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
-  ['stats','photos','reports','scores'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
-  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos();if(t.dataset.t==='scores')loadScoreNames();loadBulk()});
+  ['stats','photos','reports','scores','daily'].forEach(k=>$('#t'+k[0].toUpperCase()+k.slice(1)).hidden=k!==t.dataset.t);
+  if(t.dataset.t==='stats')loadStats();if(t.dataset.t==='reports')loadReports();if(t.dataset.t==='photos')loadPhotos();if(t.dataset.t==='daily')loadDaily();if(t.dataset.t==='scores')loadScoreNames();loadBulk()});
 async function init(){const r=await call('missions');if(r.ok){MS=r.missions;$('#fM').innerHTML='<option value="">ทั้งหมด</option>'+MS.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join('')}loadStats();badge()}
 const nm=id=>(MS.find(m=>m.id===id)||{}).title||id;
 
@@ -150,3 +150,16 @@ $('#bkSave').addEventListener('click',async()=>{hide('#eBk');hide('#oBk');const 
   if(!r.ok)return show('#eBk',r.error||'บันทึกไม่สำเร็จ');
   send.forEach(x=>{BKS[ph+'|'+x.sid]={phase:ph,sid:x.sid,b1:x.b1,b2:x.b2,b3:x.b3};delete BKE[ph+'|'+x.sid]});renderBulk();
   show('#oBk','บันทึกแล้ว '+r.saved+' คน'+(r.skipped?' (ข้าม '+r.skipped+')':'')+(part?' · ยังมี '+part+' คนที่เลือกไม่ครบ':''))});
+
+/* ===== ภารกิจด่วนประจำวัน ===== */
+async function loadDaily(){const box=$('#dyList');box.textContent='กำลังโหลดภารกิจ…';hide('#eDy');hide('#oDy');
+  const [m,d]=await Promise.all([call('missions'),api('daily')]);
+  if(!m.ok){box.textContent=m.error||'โหลดภารกิจไม่ได้';return}
+  const on=new Set(((d&&d.missions)||[]).map(x=>x.id));
+  box.innerHTML=m.missions.map(x=>`<label class="bk-chk" style="display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:16px"><input type="checkbox" class="dyck" value="${esc(x.id)}"${on.has(x.id)?' checked':''}><span><b>${esc(x.title)}</b> <span class="small">${esc(x.level||'')}${x.weeks?' · '+esc(x.weeks):''}</span></span></label>`).join('')||'ยังไม่มีภารกิจในระบบ'}
+$('#dySave').addEventListener('click',async()=>{hide('#eDy');hide('#oDy');
+  const ids=[...document.querySelectorAll('.dyck:checked')].map(c=>c.value);
+  if(ids.length>6)return show('#eDy','เลือกได้ไม่เกิน 6 ภารกิจ');
+  const b=$('#dySave');b.disabled=true;const r=await call('setDaily',{ids});b.disabled=false;
+  if(!r.ok)return show('#eDy',r.error||'บันทึกไม่สำเร็จ');
+  show('#oDy',ids.length?'ตั้งภารกิจวันนี้แล้ว '+ids.length+' รายการ':'ล้างภารกิจวันนี้แล้ว (ยังไม่มีภารกิจด่วน)')});

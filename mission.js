@@ -36,10 +36,12 @@ $('#bEdit').onclick=()=>{$('#vApp').hidden=true;$('#vId').hidden=false;fillId()}
 async function loadMs(){$('#mList').innerHTML='<div class="pcard small">กำลังโหลดภารกิจ...</div>';const r=await api('publicMissions');
   if(!r.ok){$('#mList').innerHTML=`<div class="pcard">${esc(r.error||'โหลดภารกิจไม่ได้')}<p style="margin:12px 0 0"><button class="btn btn-primary" type="button" id="retryMs">ลองใหม่</button></p></div>`;$('#retryMs').onclick=loadMs;return}
   MS=r.missions;
+  window._deepM=(new URLSearchParams(location.search)).get('m');
   $('#mList').innerHTML=MS.map(m=>`<div class="mcard"><h3>${esc(m.title)}</h3><div class="meta">${esc(m.level)} · ${esc(m.weeks)}</div>
    <div>${String(m.stages).split('|').map(s=>`<span class="stg">${esc(s)}</span>`).join('')}</div>
    <p style="margin:6px 0">${esc(m.goal)}</p><p class="small"><b>หลักฐานที่ควรมี:</b> ${esc(m.evidence)}</p>
-   <button class="btn btn-primary" style="padding:8px 20px" type="button" data-id="${esc(m.id)}">ทำภารกิจนี้</button></div>`).join('')||'<div class="pcard">ยังไม่มีภารกิจ</div>'}
+   <button class="btn btn-primary" style="padding:8px 20px" type="button" data-id="${esc(m.id)}">ทำภารกิจนี้</button></div>`).join('')||'<div class="pcard">ยังไม่มีภารกิจ</div>';
+  if(window._deepM){const b=$('#mList').querySelector('button[data-id="'+CSS.escape(window._deepM)+'"]');window._deepM=null;if(b)b.click()}}
 $('#mList').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(!b)return;
   MID=b.dataset.id;const m=MS.find(x=>x.id===MID);$('#fTitle').textContent='บันทึกผลภารกิจ: '+(m?m.title:'');
   hide('#oDone');hide('#eSub');RATE=0;drawStars();applyMode();$('#vForm').hidden=false;$('#vForm').scrollIntoView({behavior:'smooth'})});
